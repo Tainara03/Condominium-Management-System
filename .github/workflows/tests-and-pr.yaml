@@ -35,11 +35,6 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.ref_name }}
 
-      - name: Buscar branch remoto
-        run: |
-          git fetch origin ${{ github.ref_name }}:${{ github.ref_name }}
-          git checkout ${{ github.ref_name }}
-
       - name: Criar Pull Request para develop
         uses: peter-evans/create-pull-request@v6
         with:
