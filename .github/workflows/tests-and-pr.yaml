@@ -31,12 +31,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Criar Pull Request para develop
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           base: develop
-          branch: ${{ github.ref_name }}
+          head: ${{ github.ref_name }}
           title: "Merge automático para develop"
           body: "PR gerada automaticamente após passar nos testes."
