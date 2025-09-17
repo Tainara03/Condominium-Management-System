@@ -12,34 +12,28 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout completo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Configurar Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Instalar dependências
-        run: npm ci
+      - run: npm ci
 
-      - name: Rodar testes
-        run: npm run test -- --watch=false --browsers=ChromeHeadless
+      - run: npm run test -- --watch=false --browsers=ChromeHeadless
 
   create-pr-main:
     needs: tests
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/develop'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
     steps:
-      - name: Checkout completo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Criar Pull Request para main
-        uses: repo-sync/pull-request@v2
+      - uses: repo-sync/pull-request@v2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_branch: develop
