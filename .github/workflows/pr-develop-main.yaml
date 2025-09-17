@@ -4,17 +4,33 @@ on:
   push:
     branches:
       - develop
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  create-pr-main:
+  tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: develop
 
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Rodar testes
+        run: npm run test -- --watch=false --browsers=ChromeHeadless
+
+  create-pr-main:
+    needs: tests
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    steps:
       - name: Criar Pull Request para main
         uses: repo-sync/pull-request@v2
         with:
