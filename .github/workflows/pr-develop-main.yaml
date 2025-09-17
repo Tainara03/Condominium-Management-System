@@ -16,10 +16,10 @@ jobs:
           ref: develop
 
       - name: Criar Pull Request para main
-        uses: peter-evans/create-pull-request@v6
+        uses: repo-sync/pull-request@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          base: main
-          head: develop
-          title: "Merge automático para main"
-          body: "PR automática de develop para main."
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          source_branch: develop
+          destination_branch: main
+          pr_title: "Merge automático de develop para main"
+          pr_body: "PR automática de develop para main."

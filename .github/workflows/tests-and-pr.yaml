@@ -36,10 +36,10 @@ jobs:
           ref: ${{ github.ref_name }}
 
       - name: Criar Pull Request para develop
-        uses: peter-evans/create-pull-request@v6
+        uses: repo-sync/pull-request@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          base: develop
-          head: ${{ github.ref_name }}
-          title: "Merge automático para develop"
-          body: "PR gerada automaticamente após passar nos testes."
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          source_branch: ${{ github.ref_name }}
+          destination_branch: develop
+          pr_title: "Merge automático de ${{ github.ref_name }} para develop"
+          pr_body: "PR gerada automaticamente após passar nos testes."
