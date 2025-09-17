@@ -1,0 +1,42 @@
+name: CI - Tests and PR to Develop
+
+on:
+  push:
+    branches:
+      - feature/**
+      - hotfix/**
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Rodar testes
+        run: npm run test -- --watch=false --browsers=ChromeHeadless
+
+  create-pr-develop:
+    needs: tests
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/develop'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Criar Pull Request para develop
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: develop
+          branch: ${{ github.ref_name }}
+          title: "Merge automático para develop"
+          body: "PR gerada automaticamente após passar nos testes."

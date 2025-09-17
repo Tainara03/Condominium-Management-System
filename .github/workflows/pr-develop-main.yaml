@@ -1,0 +1,22 @@
+name: Auto PR Develop to Main
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  create-pr-main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Criar Pull Request para main
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          branch: develop
+          title: "Merge automático para main"
+          body: "PR automática de develop para main."
