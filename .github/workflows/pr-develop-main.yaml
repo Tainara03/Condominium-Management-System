@@ -12,8 +12,10 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout completo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Configurar Node.js
         uses: actions/setup-node@v4
@@ -31,6 +33,11 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
     steps:
+      - name: Checkout completo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Criar Pull Request para main
         uses: repo-sync/pull-request@v2
         with:
