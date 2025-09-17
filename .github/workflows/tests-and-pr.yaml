@@ -25,20 +25,26 @@ jobs:
         run: npm run test -- --watch=false --browsers=ChromeHeadless
 
   create-pr-develop:
-    needs: tests
-    runs-on: ubuntu-latest
-    if: github.ref != 'refs/heads/develop'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+  needs: tests
+  runs-on: ubuntu-latest
+  if: github.ref != 'refs/heads/develop'
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        ref: ${{ github.ref_name }}
 
-      - name: Criar Pull Request para develop
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          base: develop
-          head: ${{ github.ref_name }}
-          title: "Merge automático para develop"
-          body: "PR gerada automaticamente após passar nos testes."
+    - name: Buscar branch remoto
+      run: |
+        git fetch origin ${{ github.ref_name }}:${{ github.ref_name }}
+        git checkout ${{ github.ref_name }}
+
+    - name: Criar Pull Request para develop
+      uses: peter-evans/create-pull-request@v6
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        base: develop
+        head: ${{ github.ref_name }}
+        title: "Merge automático para develop"
+        body: "PR gerada automaticamente após passar nos testes."

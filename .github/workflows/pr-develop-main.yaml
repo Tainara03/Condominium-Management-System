@@ -11,12 +11,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: develop
 
       - name: Criar Pull Request para main
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           base: main
-          branch: develop
+          head: develop
           title: "Merge automático para main"
           body: "PR automática de develop para main."
