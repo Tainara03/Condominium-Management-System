@@ -15,4 +15,18 @@
 - Controle de cobranças e condomínio
 
 #### Arquitetura e Tecnologias
-_em definição_
+-Linguagem Backend:
+→ TypeScript e Node.js
+-Banco de Dados:
+→ PostgreSQL
+-Frontend:
+→ Angular, TypeScript
+-Gerenciamento de Dependências:
+→ npm
+-Controle de Versão:
+→ Git
+-Containerização:
+→ Docker
+-Arquitetura utilizada: 
+→ MVC
+
