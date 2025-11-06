@@ -1,0 +1,15 @@
+<div class="list-group" style="width: 200px;">
+  <a class="list-group-item list-group-item-action" routerLink="/meu-perfil">Meu Perfil</a>
+
+  <!-- Apenas para admin -->
+  <a *ngIf="auth.userType() === 'admin'" class="list-group-item list-group-item-action" routerLink="/cadastrar-unidades">Painel Administrador</a>
+
+  <!-- Apenas para porteiro -->
+  <a *ngIf="auth.userType() === 'porteiro'" class="list-group-item list-group-item-action" routerLink="/cadastrar-encomendas">Cadastrar Encomendas</a>
+
+  <!-- Apenas para moradores -->
+  <a *ngIf="auth.userType() === 'morador'" class="list-group-item list-group-item-action" routerLink="/cobrancas">Minhas Cobranças</a>
+
+  <a class="list-group-item list-group-item-action" routerLink="/registrar-ocorrencia">Enviar Comunicados</a>
+  <a class="list-group-item list-group-item-action" routerLink="/reserva-de-areas">Reserva de Áreas</a>
+</div>
