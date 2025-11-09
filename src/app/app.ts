@@ -1,16 +1,19 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from './components/header/header.component';
-import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { FooterComponent } from './components/footer/footer.component';
+import { HeaderComponent } from './shared/layout/header/header.component';
+import { SidebarComponent } from './shared/layout/sidebar/sidebar.component';
+import { FooterComponent } from './shared/layout/footer/footer.component';
 import { NgIf } from '@angular/common';
+import { AuthService } from './auth/auth.service';
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, NgIf, HeaderComponent, SidebarComponent, FooterComponent],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']
 })
 export class App {
-  protected readonly title = signal('Condominium-Management-System');
+  protected readonly title = 'Condominium-Management-System';
+
+  constructor(public authService: AuthService) {}
 }

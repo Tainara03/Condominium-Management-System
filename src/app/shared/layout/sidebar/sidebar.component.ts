@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AuthService } from '../../services/auth/auth.service';
+import { AuthService } from '../../../auth/auth.service';
 import { NgIf } from '@angular/common';
 
 @Component({

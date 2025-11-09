@@ -1,0 +1,19 @@
+<div class="d-flex vh-100 justify-content-center align-items-center">
+  <div class="card p-4 shadow-lg" style="width: 700px;">
+    <div class="d-flex align-items-center">
+      <img src="assets/logo-domus.png" alt="Logo Domus" style="max-width: 500px; max-height: 500px; margin-right: 20px;">
+      <div class="flex-grow-1">
+        <h3 class="mb-3">Sign in</h3>
+        <div class="mb-3">
+          <input id="username" [(ngModel)]="username" class="form-control" placeholder="Username" />
+        </div>
+
+        <div class="mb-3">
+          <input id="password" [(ngModel)]="password" type="password" class="form-control" placeholder="Password" />
+        </div>
+
+        <button (click)="onLogin()" class="btn btn-primary w-100">Entrar</button>
+      </div>
+    </div>
+  </div>
+</div>
