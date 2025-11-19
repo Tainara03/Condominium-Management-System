@@ -11,6 +11,8 @@
     "nodemon": "^3.1.11",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
+    "typeorm": "^0.3.27",
     "typescript": "^5.9.3"
   },
   "dependencies": {
@@ -18,12 +20,12 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "pg": "^8.16.3",
-    "reflect-metadata": "^0.2.2",
-    "typeorm": "^0.3.27"
+    "reflect-metadata": "^0.2.2"
   },
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
-    "start": "node src/server.ts"
+    "start": "node src/server.ts",
+    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
   }
 }
