@@ -27,7 +27,8 @@ export class CreateUsersTable1763515876333 implements MigrationInterface {
                         name: 'email',
                         type: 'varchar',
                         length: '100',
-                        isNullable: false
+                        isNullable: false,
+                        isUnique: true
                     },
                     {
                         name: 'password_hash',
@@ -70,7 +71,7 @@ export class CreateUsersTable1763515876333 implements MigrationInterface {
                         columnNames: ['unit_id'],
                         referencedTableName: 'units',
                         referencedColumnNames: ['id'],
-                        onDelete: 'SET NULL',
+                        onDelete: 'RESTRICT',
                         onUpdate: 'CASCADE'
                     }
                 ]
