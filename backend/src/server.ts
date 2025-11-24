@@ -1,61 +1,18 @@
-// import 'reflect-metadata';
-// import express from "express";
-// import cors from 'cors';
-// import bodyParser  from 'body-parser';
-
-// import { AppDataSource } from "./database/data-source";
-
-// import routers from './app/routes/routes';
-// import dotenv from "dotenv"
-
-
-
-// dotenv.config()
-
-// const app = express();
-
-// app.use(cors());
-
-// app.use(bodyParser.json());
-
-// app.use(express.json());
-
-// app.use(routers);
-
-// const PORT = parseInt(String(process.env.PORT));
-
-// //Conexão BD
-// AppDataSource.initialize().then(async () => {
-
-//     console.log("DataSource Connected");
-
-
-//     const server = app.listen(PORT, ()=> console.log(`Server Started on port ${PORT}`))
-
-//     // console.log("Inserting a new user into the database...")
-//     // const user = new Usuario()
-//     // user.nome = "Timber"
-//     // user.email = "email@email.com"
-//     // await AppDataSource.manager.save(user)
-//     // console.log("Saved a new user with id: " + user.id)
-
-//     // console.log("Loading users from the database...")
-//     // const users = await AppDataSource.manager.find(Usuario)
-//     // console.log("Loaded users: ", users)
-
-//     // console.log("Here you can setup and run express / fastify / any other framework.")
-
-// }).catch(error => console.log(error))
 import "reflect-metadata"
 import express from "express"
 import cors from "cors"
 import bodyParser from "body-parser"
 import { AppDataSource } from "./database/data-source"
+import routers from "./app/routes/routes";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 app.use(express.json())
+
+app.use('/api', routers);
 
 const PORT = parseInt(process.env.BACK_PORT || "3000")
 

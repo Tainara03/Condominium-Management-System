@@ -16,7 +16,7 @@ const findById = (id: string) => {
     return userRepository.findOne({where: {id}, relations:['role', 'unit']});
 }
 
-const createUser = async (userData: IUser) => {
+const createUser = async (userData: Partial<User>) => {
     const newUser = userRepository.create(userData);
     await userRepository.save(newUser);
     return newUser;
