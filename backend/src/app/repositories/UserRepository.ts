@@ -24,6 +24,7 @@ const createUser = async (userData: Partial<User>) => {
 
 const updateUser = async (id: string, userData: Partial<IUser>) => {
     userRepository.update(id, userData);
+    return userRepository.findOne({where: {id}});
 }
 
 const deleteUser = async (id: string) => {

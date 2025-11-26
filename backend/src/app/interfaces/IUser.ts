@@ -9,8 +9,8 @@ interface IUser {
     password_hash: string,
     phone?: string,
     role_id: number,
-    unit_id: string,
-    is_active: boolean
+    unit_id: number,
+    is_approved: boolean
 }
 
 export default IUser;

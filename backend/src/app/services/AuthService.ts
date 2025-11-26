@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import jwt, { SignOptions } from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import User from "../entities/User";
 import dotenv from 'dotenv';
 
@@ -19,7 +19,7 @@ const comparePassword = async (password: string, hash: string) => {
 
 
 const signToken = (user: User) => {
-    if (!user) throw new Error('User data is required to sign token');
+    if (!user || !user.id || !user.email) throw new Error('User data is incomplete for signing token');
 
     const payload = { sub: user.id,
                     email: user.email, 
@@ -29,7 +29,11 @@ const signToken = (user: User) => {
 };
 
 const verifyToken = (token: string) => {
-  return jwt.verify(token, JWT_SECRET) as any;
+  try {
+    return jwt.verify(token, JWT_SECRET) as JwtPayload;
+  } catch (err) {
+    throw new Error('Invalid or expired token');
+  }
 };
 
 export default { hashPassword, comparePassword, signToken, verifyToken };

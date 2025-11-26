@@ -34,16 +34,16 @@ class User {
     role!: Role;
 
     // armazena a FK unit_id
-    @Column({ type: "uuid", nullable: false })
-    unit_id!: string;
+    @Column({ type: "int", nullable: false })
+    unit_id!: number;
     
     // relacionamento com unit
     @ManyToOne(()=> Unit)
     @JoinColumn( {name: 'unit_id'} )
     unit?: Unit
     
-    @Column('boolean', {nullable: false, default: true })
-    is_active!: boolean;
+    @Column('boolean', {nullable: false, default: false })
+    is_approved!: boolean;
 }
 
 export default User

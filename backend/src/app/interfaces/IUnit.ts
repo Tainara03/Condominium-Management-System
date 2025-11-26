@@ -3,7 +3,7 @@ Arquivo que define para o front qual o tipo de arquivo da nossa tabela users
 */
 
 interface IUnit {
-    id?: string,
+    id?: number,
     apartment: string,
     building: string
 }

@@ -4,8 +4,8 @@ import User from "./User";
 @Entity('units')
 class Unit {
     
-    @PrimaryGeneratedColumn('uuid')
-    id?: string;
+    @PrimaryGeneratedColumn('increment')
+    id?: number;
 
     @Column('varchar', { length: 6, nullable:false })
     apartment!: string

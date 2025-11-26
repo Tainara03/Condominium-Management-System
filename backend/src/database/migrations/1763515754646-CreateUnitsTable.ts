@@ -9,11 +9,10 @@ export class CreateUnitsTable1763515754646 implements MigrationInterface {
                 columns: [
                     {
                         name: 'id',
-                        type: 'uuid',
+                        type: 'int',
                         isPrimary: true,
                         isGenerated: true,
-                        generationStrategy: 'uuid',
-                        default: 'uuid_generate_v4()'
+                        generationStrategy: 'increment',
                     },
                     {
                         name: 'apartment',

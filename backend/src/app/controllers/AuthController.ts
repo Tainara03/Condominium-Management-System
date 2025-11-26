@@ -2,41 +2,84 @@ import { Router, Request, Response } from 'express';
 import UserRepository from '../repositories/UserRepository';
 import AuthService from '../services/AuthService';
 import User from '../entities/User';
+import Unit from '../entities/Unit';
 const authRouter = Router();
 
 // Register
 authRouter.post('/register', async (req: Request, res: Response) => {
-  const { name, email, password, phone, role_id, unit_id } = req.body;
+    try {
+        
+        if (!req.body || Object.keys(req.body).length === 0) {
+            return res.status(400).json({
+                message: "Bad request: request body is missing or malformed."
+            });
+        }
 
-  // validações básicas
-  if (!email || !password || !name) return res.status(400).json({ message: "name, email and password are required." });
+        const { name, email, password, phone, role_id, unit_id } = req.body;
 
-  const existing = await UserRepository.findByEmail(email);
-  if (existing) return res.status(409).json({ message: "Email already exists." });
+        // validações básicas
+        if (!email || !password || !name || !role_id || !unit_id) {
+            return res.status(400).json({ message: "All data are required" });
+        }
 
-  const password_hash = await AuthService.hashPassword(password);
+        const existing = await UserRepository.findByEmail(email);
+        if (existing) {
+            return res.status(409).json({ message: "Email already exists." });
+        }
 
-  const created = await UserRepository.createUser(
-    {name, email, password_hash, phone, role_id, unit_id, is_active: true} as Partial<User>);
+        //Verficar se a unidade existe
+        //verificar se o role existe
+        
 
-  const token = AuthService.signToken(created as User);
+        const password_hash = await AuthService.hashPassword(password);
 
-  return res.status(201).json({ user: { id: created.id, name: created.name, email: created.email }, token });
+        const created = await UserRepository.createUser(
+            { name, email, password_hash, phone, role_id, unit_id, is_approved: false });
+
+        const token = AuthService.signToken(created);
+
+        return res.status(201).json(
+            {
+                user: {
+                    id: created.id, name: created.name, email: created.email, role: created.role, unit: created.unit
+                }, token
+            });
+    } catch (error) {
+        return res.status(500).json({ message: 'Internal server error' });
+    }
 });
 
 // Login
-authRouter.post('/login', async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-  if (!email || !password) return res.status(400).json({ message: 'email and password are required.' });
+authRouter.post('/login', async (req: Request<{}, {}, { email: string; password: string }>, res: Response) => {
+    try {
+        
+        if (!req.body || Object.keys(req.body).length === 0) {
+            return res.status(400).json({
+                message: "Bad request: request body is missing or malformed."
+            });
+        }
 
-  const user = await UserRepository.findByEmail(email);
-  if (!user) return res.status(401).json({ message: 'invalid credentials' });
+        const { email, password } = req.body;
+        if (!email || !password) {
+            return res.status(400).json({ message: 'email and password are required.' });
+        }
 
-  const ok = await AuthService.comparePassword(password, user.password_hash);
-  if (!ok) return res.status(401).json({ message: 'invalid credentials' });
+        const user = await UserRepository.findByEmail(email);
+        if (!user) {
+            return res.status(401).json({ message: 'invalid credentials' });
+        }
 
-  const token = AuthService.signToken(user);
-  return res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
+        const ok = await AuthService.comparePassword(password, user.password_hash);
+        if (!ok) {
+            return res.status(401).json({ message: 'invalid credentials' });
+        }
+
+        const token = AuthService.signToken(user);
+        return res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role, unit: user.unit } });
+
+    } catch (error: any) {
+        return res.status(500).json({ message: `Internal server error ${error.message}`, detail: error });
+    }
 });
 
 export default authRouter;

@@ -1,7 +1,7 @@
 import "reflect-metadata"
 import express from "express"
 import cors from "cors"
-import bodyParser from "body-parser"
+import { Client } from 'pg';
 import { AppDataSource } from "./database/data-source"
 import routers from "./app/routes/routes";
 import dotenv from "dotenv";
@@ -9,15 +9,13 @@ dotenv.config();
 
 const app = express()
 app.use(cors())
-app.use(bodyParser.json())
 app.use(express.json())
 
-app.use('/api', routers);
+app.use(routers);
 
 const PORT = parseInt(process.env.BACK_PORT || "3000")
 
 async function waitForDB() {
-  const { Client } = require('pg');
   const client = new Client({
     host: process.env.DB_HOST,
     port: parseInt(process.env.DB_PORT!),
@@ -27,37 +25,44 @@ async function waitForDB() {
   });
 
   let connected = false;
-  while (!connected) {
+  let attempts = 0;
+  while (attempts < 10 && !connected) {
     try {
       await client.connect();
       connected = true;
       await client.end();
     } catch (err) {
-      console.log("DB not ready, retrying in 2s...");
+      attempts++;
+      console.log("DB not ready - attempt ${attempts}/${DB_MAX_RETRIES} - retrying in 2s...");
       await new Promise(res => setTimeout(res, 2000));
     }
+  }
+  if (!connected) {
+    throw new Error('Unable to connect to database after multiple attempts');
   }
 }
 
 async function startServer() {
-    try {
+  try {
 
-        await waitForDB();
-        
-        await AppDataSource.initialize()
-        console.log("✅ DataSource connected")
+    console.log('Starting server...');
+    await waitForDB();
+    console.log('DB reachable, initializing TypeORM DataSource...');
 
-        // Roda todas as migrations pendentes automaticamente
-        await AppDataSource.runMigrations()
-        console.log("✅ Migrations applied")
+    await AppDataSource.initialize()
+    console.log("✅ DataSource connected")
 
-        app.listen(PORT, () => {
-            console.log(`🚀 Server running on port ${PORT}`)
-        })
-    } catch (err) {
-        console.error("❌ Error starting server:", err)
-        process.exit(1)
-    }
+    // Roda todas as migrations pendentes automaticamente
+    await AppDataSource.runMigrations()
+    console.log("✅ Migrations applied")
+
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`)
+    })
+  } catch (err) {
+    console.error("❌ Error starting server:", err)
+    process.exit(1)
+  }
 }
 
 startServer()

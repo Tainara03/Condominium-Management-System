@@ -49,13 +49,13 @@ export class CreateUsersTable1763515876333 implements MigrationInterface {
                     },
                     {
                         name: 'unit_id',
-                        type: 'uuid',
+                        type: 'int',
                         isNullable: false
                     },
                     {
-                        name: 'is_active',
+                        name: 'is_approved',
                         type: 'boolean',
-                        default: 'true',
+                        default: 'false',
                         isNullable: false
                     }
                 ],
