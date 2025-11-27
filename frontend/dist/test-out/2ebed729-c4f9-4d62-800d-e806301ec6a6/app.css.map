@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/app.css"],
+  "sourcesContent": [".main-container {\r\n  display: flex;\r\n  min-height: calc(100vh - 100px);\r\n}\r\n\r\napp-sidebar {\r\n  width: 250px;\r\n}\r\n\r\n.content {\r\n  padding: 20px;\r\n  flex-grow: 1;\r\n}\r\n"],
+  "mappings": ";AAAA,CAAC;AACC,WAAS;AACT,cAAY,KAAK,MAAM,EAAE;AAC3B;AAEA;AACE,SAAO;AACT;AAEA,CAAC;AACC,WAAS;AACT,aAAW;AACb;",
+  "names": []
+}
