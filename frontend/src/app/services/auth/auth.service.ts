@@ -1,11 +1,12 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, computed } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  // TODO: mudar default para null quando implementar o login
-  userType = signal<'admin' | 'morador' | 'porteiro' | null>('morador');
+  userType = signal<'admin' | 'morador' | 'porteiro' | null>(null);
+
+  isLoggedIn = computed(() => this.userType() !== null);
 
   loginAs(type: 'admin' | 'morador' | 'porteiro') {
     this.userType.set(type);
@@ -13,5 +14,9 @@ export class AuthService {
 
   logout() {
     this.userType.set(null);
+  }
+
+  getUserType(): 'admin' | 'morador' | 'porteiro' | null {
+    return this.userType();
   }
 }
