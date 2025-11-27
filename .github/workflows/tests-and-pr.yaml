@@ -19,9 +19,11 @@ jobs:
           node-version: '20'
 
       - name: Instalar dependências
+        working-directory: ./frontend
         run: npm ci
 
       - name: Rodar testes
+        working-directory: ./frontend
         run: npm run test -- --watch=false --browsers=ChromeHeadless
 
   create-pr-develop:

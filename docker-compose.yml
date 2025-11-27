@@ -2,33 +2,41 @@ version: '3.8'
 
 services:
   app:
-    build: .
-    command: npm run dev
-    container_name: meu-app-node
+    build: ./frontend
+    container_name: container_frontend
+    #command: npm start
     ports:
-      - "3000:3000"
+      - "${FRONT_PORT}:${FRONT_PORT}"
+    depends_on:
+      - backend
+      
+  backend:
+    build: ./backend
+    container_name: container_backend
+    command: npm run dev
+    ports:
+      - "${BACK_PORT}:${BACK_PORT}"
     environment:
-    #### ISSO VAI SER ALTERADO DEPOIS
-      - PORT=3000
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_USER=postgres
-      - DB_PASSWORD=secret
-      - DB_NAME=mydatabase
+      - PORT=${BACK_PORT}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
     volumes:
-      - .:/usr/src/app
+      - ./backend:/usr/src/app
       - /usr/src/app/node_modules
     depends_on:
       - db
 
   db:
     image: postgres:15-alpine
-    container_name: meu-banco-postgres
+    container_name: container_bd
     environment:
     #### ISSO VAI SER ALTERADO DEPOIS
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=secret
-      - POSTGRES_DB=mydatabase
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
     ports:
       - "5432:5432"
     volumes:
