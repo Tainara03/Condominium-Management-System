@@ -1,33 +1,21 @@
-FROM node:20-bullseye AS builder
-
-WORKDIR /usr/src/app
+# Etapa 1: Build Angular
+FROM node:20 AS builder
+WORKDIR /app
 
 COPY package*.json ./
-
 RUN npm install
 
 COPY . .
+RUN npm run build -- --configuration production
 
-RUN npm run build
+# Etapa 2: Servir com NGINX
+FROM nginx:alpine
 
-FROM node:20-bullseye-slim
+# Copia sua configuração customizada
+COPY nginx.conf /etc/nginx/nginx.conf
 
-WORKDIR /usr/src/app
+# Copia o build do Angular
+COPY --from=builder /app/dist/Condominium-Management-System/browser /usr/share/nginx/html
 
-RUN groupadd --system nodejs && useradd --system --gid nodejs nodejs
-USER nodejs
-
-COPY --from=builder /usr/src/app/dist ./dist
-COPY --from=builder /usr/src/app/package*.json ./
-COPY --from=builder /usr/src/app/node_modules ./node_modules
-
-
-ARG FRONT_PORT
-ENV FRONT_PORT=${FRONT_PORT}
-
-EXPOSE ${FRONT_PORT}
-
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD [ "node", "-e", "require('http').get('http://localhost:${process.env.FRONT_PORT}', (res) => process.exit(res.statusCode == 200 ? 0 : 1))" ]
-
-CMD [ "node", "dist/server.js" ]
+EXPOSE 4200
+CMD ["nginx", "-g", "daemon off;"]
