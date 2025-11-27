@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
   app:
     build: ./frontend
@@ -25,9 +24,9 @@ services:
       - DB_NAME=${DB_NAME}
     volumes:
       - ./backend:/usr/src/app
-      - /usr/src/app/node_modules
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   db:
     image: postgres:15-alpine
@@ -41,5 +40,11 @@ services:
       - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${DB_USER}"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+
 volumes:
   postgres-data:

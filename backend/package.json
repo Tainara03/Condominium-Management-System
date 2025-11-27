@@ -3,24 +3,33 @@
   "version": "0.0.0",
   "description": "Backend do sistema de gestão condominial",
   "main": "dist/server.js",
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^22.13.10",
+    "@types/pg": "^8.15.6",
+    "bcrypt": "^6.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "nodemon": "^3.1.11",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
+    "typeorm": "^0.3.27",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "pg": "^8.16.3",
+    "reflect-metadata": "^0.2.2"
+  },
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
-  },
-  "dependencies": {
-    "express": "^4.19.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.0",
-    "pg": "^8.13.0"
-  },
-  "devDependencies": {
-    "@types/express": "^4.17.21",
-    "@types/cors": "^2.8.5",
-    "@types/node": "^20.11.0",
-    "@types/pg": "^8.13.0",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.6.0"
-    
+    "start": "node src/server.ts",
+    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
   }
 }
