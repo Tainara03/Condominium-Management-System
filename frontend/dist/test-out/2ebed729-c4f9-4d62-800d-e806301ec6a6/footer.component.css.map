@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/components/footer/footer.component.css"],
+  "sourcesContent": [".custom-footer {\r\n    background-color: #824F31;\r\n}"],
+  "mappings": ";AAAA,CAAC;AACG,oBAAkB;AACtB;",
+  "names": []
+}
