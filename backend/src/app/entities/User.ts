@@ -25,8 +25,8 @@ class User {
     phone?: string;
 
     // armazena a FK role
-    @Column({ type: "int", nullable: false })
-    role_id!: number;
+    @Column({ type: "uuid", nullable: false })
+    role_id!: string;
 
     // relacionamento com role
     @ManyToOne(() => Role)
@@ -34,8 +34,8 @@ class User {
     role!: Role;
 
     // armazena a FK unit_id
-    @Column({ type: "int", nullable: false })
-    unit_id!: number;
+    @Column({ type: "uuid", nullable: false })
+    unit_id!: string;
     
     // relacionamento com unit
     @ManyToOne(()=> Unit)

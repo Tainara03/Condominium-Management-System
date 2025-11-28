@@ -13,7 +13,7 @@ roleRouter.get('/', ensureAuthenticated, permit(1), async (req: Request, res: Re
         const { id, role } = req.query;
         let roleData;
         if (id) {
-            roleData = await RoleService.getRoleById(Number(id));
+            roleData = await RoleService.getRoleById(id as string);
         } else if (role) {
             roleData = await RoleService.getRoleByName(role as string);
         } else {
@@ -25,6 +25,7 @@ roleRouter.get('/', ensureAuthenticated, permit(1), async (req: Request, res: Re
         if (error instanceof QueryFailedError) {
             return res.status(400).json({ message: 'Querry Failed', error: error.message });
         }
+
         //Se retornar role not found
         if (error instanceof Error && error.message === 'Role not found') {
             return res.status(404).json({ message: 'Role not found' });
@@ -35,18 +36,18 @@ roleRouter.get('/', ensureAuthenticated, permit(1), async (req: Request, res: Re
 });
 
 //Criar novo role
-roleRouter.post('/', ensureAuthenticated, permit(3), async (req: Request, res: Response) => {
+roleRouter.post('/', ensureAuthenticated, permit(4), async (req: Request, res: Response) => {
     try {
         if (!req.body || Object.keys(req.body).length === 0) {
             return res.status(400).json({ message: "Bad request: request body is missing or malformed." });
         }
         const roleData: Partial<IRole> = req.body;
-        const newRole = await RoleService.createRole(0, roleData);
+        const newRole = await RoleService.createRole(roleData);
         return res.status(201).json(newRole);
     } catch (error) {
         //Se tentar criar um role que já existe
         if (error instanceof Error && error.message === 'Role already exists') {
-            return res.status(409).json({ message: 'Role already exists' });
+            return res.status(409).json({ message: 'Conflict: Role already exists' });
         }
         //Qualquer outro erro
         return res.status(500).json({ message: 'Internal server error' });
@@ -54,19 +55,22 @@ roleRouter.post('/', ensureAuthenticated, permit(3), async (req: Request, res: R
 });
 
 //atualizar role
-roleRouter.put('/:id', ensureAuthenticated, permit(3), async (req: Request, res: Response) => {
+roleRouter.put('/:id', ensureAuthenticated, permit(4), async (req: Request, res: Response) => {
     try {
         if (!req.params || Object.keys(req.params).length === 0) {
             return res.status(400).json({ message: "Bad request: request params are missing" });
         }
         const { id } = req.params;
         if (!req.body || Object.keys(req.body).length === 0) {
-            return res.status(400).json({ message: 'No data provided for update' });
+            return res.status(400).json({ message: 'Bad request: no data provided for update' });
         }
-        const updatedRole = await RoleService.updateRole(Number(id), req.body);
+
+        const updatedRole = await RoleService.updateRole(id, req.body);
+
         if (!updatedRole) {
             return res.status(404).json({ message: 'Could Not update Role' });
         }
+
         return res.status(204).json(updatedRole);
     } catch (error) {
         //Se Der problema na query
@@ -83,13 +87,13 @@ roleRouter.put('/:id', ensureAuthenticated, permit(3), async (req: Request, res:
 });
 
 //deletar role
-roleRouter.delete('/:id', ensureAuthenticated, permit(3), async (req: Request, res: Response) => {
+roleRouter.delete('/:id', ensureAuthenticated, permit(4), async (req: Request, res: Response) => {
     try {
         if (!req.params || Object.keys(req.params).length === 0) {
             return res.status(400).json({ message: "Bad request: request params are missing" });
         }
         const { id } = req.params;
-        const deleted = await RoleService.deleteRole(Number(id));
+        const deleted = await RoleService.deleteRole(id);
         if (!deleted) {
             return res.status(404).json({ message: 'Could Not delete Role' });
         }

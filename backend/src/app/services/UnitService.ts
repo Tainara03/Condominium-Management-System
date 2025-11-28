@@ -1,7 +1,7 @@
 import UnitRepository from "../repositories/UnitRepository";
 import Unit from "../entities/Unit";
 
-const getUnitById = async (id: number) => {
+const getUnitById = async (id: string) => {
     try {
         const unit = await UnitRepository.getUnitById(id);
         if (!unit) {
@@ -47,7 +47,7 @@ const createUnit = async (unitData: Partial<Unit>) => {
     }
 };
 
-const updateUnit = async (id: number, unitData: Partial<Unit>) => {
+const updateUnit = async (id: string, unitData: Partial<Unit>) => {
     try {
         const unit = await UnitRepository.getUnitById(id);
         if (!unit) {
@@ -61,7 +61,7 @@ const updateUnit = async (id: number, unitData: Partial<Unit>) => {
     }
 };
 
-const deleteUnit = async (id: number) => {
+const deleteUnit = async (id: string) => {
     try {
         const unit = await UnitRepository.getUnitById(id);
         if (!unit) {

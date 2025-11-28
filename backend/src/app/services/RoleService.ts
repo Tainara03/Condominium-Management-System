@@ -2,7 +2,7 @@ import RoleRepository from "../repositories/RoleRepository";
 import IRole from "../interfaces/IRole";
 
 
-const getRoleById = async (id: number) => {
+const getRoleById = async (id: string) => {
     try {
         const role = await RoleRepository.getRoleById(id);
         if (!role) {
@@ -38,7 +38,7 @@ const getAllRoles = async () => {
     }
 };
 
-const createRole = async (id:number, roleData: Partial<IRole>) => {
+const createRole = async (roleData: Partial<IRole>) => {
     try {
         const existingRole = await RoleRepository.getRoleByName(roleData.role!);
         if (existingRole) {
@@ -51,7 +51,7 @@ const createRole = async (id:number, roleData: Partial<IRole>) => {
     }
 };
 
-const updateRole = async (id: number, roleData: Partial<IRole>) => {
+const updateRole = async (id: string, roleData: Partial<IRole>) => {
     try {
         const role = await RoleRepository.getRoleById(id);
         if (!role) {
@@ -64,7 +64,7 @@ const updateRole = async (id: number, roleData: Partial<IRole>) => {
     }   
 };
 
-const deleteRole = async (id: number) => {
+const deleteRole = async (id: string) => {
     try {
         const role = await RoleRepository.getRoleById(id);
         if (!role) {

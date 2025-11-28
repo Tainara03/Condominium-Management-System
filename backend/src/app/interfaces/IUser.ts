@@ -8,8 +8,8 @@ interface IUser {
     email: string,
     password_hash: string,
     phone: string,
-    role_id: number,
-    unit_id: number,
+    role_id: string,
+    unit_id: string,
     is_approved: boolean
 }
 

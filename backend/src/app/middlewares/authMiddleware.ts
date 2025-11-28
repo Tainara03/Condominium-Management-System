@@ -30,7 +30,7 @@ export const ensureAuthenticated = async (req: AuthRequest, res: Response, next:
         const decoded = jwt.verify(token, JWT_SECRET) as {
             sub: string,
             email: string,
-            role_id: number,
+            role_id: string,
             role_level: number
         };
 
