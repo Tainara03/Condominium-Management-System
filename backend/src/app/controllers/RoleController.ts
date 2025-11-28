@@ -36,7 +36,7 @@ roleRouter.get('/', ensureAuthenticated, permit(1), async (req: Request, res: Re
 });
 
 //Criar novo role
-roleRouter.post('/', ensureAuthenticated, permit(3), async (req: Request, res: Response) => {
+roleRouter.post('/', ensureAuthenticated, permit(4), async (req: Request, res: Response) => {
     try {
         if (!req.body || Object.keys(req.body).length === 0) {
             return res.status(400).json({ message: "Bad request: request body is missing or malformed." });
@@ -55,7 +55,7 @@ roleRouter.post('/', ensureAuthenticated, permit(3), async (req: Request, res: R
 });
 
 //atualizar role
-roleRouter.put('/:id', ensureAuthenticated, permit(3), async (req: Request, res: Response) => {
+roleRouter.put('/:id', ensureAuthenticated, permit(4), async (req: Request, res: Response) => {
     try {
         if (!req.params || Object.keys(req.params).length === 0) {
             return res.status(400).json({ message: "Bad request: request params are missing" });
@@ -87,7 +87,7 @@ roleRouter.put('/:id', ensureAuthenticated, permit(3), async (req: Request, res:
 });
 
 //deletar role
-roleRouter.delete('/:id', ensureAuthenticated, permit(3), async (req: Request, res: Response) => {
+roleRouter.delete('/:id', ensureAuthenticated, permit(4), async (req: Request, res: Response) => {
     try {
         if (!req.params || Object.keys(req.params).length === 0) {
             return res.status(400).json({ message: "Bad request: request params are missing" });
