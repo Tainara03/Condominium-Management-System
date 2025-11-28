@@ -1,10 +1,9 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
-
-export class SeedInitialData1764098807756 implements MigrationInterface {
-
-    public async up(queryRunner: QueryRunner): Promise<void> {
-
-         //Inserir roles padrão
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SeedInitialData1764098807756 = void 0;
+class SeedInitialData1764098807756 {
+    async up(queryRunner) {
+        //Inserir roles padrão
         await queryRunner.query(`
             INSERT INTO roles (role, level) VALUES
             ('morador', 1),
@@ -12,17 +11,13 @@ export class SeedInitialData1764098807756 implements MigrationInterface {
             ('sindico', 3),
             ('admin', 4)
         `);
-
         //Aqui inseri uma unidade padrão para funcionarios, sindicos e administradores
         await queryRunner.query(`
             INSERT INTO units (apartment, building)
             VALUES ('1', 'Administração')
         `);
-
-        
         //Senha padrão: admin
         const adminHash = '$2b$10$AykSXxT.W0HyB77eFZ2oyuNTkiewmrCrLrAtxGvMlL2HpCGeccPkm';
-        
         //Inserir usuário administrador padrão
         await queryRunner.query(`
             INSERT INTO users (name, email, password_hash, phone, role_id, unit_id, is_approved)
@@ -36,17 +31,13 @@ export class SeedInitialData1764098807756 implements MigrationInterface {
                 true
             )
         `);
-
         //REMOVER ANTES DE SUBIR EM PRODUÇÃO
-
         //inserir unidade de teste
         await queryRunner.query(`
             INSERT INTO units (apartment, building)
             VALUES ('404', 'A')
         `);
-
         //Inserindo alguns usuários para teste
-
         //Usuário aprovado pelo admin
         await queryRunner.query(`
             INSERT INTO users (name, email, password_hash, phone, role_id, unit_id, is_approved)
@@ -60,7 +51,6 @@ export class SeedInitialData1764098807756 implements MigrationInterface {
                 true
             )
         `);
-
         //Usuário não aprovado pelo admin
         await queryRunner.query(`
             INSERT INTO users (name, email, password_hash, phone, role_id, unit_id, is_approved)
@@ -74,7 +64,6 @@ export class SeedInitialData1764098807756 implements MigrationInterface {
                 false
             )
         `);
-
         //Síndico
         await queryRunner.query(`
             INSERT INTO users (name, email, password_hash, phone, role_id, unit_id, is_approved)
@@ -88,7 +77,6 @@ export class SeedInitialData1764098807756 implements MigrationInterface {
                 true
             )
         `);
-
         await queryRunner.query(`
             INSERT INTO users (name, email, password_hash, phone, role_id, unit_id, is_approved)
             VALUES (
@@ -102,11 +90,11 @@ export class SeedInitialData1764098807756 implements MigrationInterface {
             )
         `);
     }
-
-    public async down(queryRunner: QueryRunner): Promise<void> {
+    async down(queryRunner) {
         await queryRunner.query(`DELETE FROM users`);
         await queryRunner.query(`DELETE FROM units`);
         await queryRunner.query(`DELETE FROM roles`);
     }
-
 }
+exports.SeedInitialData1764098807756 = SeedInitialData1764098807756;
+//# sourceMappingURL=1764098807756-SeedInitialData.js.map

@@ -8,11 +8,13 @@ RUN npm install
 
 COPY . .
 
-ARG BACK_PORT
-ENV BACK_PORT=${BACK_PORT}
+RUN npm run build 
+
+#ARG BACK_PORT
+ENV PORT=${BACK_PORT}
 
 EXPOSE ${BACK_PORT}
 
-CMD ["npm", "run", "dev"]
+CMD ["node", "dist/server.js"] 
 
 #DOCKER PRECISA SER ALTERADO PARA PRODUÇÃO QUANDO POSSÍVEL
