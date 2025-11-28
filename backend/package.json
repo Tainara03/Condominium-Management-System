@@ -29,7 +29,7 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
-    "start": "node src/server.ts",
+    "start": "node dist/server.js", 
     "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
   }
 }
