@@ -13,7 +13,7 @@ unitRouter.get('/', ensureAuthenticated, permit(1), async (req: Request, res: Re
 
         let unit;
         if (id) {
-            unit = await UnitService.getUnitById(Number(id));
+            unit = await UnitService.getUnitById(id as string);
         } else if (apartment && building) {
             unit = await UnitService.getUnitByApartmentAndBuilding(apartment as string, building as string);
         } else {
@@ -36,7 +36,7 @@ unitRouter.get('/', ensureAuthenticated, permit(1), async (req: Request, res: Re
 });
 
 //atualizar unidade
-unitRouter.put('/:id', ensureAuthenticated, permit(3), async (req: Request, res: Response) => {
+unitRouter.put('/:id', ensureAuthenticated, permit(4), async (req: Request, res: Response) => {
     try {
         if (!req.params || Object.keys(req.params).length === 0) {
             return res.status(400).json({ message: "Bad request: request params are missing" });
@@ -45,7 +45,7 @@ unitRouter.put('/:id', ensureAuthenticated, permit(3), async (req: Request, res:
         if (!req.body || Object.keys(req.body).length === 0) {
             return res.status(400).json({ message: 'No data provided for update' });
         }
-        const updatedUnit = await UnitService.updateUnit(Number(id), req.body);
+        const updatedUnit = await UnitService.updateUnit(id, req.body);
         if (!updatedUnit) {
             return res.status(404).json({ message: 'Could Not update Unit' });
         }
@@ -65,7 +65,7 @@ unitRouter.put('/:id', ensureAuthenticated, permit(3), async (req: Request, res:
 });
 
 //criar unidade
-unitRouter.post('/', ensureAuthenticated, permit(3), async (req: Request, res: Response) => {
+unitRouter.post('/', ensureAuthenticated, permit(4), async (req: Request, res: Response) => {
     try {
         if (!req.body || Object.keys(req.body).length === 0) {
             return res.status(400).json({ message: 'No data provided for creation' });
@@ -87,13 +87,13 @@ unitRouter.post('/', ensureAuthenticated, permit(3), async (req: Request, res: R
 });
 
 //deletar unidade
-unitRouter.delete('/:id', ensureAuthenticated, permit(3), async (req: Request, res: Response) => {
+unitRouter.delete('/:id', ensureAuthenticated, permit(4), async (req: Request, res: Response) => {
     try {
         if (!req.params || Object.keys(req.params).length === 0) {
             return res.status(400).json({ message: "Bad request: request params are missing" });
         }
         const { id } = req.params;
-        const deleted = await UnitService.deleteUnit(Number(id));
+        const deleted = await UnitService.deleteUnit(id);
         if (!deleted) {
             return res.status(404).json({ message: 'Could Not delete Unit' });
         }

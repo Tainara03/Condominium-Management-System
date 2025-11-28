@@ -3,7 +3,7 @@ Arquivo que define para o front qual o tipo de arquivo da nossa tabela users
 */
 
 interface IRole {
-    id?: number,
+    id?: string,
     role: string,
     level: number
 }

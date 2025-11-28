@@ -44,12 +44,12 @@ export class CreateUsersTable1763515876333 implements MigrationInterface {
                     },
                     {
                         name: 'role_id',
-                        type: 'int',
+                        type: 'uuid',
                         isNullable: false
                     },
                     {
                         name: 'unit_id',
-                        type: 'int',
+                        type: 'uuid',
                         isNullable: false
                     },
                     {
