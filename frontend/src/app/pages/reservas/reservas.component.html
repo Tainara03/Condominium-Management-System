@@ -1,1 +1,62 @@
-<p>reservas.component works!</p>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+
+      <div class="card shadow-lg border-0">
+        <div class="card-header text-white text-center py-3" style="background-color: #FCAA60 !important;">
+          <h4 class="mb-0">Agendar Reserva de Área Comum</h4>
+        </div>
+        <div class="card-body p-4 p-md-5">
+
+          <form>
+            <div class="row mb-4 g-3">
+              
+              <div class="col-md-4">
+                <label for="localSelect" class="form-label fw-bold">Local</label>
+                <select class="form-select" id="localSelect" aria-label="Seleção do Local" required>
+                  <option value="" disabled selected>Selecione a Área</option>
+                  <option value="1">Salão de Festas Principal</option>
+                  <option value="2">Salão Gourmet</option>
+                  <option value="3">Quadra Poliesportiva</option>
+                  <option value="4">Churrasqueira</option>
+                </select>
+              </div>
+
+              <div class="col-md-4">
+                <label for="dataInput" class="form-label fw-bold">Data</label>
+                <input type="date" class="form-control" id="dataInput" required>
+              </div>
+
+              <div class="col-md-4">
+                <label for="periodoSelect" class="form-label fw-bold">Período</label>
+                <select class="form-select" id="periodoSelect" aria-label="Seleção do Período" required>
+                  <option value="" disabled selected>Selecione o Bloco</option>
+                  <option value="1">Manhã (06:00 - 11:00)</option>
+                  <option value="2">Tarde (12:00 - 17:00)</option>
+                  <option value="3">Noite (18:00 - 23:00)</option>
+                </select>
+              </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="form-floating">
+                        <textarea 
+                            class="form-control" 
+                            placeholder="Deixe uma descrição aqui" 
+                            id="floatingTextarea2" 
+                            style="height: 100px"
+                        ></textarea>
+                        <label for="floatingTextarea2">Descrição (Opcional)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-grid mt-4">
+              <button class="btn btn-marrom btn-lg" type="submit">Solicitar Reserva</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

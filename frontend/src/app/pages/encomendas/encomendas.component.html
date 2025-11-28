@@ -1,1 +1,65 @@
-<p>encomendas.component works!</p>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+
+      <div class="card shadow-lg border-0">
+        <div class="card-header text-white text-center py-3" style="background-color: #FCAA60 !important;">
+          <h4 class="mb-0">Cadastrar Encomendas</h4>
+        </div>
+        <div class="card-body p-4 p-md-5">
+
+          <form>
+            <div class="row mb-4 g-3">
+              
+              <div class="col-md-4">
+                <label for="blocoSelect" class="form-label fw-bold">Bloco</label>
+                <select class="form-select" id="blocoSelect" aria-label="Seleção do Bloco" required>
+                  <option value="" disabled selected>Selecione o Bloco</option>
+                  <option value="A">Bloco A</option>
+                  <option value="B">Bloco B</option>
+                  <option value="C">Bloco C</option>
+                  <option value="D">Bloco D</option>
+                </select>
+              </div>
+
+              <div class="col-md-4">
+                <label for="unidadeSelect" class="form-label fw-bold">Apartamento</label>
+                <select class="form-select" id="unidadeSelect" aria-label="Seleção da Unidade" required>
+                  <option value="" disabled selected>Selecione o Apto</option>
+                  <option value="101">101</option>
+                  <option value="102">102</option>
+                  <option value="201">201</option>
+                  <option value="304">304</option>
+                  <option value="402">402</option>
+                </select>
+              </div>
+
+              <div class="col-md-4">
+                <label for="dataHoraInput" class="form-label fw-bold">Data e Hora de Chegada</label>
+                <input type="datetime-local" class="form-control" id="dataHoraInput" required>
+              </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="form-floating">
+                        <textarea 
+                            class="form-control" 
+                            placeholder="Descreva o tipo de encomenda (Ex: Caixa grande da Amazon, Envelope)" 
+                            id="floatingTextarea2" 
+                            style="height: 100px"
+                            required
+                        ></textarea>
+                        <label for="floatingTextarea2">Tipo de Encomenda / Descrição</label>
+                    </div>
+                </div>
+            </div>
+            <div class="d-grid mt-4">
+              <button class="btn btn-marrom btn-lg" type="submit">Registrar Encomenda</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
