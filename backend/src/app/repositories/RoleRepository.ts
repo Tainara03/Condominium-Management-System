@@ -3,7 +3,7 @@ import Role from "../entities/Role";
 
 const RoleRepository = AppDataSource.getRepository(Role);
 
-const getRoleById = async (id: number) => {
+const getRoleById = async (id: string) => {
     return RoleRepository.findOne({where: {id}});
 };
 
@@ -21,12 +21,12 @@ const createRole = async (roleData: Partial<Role>) => {
     return newRole;
 }
 
-const updateRole = async (id: number, roleData: Partial<Role>) => {
+const updateRole = async (id: string, roleData: Partial<Role>) => {
     RoleRepository.update(id, roleData);
     return RoleRepository.findOne({where: {id}});
 }
 
-const deleteRole = async (id: number) => {
+const deleteRole = async (id: string) => {
     const result = await RoleRepository.delete(id);
     return result.affected !== 0;
 }

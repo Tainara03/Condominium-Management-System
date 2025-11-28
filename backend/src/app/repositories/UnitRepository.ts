@@ -5,7 +5,7 @@ import Unit from "../entities/Unit";
 const UnitRepository = AppDataSource.getRepository(Unit);
 
 //buscar unidade por id
-const getUnitById = async (id: number) => {
+const getUnitById = async (id: string) => {
     return UnitRepository.findOne({where: {id}});
 };
 
@@ -26,12 +26,12 @@ const createUnit = async (unitData: Partial<Unit>) => {
     return newUnit;
 }
 
-const updateUnit = async (id: number, userData: Partial<Unit>) => {
+const updateUnit = async (id: string, userData: Partial<Unit>) => {
     UnitRepository.update(id, userData);
     return UnitRepository.findOne({where: {id}});
 }
 
-const deleteUnit = async (id: number) => {
+const deleteUnit = async (id: string) => {
     const result = await UnitRepository.delete(id);
     return result.affected !== 0;
 }

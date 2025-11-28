@@ -4,8 +4,8 @@ import User from "./User";
 @Entity('roles')
 class Role {
     
-    @PrimaryGeneratedColumn('increment')
-    id!: number
+    @PrimaryGeneratedColumn('uuid')
+    id!: string
 
     @Column('varchar', { length: 50, nullable: false})
     role!: string

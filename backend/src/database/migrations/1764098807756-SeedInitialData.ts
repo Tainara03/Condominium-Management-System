@@ -30,7 +30,7 @@ export class SeedInitialData1764098807756 implements MigrationInterface {
                 'admin@admin.com',
                 '${adminHash}',
                 '11999999999',
-                3,    -- role admin
+                (SELECT id FROM roles WHERE level = '3' AND role = 'admin' LIMIT 1),
                 (SELECT id FROM units WHERE apartment = '1' AND building = 'Administração' LIMIT 1),
                 true
             )
