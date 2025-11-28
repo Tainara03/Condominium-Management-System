@@ -22,6 +22,19 @@ authRouter.post('/register', async (req: Request, res: Response) => {
             return res.status(400).json({ message: "All data are required" });
         }
 
+        const isValid =
+            typeof name === "string" &&
+            typeof email === "string" &&
+            typeof password === "string" &&
+            typeof phone === "string" &&
+            typeof role_id === "number" &&
+            typeof unit_id === "number";
+
+        
+        if (!isValid) {
+            return res.status(400).json({message: "Invalid input data" });
+        }
+
         const existing = await UserRepository.findByEmail(email);
         if (existing) {
             return res.status(409).json({ message: "Email already exists." });

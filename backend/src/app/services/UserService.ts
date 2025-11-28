@@ -1,4 +1,3 @@
-import { QueryFailedError } from "typeorm";
 import UserRepository from "../repositories/UserRepository";
 import IUser from "../interfaces/IUser";
 
