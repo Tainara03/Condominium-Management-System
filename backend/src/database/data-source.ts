@@ -8,6 +8,8 @@ import { CreateRolesTable1763515687970 } from "./migrations/1763515687970-Create
 import { CreateUnitsTable1763515754646 } from "./migrations/1763515754646-CreateUnitsTable"
 import { CreateUsersTable1763515876333 } from "./migrations/1763515876333-CreateUsersTable"
 import { SeedInitialData1764098807756 } from "./migrations/1764098807756-SeedInitialData"
+import { CreatePackagesTable1764373418833 } from "./migrations/1764373418833-CreatePackagesTable"
+import { CreateNoticesTable1764373726647 } from "./migrations/1764373726647-CreateNoticesTable"
 
 
 dotenv.config()
@@ -22,6 +24,6 @@ export const AppDataSource = new DataSource({
     synchronize: false,
     logging: false,
     entities: [Role, Unit, User],
-    migrations: [CreateRolesTable1763515687970, CreateUnitsTable1763515754646, CreateUsersTable1763515876333,SeedInitialData1764098807756],
+    migrations: [CreateRolesTable1763515687970, CreateUnitsTable1763515754646, CreateUsersTable1763515876333, SeedInitialData1764098807756, CreatePackagesTable1764373418833, CreateNoticesTable1764373726647],
     subscribers: [],
 })
