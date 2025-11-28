@@ -1,23 +1,30 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { LoginComponent } from './login.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { AuthService } from '../../services/auth/auth.service'
+
+class MockAuthService {
+  isLoggedIn = () => false;
+  getUserType = () => null;
+  logout = () => {};
+  loginAs = (type: any) => {};
+}
 
 describe('LoginComponent', () => {
-  let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LoginComponent]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(LoginComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+      imports: [LoginComponent, RouterTestingModule],
+      providers: [
+        { provide: AuthService, useClass: MockAuthService }
+      ]
+    }).compileComponents();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    fixture = TestBed.createComponent(LoginComponent);
+    const component = fixture.componentInstance;
+    expect(component).toBeTruthy(); 
   });
 });

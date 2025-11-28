@@ -1,1 +1,49 @@
-<p>ocorrencias.component works!</p>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+
+      <div class="card shadow-lg border-0">
+        <div class="card-header text-white text-center py-3" style="background-color: #FCAA60 !important;">
+          <h4 class="mb-0">Enviar Comunicado</h4>
+        </div>
+        <div class="card-body p-4 p-md-5">
+
+          <form>
+            <div class="row mb-4 g-3">
+              
+              <div class="col-md-8">
+                <label for="tituloInput" class="form-label fw-bold">Título do Assunto</label>
+                <input type="text" class="form-control" id="tituloInput" placeholder="Ex: Vazamento no Bloco B" required>
+              </div>
+
+              <div class="col-md-4">
+                <label for="dataInput" class="form-label fw-bold">Data da Ocorrência</label>
+                <input type="date" class="form-control" id="dataInput" required>
+              </div>
+
+              </div>
+
+            <div class="row mb-4">
+              <div class="col-12">
+                <div class="form-floating">
+                  <textarea 
+                    class="form-control" 
+                    placeholder="Descreva detalhadamente o ocorrido ou sua solicitação." 
+                    id="floatingTextareaMensagem" 
+                    style="height: 150px"
+                    required
+                  ></textarea>
+                  <label for="floatingTextareaMensagem">Mensagem / Detalhes</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-grid mt-4">
+              <button class="btn btn-marrom btn-lg" type="submit">Enviar Comunicado</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
