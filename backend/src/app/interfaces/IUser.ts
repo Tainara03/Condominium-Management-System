@@ -7,7 +7,7 @@ interface IUser {
     name: string,
     email: string,
     password_hash: string,
-    phone?: string,
+    phone: string,
     role_id: number,
     unit_id: number,
     is_approved: boolean

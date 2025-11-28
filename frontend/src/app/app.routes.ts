@@ -8,10 +8,12 @@ import { LoginComponent } from './pages/login/login.component';
 import { AuthGuard } from './services/auth/auth.guard';
 import { PainelComponent } from './pages/painel/painel.component';
 import { EncomendasComponent } from './pages/encomendas/encomendas.component';
+import { RegistroComponent } from './pages/registro/registro.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
 
+  { path: 'registro', component: RegistroComponent },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'painel', component: PainelComponent, canActivate: [AuthGuard] },
   { path: 'encomendas', component: EncomendasComponent, canActivate: [AuthGuard] },

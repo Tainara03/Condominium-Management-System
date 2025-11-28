@@ -1,0 +1,51 @@
+.bg-marrom {
+    background-color: #824F31 !important;
+}
+
+.registration-card-integrated {
+    max-width: 950px;
+    width: 100%;
+    height: 90vh;
+    border-radius: 1rem;
+    overflow: hidden;
+    margin-left: -150px !important; 
+}
+
+.registration-card-integrated .row {
+    height: 100%;
+}
+
+.registration-card-integrated .bg-marrom img {
+    min-width: 40px; 
+    max-width: 100%; 
+    height: auto; 
+    max-height: 100px;
+}
+
+.registration-card-integrated .col-md-10 {
+    display: flex;
+    flex-direction: column;
+}
+
+.registration-card-integrated form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.form-scroll-area {
+    overflow-y: auto;
+    padding-right: 15px;
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+    .registration-card-integrated {
+        height: auto;
+        max-width: 90%;
+        margin-left: 0 !important;
+    }
+    .registration-card-integrated .bg-marrom {
+        display: none; 
+    }
+}

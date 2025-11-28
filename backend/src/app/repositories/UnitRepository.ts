@@ -10,7 +10,7 @@ const getUnitById = async (id: number) => {
 };
 
 //buscar unidade por apartment e building
-const getUnitByName = async (apartment: string, building: string) => {
+const getUnitByApartmentAndBuilding = async (apartment: string, building: string) => {
     return UnitRepository.findOne({where: {apartment, building}});
 };
 
@@ -37,4 +37,4 @@ const deleteUnit = async (id: number) => {
 }
 
 
-export default {getUnitById,getUnitByName,getAllUnits,createUnit,updateUnit, deleteUnit};
+export default {getUnitById,getUnitByApartmentAndBuilding,getAllUnits,createUnit,updateUnit, deleteUnit};

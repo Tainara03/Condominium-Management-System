@@ -1,0 +1,17 @@
+.login-card-layout {
+    max-width: 900px !important;
+    width: 100%;
+    margin-left: -150px !important;
+    border-radius: 1rem;
+}
+
+.login-card-layout img {
+    max-height: 500px;
+}
+
+@media (max-width: 992px) {
+    .login-card-layout {
+        margin-left: 0 !important;
+        max-width: 90%; 
+    }
+}
