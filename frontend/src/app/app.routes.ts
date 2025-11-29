@@ -9,6 +9,7 @@ import { AuthGuard } from './services/auth/auth.guard';
 import { PainelComponent } from './pages/painel/painel.component';
 import { EncomendasComponent } from './pages/encomendas/encomendas.component';
 import { RegistroComponent } from './pages/registro/registro.component';
+import { CadastroCobrancasComponent } from './pages/cadastro-cobrancas/cadastro-cobrancas.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -19,6 +20,7 @@ export const routes: Routes = [
   { path: 'encomendas', component: EncomendasComponent, canActivate: [AuthGuard] },
   { path: 'perfil', component: PerfilComponent, canActivate: [AuthGuard] },
   { path: 'cobrancas', component: CobrancasComponent, canActivate: [AuthGuard] },
+  { path: 'cadastrar-cobrancas', component: CadastroCobrancasComponent, canActivate: [AuthGuard] },
   { path: 'ocorrencias', component: OcorrenciasComponent, canActivate: [AuthGuard] },
   { path: 'reservas', component: ReservasComponent, canActivate: [AuthGuard] },
 

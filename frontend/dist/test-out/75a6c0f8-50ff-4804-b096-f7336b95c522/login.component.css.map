@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/pages/login/login.component.css"],
+  "sourcesContent": [".login-card-layout {\r\n    max-width: 900px !important;\r\n    width: 100%;\r\n    margin-left: -150px !important;\r\n    border-radius: 1rem;\r\n}\r\n\r\n.login-card-layout img {\r\n    max-height: 500px;\r\n}\r\n\r\n@media (max-width: 992px) {\r\n    .login-card-layout {\r\n        margin-left: 0 !important;\r\n        max-width: 90%; \r\n    }\r\n}"],
+  "mappings": ";AAAA,CAAC;AACG,aAAW;AACX,SAAO;AACP,eAAa;AACb,iBAAe;AACnB;AAEA,CAPC,kBAOkB;AACf,cAAY;AAChB;AAEA,OAAO,CAAC,SAAS,EAAE;AACf,GAZH;AAaO,iBAAa;AACb,eAAW;AACf;AACJ;",
+  "names": []
+}

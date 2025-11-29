@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/pages/ocorrencias/ocorrencias.component.css"],
+  "sourcesContent": [".btn-marrom {\r\n    background-color: #FCAA60;\r\n    border-color: #FCAA60;\r\n    color: #FFF;\r\n}\r\n\r\n.btn-marrom:hover {\r\n    background-color: #e59950;\r\n    border-color: #e59950;\r\n}\r\n\r\n.btn-marrom:active,\r\n.btn-marrom:focus {\r\n    background-color: #d18844 !important;\r\n    border-color: #d18844 !important;\r\n    box-shadow: 0 0 0 0.25rem rgba(252, 170, 96, 0.5);\r\n}"],
+  "mappings": ";AAAA,CAAC;AACG,oBAAkB;AAClB,gBAAc;AACd,SAAO;AACX;AAEA,CANC,UAMU;AACP,oBAAkB;AAClB,gBAAc;AAClB;AAEA,CAXC,UAWU;AACX,CAZC,UAYU;AACP,oBAAkB;AAClB,gBAAc;AACd,cAAY,EAAE,EAAE,EAAE,QAAQ,KAAK,GAAG,EAAE,GAAG,EAAE,EAAE,EAAE;AACjD;",
+  "names": []
+}

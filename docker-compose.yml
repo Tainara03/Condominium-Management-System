@@ -12,6 +12,7 @@ services:
   backend:
     build: ./backend
     container_name: container_backend
+    #command: npm run dev
     command: npm run dev
     ports:
       - "${BACK_PORT}:${BACK_PORT}"
@@ -22,8 +23,10 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
-    volumes:
+    
+    volumes:  
       - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
     depends_on:
       db:
         condition: service_healthy
