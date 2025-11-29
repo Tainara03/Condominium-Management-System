@@ -1,1 +1,93 @@
-<p>cobrancas.component works!</p>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+
+      <div class="card shadow-lg border-0">
+        <div class="card-header text-white text-center py-3" style="background-color: #FCAA60 !important;">
+          <h4 class="mb-0">Controle de Cobranças</h4>
+        </div>
+        <div class="card-body px-4 py-3 py-md-4">
+            
+            <div class="row mb-4 g-3 align-items-end">
+                
+                <div class="col-md-2">
+                    <label for="filtroBloco" class="form-label fw-bold">Bloco</label>
+                    <select id="filtroBloco" class="form-select form-select-sm"
+                            [(ngModel)]="filtros.bloco" (change)="aplicarFiltros()">
+                        <option value="">Todos</option>
+                        <option value="A">Bloco A</option>
+                        <option value="B">Bloco B</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="filtroApto" class="form-label fw-bold">Apartamento</label>
+                    <input type="text" id="filtroApto" class="form-control form-control-sm" placeholder="Ex: 101"
+                           [(ngModel)]="filtros.apartamento" (input)="aplicarFiltros()">
+                </div>
+                <div class="col-md-2">
+                    <label for="filtroStatus" class="form-label fw-bold">Status</label>
+                    <select id="filtroStatus" class="form-select form-select-sm"
+                            [(ngModel)]="filtros.status" (change)="aplicarFiltros()">
+                        <option value="">Todos</option>
+                        <option value="Pago">Pago</option>
+                        <option value="Pendente">Pendente</option>
+                        <option value="Atrasado">Atrasado</option>
+                    </select>
+                </div>
+                <div class="col-md-6 d-flex justify-content-end align-items-end">
+                  <button class="btn btn-sm btn-outline-secondary me-2" (click)="resetarFiltros()">Resetar Filtros</button>
+                  <button 
+                      *ngIf="auth.userType() === 'admin'" 
+                      type="button" 
+                      class="btn btn-marrom btn-sm me-2" 
+                      routerLink="/cadastrar-cobrancas"> <i class="bi bi-plus-lg me-2"></i> Adicionar Cobranças
+                  </button>
+                </div>
+                
+            </div>
+            <table class="table table-light table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Bloco</th>
+                        <th scope="col">Apto</th>
+                        <th scope="col">Data Lanç.</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Valor</th>
+                        <th scope="col">Vencimento</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Comprovante</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let cobranca of cobrancasFiltradas"
+                        [ngClass]="{
+                            'bg-warning': cobranca.status === 'Pendente',
+                            'bg-danger text-white': cobranca.status === 'Atrasado',
+                            'bg-success-light': cobranca.status === 'Pago' 
+                        }">
+                        
+                        <td>{{ cobranca.bloco }}</td>
+                        <td>{{ cobranca.apartamento }}</td>
+                        <td>{{ cobranca.dataLancamento }}</td>
+                        <td>{{ cobranca.tipoCobranca }}</td>
+                        <td>{{ cobranca.valor }}</td>
+                        <td>{{ cobranca.dataVencimento }}</td>
+                        
+                        <td>
+                            <span class="fw-bold">{{ cobranca.status }}</span>
+                        </td>
+                        
+                        <td>
+                            <a [href]="cobranca.linkComprovante" class="btn btn-sm btn-outline-info" 
+                               [class.disabled]="cobranca.status !== 'Pago'">
+                                {{ cobranca.status === 'Pago' ? 'Ver Doc' : '—' }}
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

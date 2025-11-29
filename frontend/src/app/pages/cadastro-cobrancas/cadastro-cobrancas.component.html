@@ -1,0 +1,128 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+
+      <div class="card shadow-lg border-0">
+        <div class="card-header text-white text-center py-3" style="background-color: #FCAA60 !important;">
+          <h4 class="mb-0">Cadastrar Cobrança</h4>
+        </div>
+        <div class="card-body p-4 p-md-5">
+
+          <form (ngSubmit)="cadastrarCobranca()">
+            
+            <div class="row mb-4 g-3">
+              
+              <div class="col-md-4">
+                <label for="tipoCobrancaSelect" class="form-label fw-bold">Tipo de Cobrança</label>
+                <select class="form-select" id="tipoCobrancaSelect" 
+                        [(ngModel)]="cobrancaData.tipo" name="tipoCobranca" required>
+                  <option value="" disabled selected>Selecione</option>
+                  <option value="Condominio">Condomínio</option>
+                  <option value="Agua">Água</option>
+                  <option value="Multa">Multa</option>
+                  <option value="Outro">Outro</option>
+                </select>
+              </div>
+
+              <div class="col-md-4">
+                <label for="dataVencimento" class="form-label fw-bold">Data de Vencimento</label>
+                <input type="date" class="form-control" id="dataVencimento" 
+                       [(ngModel)]="cobrancaData.dataVencimento" name="dataVencimento" required>
+              </div>
+
+              <div class="col-md-4">
+                <label for="valorInput" class="form-label fw-bold">Valor (R$)</label>
+                <input type="number" class="form-control" id="valorInput" placeholder="0.00" min="0" step="0.01"
+                       [(ngModel)]="cobrancaData.valor" name="valor" required>
+              </div>
+            </div>
+
+<div class="row mb-4 g-3">
+                <div class="col-md-4">
+                    <label for="modoDestino" class="form-label fw-bold">Aplicar a</label>
+                    <select class="form-select" id="modoDestino" 
+                            [(ngModel)]="cobrancaData.modoDestino" name="modoDestino" required>
+                        <option value="Todos">Todas as Unidades (Lançamento em Massa)</option>
+                        <option value="Blocos">Blocos Selecionados (Todos os aptos dentro)</option>
+                        <option value="Unidades">Unidades Específicas (Aptos individuais)</option>
+                    </select>
+                </div>
+
+                <ng-container *ngIf="cobrancaData.modoDestino === 'Blocos'">
+                    <div class="col-md-8">
+                        <label for="blocoMultiSelect" class="form-label fw-bold">Blocos (Múltipla Seleção)</label>
+                        <select class="form-select" id="blocoMultiSelect" size="4" multiple 
+                                [(ngModel)]="cobrancaData.blocosSelecionados" name="blocosSelecionados" required>
+                            <option value="A">Bloco A</option>
+                            <option value="B">Bloco B</option>
+                            <option value="C">Bloco C</option>
+                            <option value="D">Bloco D</option>
+                        </select>
+                        <div class="form-text obs fw-bold">
+                            Segure CTRL (ou CMD no Mac) para selecionar vários.
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="cobrancaData.modoDestino === 'Unidades'">
+                    <div class="col-md-4">
+                        <label for="blocoUnidadeSelect" class="form-label fw-bold">Blocos Envolvidos</label>
+                        <select class="form-select" id="blocoUnidadeSelect" size="4" multiple 
+                                [(ngModel)]="cobrancaData.blocosSelecionados" name="blocosUnidadeSelecionados" required>
+                            <option value="A">Bloco A</option>
+                            <option value="B">Bloco B</option>
+                        </select>
+                        <div class="form-text obs fw-bold">Segure CTRL/CMD para selecionar vários.</div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="aptosMultiSelect" class="form-label fw-bold">Apartamentos</label>
+                        <select class="form-select" id="aptosMultiSelect" size="4" multiple 
+                                [(ngModel)]="cobrancaData.apartamentosSelecionados" name="apartamentosSelecionados" required>
+                            <option value="101">101</option>
+                            <option value="102">102</option>
+                            <option value="201">201</option>
+                            <option value="304">304</option>
+                        </select>
+                        <div class="form-text obs fw-bold">Segure CTRL/CMD para selecionar vários.</div>
+                    </div>
+                </ng-container>
+            </div>
+            
+            <div class="row mb-4 g-3">
+                <div class="col-md-6">
+                    <label for="linkBoleto" class="form-label fw-bold">Link Direto do Boleto/PDF</label>
+                    <input type="url" class="form-control" id="linkBoleto" placeholder="https://..."
+                           [(ngModel)]="cobrancaData.linkBoleto" name="linkBoleto">
+                    <div class="form-text">Útil para boletos gerados por terceiros.</div>
+                </div>
+                <div class="col-md-6">
+                    <label for="uploadComprovante" class="form-label fw-bold">Ou faça Upload do PDF</label>
+                    <input class="form-control" type="file" id="uploadComprovante" 
+                           (change)="onFileSelected($event)" name="arquivoAnexo">
+                    <div class="form-text">Será anexado à cobrança (máx. 5MB).</div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="form-floating">
+                        <textarea 
+                            class="form-control" 
+                            placeholder="Descreva o motivo da cobrança." 
+                            id="floatingDescricao" 
+                            style="height: 100px"
+                            [(ngModel)]="cobrancaData.descricao" name="descricao"
+                        ></textarea>
+                        <label for="floatingDescricao">Descrição Detalhada</label>
+                    </div>
+                </div>
+            </div>
+            <div class="d-grid mt-4">
+              <button class="btn btn-marrom btn-lg" type="submit">Cadastrar Cobrança</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

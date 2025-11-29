@@ -1,12 +1,11 @@
 <div *ngIf="auth.isLoggedIn()" class="list-group" style="width: 200px;">
-  <a class="list-group-item list-group-item-action" routerLink="/home">Feed de Notificações</a>
+  <a class="list-group-item list-group-item-action" routerLink="/home">Página Inicial</a>
   
   <a *ngIf="auth.userType() === 'admin'" class="list-group-item list-group-item-action" routerLink="/painel">Painel Administrador</a>
   
   <a *ngIf="auth.userType() === 'porteiro'" class="list-group-item list-group-item-action" routerLink="/encomendas">Cadastrar Encomendas</a>
   
-  <a *ngIf="auth.userType() === 'morador'" class="list-group-item list-group-item-action" routerLink="/cobrancas">Minhas Cobranças</a>
-  
+  <a class="list-group-item list-group-item-action" routerLink="/cobrancas">Controle de Cobranças</a>
   <a class="list-group-item list-group-item-action" routerLink="/ocorrencias">Enviar Comunicados</a>
   <a class="list-group-item list-group-item-action" routerLink="/reservas">Reserva de Áreas</a>
   <a class="list-group-item list-group-item-action" routerLink="/perfil">Meu Perfil</a>
