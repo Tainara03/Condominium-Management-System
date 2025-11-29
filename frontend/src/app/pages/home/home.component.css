@@ -1,0 +1,23 @@
+.text-bg-warning {
+    background-color: #ffc107 !important;
+    color: #664d03 !important;
+}
+
+.text-bg-danger {
+    background-color: #dc3545 !important;
+    color: #fff !important;
+}
+
+.text-bg-info {
+    background-color: #0dcaf0 !important;
+    color: #055160 !important;
+}
+
+.text-bg-success {
+    background-color: #d1e7dd !important; 
+    color: #0f5132 !important;
+}
+
+.card .card-text {
+    color: inherit;
+}

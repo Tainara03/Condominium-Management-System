@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/pages/cobrancas/cobrancas.component.css"],
+  "sourcesContent": [".btn-marrom {\r\n    background-color: #FCAA60;\r\n    border-color: #FCAA60;\r\n    color: #FFF;\r\n}\r\n\r\n.btn-marrom:hover {\r\n    background-color: #e59950;\r\n    border-color: #e59950;\r\n}\r\n\r\n.card-fixed-height {\r\n    max-height: 80vh; \r\n    width: 100%;\r\n}\r\n\r\n.fixed-height-content {\r\n    height: 100%;\r\n    \r\n    display: flex;\r\n    flex-direction: column;\r\n    \r\n    overflow-y: auto; \r\n}\r\n\r\n.fixed-height-content table {\r\n    flex-shrink: 0;\r\n}"],
+  "mappings": ";AAAA,CAAC;AACG,oBAAkB;AAClB,gBAAc;AACd,SAAO;AACX;AAEA,CANC,UAMU;AACP,oBAAkB;AAClB,gBAAc;AAClB;AAEA,CAAC;AACG,cAAY;AACZ,SAAO;AACX;AAEA,CAAC;AACG,UAAQ;AAER,WAAS;AACT,kBAAgB;AAEhB,cAAY;AAChB;AAEA,CATC,qBASqB;AAClB,eAAa;AACjB;",
+  "names": []
+}

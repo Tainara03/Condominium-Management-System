@@ -30,7 +30,7 @@ export class LoginComponent {
       this.isSuccess = true;
       this.loginMessage = 'Login realizado com sucesso! Redirecionando...';
       
-      this.authService.loginAs('porteiro');
+      this.authService.loginAs('admin');
       console.log('Usuário logado como:', this.authService.getUserType());
       this.router.navigate(['/home']);
     } else {

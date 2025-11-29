@@ -1,0 +1,28 @@
+.btn-marrom {
+    background-color: #FCAA60;
+    border-color: #FCAA60;
+    color: #FFF;
+}
+
+.btn-marrom:hover {
+    background-color: #e59950;
+    border-color: #e59950;
+}
+
+.card-fixed-height {
+    max-height: 80vh; 
+    width: 100%;
+}
+
+.fixed-height-content {
+    height: 100%;
+    
+    display: flex;
+    flex-direction: column;
+    
+    overflow-y: auto; 
+}
+
+.fixed-height-content table {
+    flex-shrink: 0;
+}
