@@ -17,6 +17,10 @@ import Billing from "../app/entities/Billing"
 import { HistoryTable1764388308040 } from "./migrations/1764388308040-HistoryTable"
 import History from "../app/entities/history"
 import { SeedBillingsAndHistory1764395710090 } from "./migrations/1764395710090-SeedBillingsAndHistory"
+import { CreatePackagesTable1764373418833 } from "./migrations/1764373418833-CreatePackagesTable"
+import { CreateNoticesTable1764373726647 } from "./migrations/1764373726647-CreateNoticesTable"
+import Package from "../app/entities/Package"
+import Notice from "../app/entities/Notice"
 
 dotenv.config()
 
@@ -29,9 +33,10 @@ export const AppDataSource = new DataSource({
     database: process.env.DB_NAME,
     synchronize: false,
     logging: false,
-    entities: [Role, Unit, User, Reservation, CommonAreas,Billing,History],
+    entities: [Role, Unit, User, Reservation, CommonAreas,Billing,History, Package, Notice],
     migrations: [CreateRolesTable1763515687970, CreateUnitsTable1763515754646, CreateUsersTable1763515876333, 
                  CreateReservationsTable1764340096167, CreateCommonAreasTable1764340096168, SeedInitialData1764346356542,
-                 CreateBillingTable1764388263273,HistoryTable1764388308040,SeedBillingsAndHistory1764395710090],
+                 CreateBillingTable1764388263273,HistoryTable1764388308040,SeedBillingsAndHistory1764395710090,
+                 CreatePackagesTable1764373418833, CreateNoticesTable1764373726647],
     subscribers: [],
 })
