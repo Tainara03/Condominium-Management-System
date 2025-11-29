@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/services/auth/auth.service.ts"],
+  "sourcesContent": ["import { Injectable, signal, computed } from '@angular/core';\r\nimport { Router } from '@angular/router';\r\n\r\n@Injectable({\r\n  providedIn: 'root'\r\n})\r\nexport class AuthService {\r\n  constructor(private router: Router) {}\r\n\r\n  userType = signal<'admin' | 'morador' | 'porteiro' | null>(null);\r\n\r\n  isLoggedIn = computed(() => this.userType() !== null);\r\n\r\n  loginAs(type: 'admin' | 'morador' | 'porteiro') {\r\n    this.userType.set(type);\r\n  }\r\n\r\n  logout() {\r\n    this.userType.set(null);\r\n    this.router.navigate(['/login']);\r\n  }\r\n\r\n  getUserType(): 'admin' | 'morador' | 'porteiro' | null {\r\n    return this.userType();\r\n  }\r\n}"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;QAMa;;;;;AANb;AACA;AAKO,IAAM,eAAN,WAAiB;MACF;MAApB,YAAoB,QAAc;AAAd,aAAA,SAAA;MAAiB;MAErC,WAAW,OAAgD,IAAI;MAE/D,aAAa,SAAS,MAAM,KAAK,SAAQ,MAAO,IAAI;MAEpD,QAAQ,MAAsC;AAC5C,aAAK,SAAS,IAAI,IAAI;MACxB;MAEA,SAAM;AACJ,aAAK,SAAS,IAAI,IAAI;AACtB,aAAK,OAAO,SAAS,CAAC,QAAQ,CAAC;MACjC;MAEA,cAAW;AACT,eAAO,KAAK,SAAQ;MACtB;OAlBsB,yCAAjB;;2BAAA;AAAM,kBAAW,WAAA;MAHvB,WAAW;QACV,YAAY;OACb;OACY,WAAW;;;",
+  "names": []
+}

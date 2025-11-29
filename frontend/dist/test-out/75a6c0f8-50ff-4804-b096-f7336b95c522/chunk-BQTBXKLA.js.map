@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["angular:jit:template:src\\app\\components\\footer\\footer.component.html", "angular:jit:style:src\\app\\components\\footer\\footer.component.css", "src/app/components/footer/footer.component.ts"],
+  "sourcesContent": ["<footer *ngIf=\"auth.isLoggedIn()\" class=\"custom-footer text-white text-center py-3\">\r\n\u00A0 &copy; 2025 Condominium Management System. Todos os direitos reservados.\r\n</footer>", "/* src/app/components/footer/footer.component.css */\n.custom-footer {\n  background-color: #824F31;\n}\n/*# sourceMappingURL=footer.component.css.map */\n", "import { Component } from '@angular/core';\r\nimport { AuthService } from '../../services/auth/auth.service';\r\nimport { NgIf } from '@angular/common';\r\n\r\n@Component({\r\n  selector: 'app-footer',\r\n  imports: [NgIf],\r\n  templateUrl: './footer.component.html',\r\n  styleUrl: './footer.component.css'\r\n})\r\nexport class FooterComponent {\r\n  constructor(public auth: AuthService) {}\r\n}\r\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;;;ACAA,IAAAA;AAAA,IAAAC,yBAAA;AAAA;AAAA,IAAAD,4BAAA;AAAA;AAAA;;;QCUa;;;;;;;AAVb;AACA;AACA;AAQO,IAAM,mBAAN,WAAqB;MACP;MAAnB,YAAmB,MAAiB;AAAjB,aAAA,OAAA;MAAoB;OADb,6CAArB;;2BAAA;AAAM,sBAAe,WAAA;MAN3B,UAAU;QACT,UAAU;QACV,SAAS,CAAC,IAAI;QACd,UAAA;;OAED;OACY,eAAe;;;",
+  "names": ["footer_component_default", "init_footer_component"]
+}
