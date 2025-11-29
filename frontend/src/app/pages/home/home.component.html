@@ -1,1 +1,54 @@
-<p>home.component works!</p>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+
+      <div class="card shadow-lg border-0">
+        <div class="card-header text-white text-center py-3" style="background-color: #FCAA60 !important;">
+          <h4 class="mb-0">Central de Notificações e Histórico</h4>
+        </div>
+        <div class="card-body p-4">
+            
+            <div class="d-flex justify-content-between mb-4">
+                <select class="form-select form-select-sm w-auto" [(ngModel)]="filtroTipo" (change)="aplicarFiltros()">
+                    <option value="">Todos os Tipos</option>
+                    <option value="COBRANCA">Cobranças</option>
+                    <option value="ENCOMENDA">Encomendas</option>
+                    <option value="OCORRENCIA">Ocorrências</option>
+                    <option value="RESERVA">Reservas</option>
+                </select>
+            </div>
+            
+            <div *ngIf="eventosFiltrados.length > 0; else feedVazio" class="list-group list-group-flush">
+                
+                <div *ngFor="let evento of eventosFiltrados" 
+                     class="list-group-item list-group-item-action d-flex align-items-start py-3"
+                     [ngClass]="getCardStyle(evento.tipo)">
+
+                    <i [ngClass]="getIcone(evento.tipo)" class="fs-4 me-3 mt-1"></i>
+
+                    <div class="w-100">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1 fw-bold">{{ getTitulo(evento) }}</h6>
+                            <small class="text-muted">{{ evento.data | date:'short' }}</small>
+                        </div>
+                        <p class="mb-1 small">{{ evento.mensagem }}</p>
+                        
+                        <a [routerLink]="getLink(evento.tipo)" class="btn btn-sm btn-link p-0 pt-1">
+                            Ver Detalhes
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+            
+            <ng-template #feedVazio>
+                <div class="alert alert-info text-center mt-3">
+                    Nenhuma atividade encontrada para os filtros atuais.
+                </div>
+            </ng-template>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
