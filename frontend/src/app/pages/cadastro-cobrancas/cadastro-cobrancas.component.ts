@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,  } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
     selector: 'app-cadastro-cobrancas',
     standalone: true,
-    imports: [FormsModule, CommonModule, HttpClient],
+    imports: [FormsModule, CommonModule, HttpClient, HttpClientModule],
     templateUrl: './cadastro-cobrancas.component.html',
     styleUrls: ['./cadastro-cobrancas.component.css']
 })
