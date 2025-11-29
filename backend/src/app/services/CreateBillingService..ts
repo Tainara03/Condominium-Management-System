@@ -5,7 +5,7 @@ import { In } from "typeorm";
 
 interface IRequest {
     type: string;
-    amount: number;
+    Ammount: number;
     due_date: string;
     description: string;
     modoDestino: string;
@@ -15,7 +15,7 @@ interface IRequest {
 }
 
 export class CreateBillingService {
-    async execute({ type, amount, due_date, description, modoDestino, blocosSelecionados, apartamentosSelecionados, file_path }: IRequest) {
+    async execute({ type, Ammount, due_date, description, modoDestino, blocosSelecionados, apartamentosSelecionados, file_path }: IRequest) {
         
         const billingRepository = AppDataSource.getRepository(Billing);
         const unitRepository = AppDataSource.getRepository(Unit);
@@ -45,7 +45,7 @@ export class CreateBillingService {
 
         const billingsToSave = units.map(unit => {
             return billingRepository.create({
-                ammount: amount,
+                ammount: Ammount,
                 type: type,
                 due_date: new Date(due_date),
                 description: description,

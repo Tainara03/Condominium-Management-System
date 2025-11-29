@@ -7,7 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 @Component({
     selector: 'app-cadastro-cobrancas',
     standalone: true,
-    imports: [FormsModule, CommonModule, HttpClient, HttpClientModule],
+    imports: [FormsModule, CommonModule, HttpClientModule],
     templateUrl: './cadastro-cobrancas.component.html',
     styleUrls: ['./cadastro-cobrancas.component.css']
 })
