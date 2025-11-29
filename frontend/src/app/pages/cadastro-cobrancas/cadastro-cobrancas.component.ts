@@ -1,18 +1,16 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http'; // <--- Importante
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-cadastro-cobrancas',
     standalone: true,
-    imports: [FormsModule, CommonModule],
+    imports: [FormsModule, CommonModule, HttpClient],
     templateUrl: './cadastro-cobrancas.component.html',
     styleUrls: ['./cadastro-cobrancas.component.css']
 })
 export class CadastroCobrancasComponent {
-    
-    // Configurações
     private apiUrl = 'http://localhost:3000/cobrancas'; 
     isLoading = false; 
 
@@ -28,7 +26,6 @@ export class CadastroCobrancasComponent {
         descricao: ''
     };
 
-    // CONSTRUTOR IMPORTANTE
     constructor(private http: HttpClient) { }
 
     onFileSelected(event: any): void {
@@ -38,17 +35,15 @@ export class CadastroCobrancasComponent {
         }
     }
 
-    // A FUNÇÃO NOVA QUE ENVIA PARA O BACKEND
     cadastrarCobranca(): void {
         
-        // 1. Validações
         if (this.cobrancaData.modoDestino === 'Blocos' && this.cobrancaData.blocosSelecionados.length === 0) {
             alert('Selecione pelo menos um Bloco.');
             return;
         }
 
         if (this.cobrancaData.modoDestino === 'Unidades' && 
-           (this.cobrancaData.blocosSelecionados.length === 0 || this.cobrancaData.apartamentosSelecionados.length === 0)) {
+            (this.cobrancaData.blocosSelecionados.length === 0 || this.cobrancaData.apartamentosSelecionados.length === 0)) {
             alert('Selecione Bloco e Apartamento.');
             return;
         }
@@ -67,10 +62,9 @@ export class CadastroCobrancasComponent {
             formData.append('file', this.cobrancaData.arquivoAnexo);
         }
 
-        // AQUI É O PULO DO GATO: this.http.post
         this.http.post(this.apiUrl, formData).subscribe({
             next: (response) => {
-                alert('Cobrança cadastrada com sucesso!'); // <--- Alerta real
+                alert('Cobrança cadastrada com sucesso!');
                 this.limparFormulario();
                 this.isLoading = false;
             },
