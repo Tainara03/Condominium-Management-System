@@ -13,7 +13,6 @@ import { CadastroCobrancasComponent } from './pages/cadastro-cobrancas/cadastro-
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
-
   { path: 'registro', component: RegistroComponent },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'painel', component: PainelComponent, canActivate: [AuthGuard] },

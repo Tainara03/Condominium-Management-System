@@ -32,6 +32,11 @@ export class CreateBillingTable1764388263273 implements MigrationInterface {
                         default: false
                     },
                     {
+                        name: 'file_path',
+                        type: 'varchar',
+                        isNullable: true,
+                    },
+                    {
                         name: 'paid_at',
                         type: 'timestamp',
                         isNullable: true,
