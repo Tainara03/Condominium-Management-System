@@ -13,7 +13,7 @@ services:
     build: ./backend
     container_name: container_backend
     #command: npm run dev
-    command: node dist/server.js
+    command: npm run dev
     ports:
       - "${BACK_PORT}:${BACK_PORT}"
     environment:

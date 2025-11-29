@@ -15,6 +15,6 @@ ENV PORT=${BACK_PORT}
 
 EXPOSE ${BACK_PORT}
 
-CMD ["node", "dist/server.js"] 
+CMD ["npm", "run", "dev"]
 
 #DOCKER PRECISA SER ALTERADO PARA PRODUÇÃO QUANDO POSSÍVEL
