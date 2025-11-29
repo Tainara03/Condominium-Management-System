@@ -12,6 +12,10 @@ import { CreateUsersTable1763515876333 } from "./migrations/1763515876333-Create
 import { CreateReservationsTable1764340096167 } from "./migrations/1764340096167-CreateReservationsTable"
 import { CreateCommonAreasTable1764340096168 } from "./migrations/1764340096168-CreateCommonAreasTable"
 import { SeedInitialData1764346356542 } from "./migrations/1764346356542-SeedInitialData"
+import { CreateBillingTable1764388263273 } from "./migrations/1764388263273-CreateBillingsTable"
+import Billing from "../app/entities/Billing"
+import { HistoryTable1764388308040 } from "./migrations/1764388308040-HistoryTable"
+import History from "../app/entities/history"
 
 dotenv.config()
 
@@ -24,8 +28,9 @@ export const AppDataSource = new DataSource({
     database: process.env.DB_NAME,
     synchronize: false,
     logging: false,
-    entities: [Role, Unit, User, Reservation, CommonAreas],
+    entities: [Role, Unit, User, Reservation, CommonAreas,Billing,History],
     migrations: [CreateRolesTable1763515687970, CreateUnitsTable1763515754646, CreateUsersTable1763515876333, 
-                 CreateReservationsTable1764340096167, CreateCommonAreasTable1764340096168, SeedInitialData1764346356542],
+                 CreateReservationsTable1764340096167, CreateCommonAreasTable1764340096168, SeedInitialData1764346356542,
+                 CreateBillingTable1764388263273,HistoryTable1764388308040],
     subscribers: [],
 })
