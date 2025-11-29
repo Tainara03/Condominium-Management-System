@@ -1,20 +1,24 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { HttpClient,  } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
     selector: 'app-cadastro-cobrancas',
     standalone: true,
-    imports: [FormsModule, CommonModule],
+    imports: [FormsModule, CommonModule, HttpClientModule],
     templateUrl: './cadastro-cobrancas.component.html',
     styleUrls: ['./cadastro-cobrancas.component.css']
 })
 export class CadastroCobrancasComponent {
-    
+    private apiUrl = 'http://localhost:3000/cobrancas'; 
+    isLoading = false; 
+
     cobrancaData = {
         tipo: '',
         dataVencimento: '',
-        valor: 0,
+        valor: null, 
         modoDestino: 'Todos',
         blocosSelecionados: [] as string[],
         apartamentosSelecionados: [] as string[],
@@ -23,7 +27,7 @@ export class CadastroCobrancasComponent {
         descricao: ''
     };
 
-    constructor() {}
+    constructor(private http: HttpClient) { }
 
     onFileSelected(event: any): void {
         const file: File = event.target.files[0];
@@ -33,35 +37,57 @@ export class CadastroCobrancasComponent {
     }
 
     cadastrarCobranca(): void {
-      
+        
         if (this.cobrancaData.modoDestino === 'Blocos' && this.cobrancaData.blocosSelecionados.length === 0) {
-            alert('Selecione pelo menos um Bloco para o lançamento em Bloco Múltiplo.');
+            alert('Selecione pelo menos um Bloco.');
             return;
         }
 
         if (this.cobrancaData.modoDestino === 'Unidades' && 
             (this.cobrancaData.blocosSelecionados.length === 0 || this.cobrancaData.apartamentosSelecionados.length === 0)) {
-            alert('Selecione pelo menos um Bloco E pelo menos um Apartamento para o lançamento específico.');
+            alert('Selecione Bloco e Apartamento.');
             return;
         }
-        
-        let destino: string;
-        
-        switch (this.cobrancaData.modoDestino) {
-            case 'Todos':
-                destino = 'Todas as unidades do condomínio.';
-                break;
-            case 'Blocos':
-                destino = `Todos os apartamentos nos Blocos: ${this.cobrancaData.blocosSelecionados.join(', ')}.`;
-                break;
-            case 'Unidades':
-                destino = `Unidades específicas nos Blocos: ${this.cobrancaData.blocosSelecionados.join(', ')} e Aptos: ${this.cobrancaData.apartamentosSelecionados.join(', ')}.`;
-                break;
-            default:
-                destino = 'Erro de Destino';
+
+        this.isLoading = true;
+
+        const formData = new FormData();
+        Object.keys(this.cobrancaData).forEach(key => {
+            const valor = (this.cobrancaData as any)[key];
+            if (key !== 'arquivoAnexo' && valor !== null) {
+                formData.append(key, valor.toString());
+            }
+        });
+
+        if (this.cobrancaData.arquivoAnexo) {
+            formData.append('file', this.cobrancaData.arquivoAnexo);
         }
-        
-        console.log(`Cobrança de ${this.cobrancaData.valor} (${this.cobrancaData.tipo}) lançada para: ${destino}`);
-        alert('Cobrança registrada com sucesso!');
+
+        this.http.post(this.apiUrl, formData).subscribe({
+            next: (response) => {
+                alert('Cobrança cadastrada com sucesso!');
+                this.limparFormulario();
+                this.isLoading = false;
+            },
+            error: (erro) => {
+                console.error(erro); 
+                alert('Erro ao conectar com o Backend!');
+                this.isLoading = false;
+            }
+        });
+    }
+
+    limparFormulario() {
+        this.cobrancaData = {
+            tipo: '',
+            dataVencimento: '',
+            valor: null,
+            modoDestino: 'Todos',
+            blocosSelecionados: [],
+            apartamentosSelecionados: [],
+            linkBoleto: '',
+            arquivoAnexo: null,
+            descricao: ''
+        };
     }
 }
