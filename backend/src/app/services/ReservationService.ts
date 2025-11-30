@@ -1,9 +1,16 @@
-import ReservationRepository from "../repositories/ReservationRepository";
+import { AppDataSource } from "../../database/data-source";
 import Reservation from "../entities/Reservation";
 
+interface IRequest {
+    area_id: string;
+    reservation_date_time: Date;
+    description?: string;
+}
+
+const reservationRepository = AppDataSource.getRepository(Reservation);
 const getReservationById = async (id: string) => {
     try {
-        const reservation = await ReservationRepository.findById(id);
+        const reservation = await reservationRepository.findOneBy({ id }); 
         if (!reservation) {
             throw new Error('Reservation not found');
         }
@@ -15,7 +22,7 @@ const getReservationById = async (id: string) => {
 
 const getAllReservations = async () => {
     try {
-        const reservations = await ReservationRepository.getReservations();
+        const reservations = await reservationRepository.find({ relations: ['user', 'area'] }); 
         if (!reservations || reservations.length === 0) {
             throw new Error('No reservations found');
         }
@@ -27,7 +34,16 @@ const getAllReservations = async () => {
 
 const createReservation = async (reservationData: Partial<Reservation>) => {
     try {
-        const newReservation = await ReservationRepository.createReservation(reservationData);
+        const existingReservation = await reservationRepository.findOneBy({
+            area_id: reservationData.area_id,
+            reservation_date_time: reservationData.reservation_date_time
+        });
+        if (existingReservation) {
+            throw new Error('Reservation already exists'); 
+        }
+        const newReservation = reservationRepository.create(reservationData); 
+        await reservationRepository.save(newReservation); 
+        
         return newReservation;
     } catch (error) {
         throw error;
@@ -36,12 +52,11 @@ const createReservation = async (reservationData: Partial<Reservation>) => {
 
 const updateReservation = async (id: string, reservationData: Partial<Reservation>) => {
     try {
-        const reservation = await ReservationRepository.findById(id);
-        if (!reservation) {
+        const result = await reservationRepository.update(id, reservationData);
+        if (result.affected === 0) {
             throw new Error('Reservation not found');
         }
-
-        const updatedReservation = await ReservationRepository.updateReservation(id, reservationData);
+        const updatedReservation = await reservationRepository.findOneBy({ id });
         return updatedReservation;
     } catch (error) {
         throw error;
@@ -50,13 +65,11 @@ const updateReservation = async (id: string, reservationData: Partial<Reservatio
 
 const deleteReservation = async (id: string) => {
     try {
-        const reservation = await ReservationRepository.findById(id);
-        if (!reservation) {
+        const deleteResult = await reservationRepository.delete(id);
+        if (deleteResult.affected === 0) {
             throw new Error('Reservation not found');
         }
-
-        const deleteResponse = await ReservationRepository.deleteReservation(id);
-        return deleteResponse;
+        return { affected: deleteResult.affected };
     } catch (error) {
         throw error;
     }

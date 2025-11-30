@@ -8,43 +8,45 @@
         </div>
         <div class="card-body p-4 p-md-5">
 
-          <form>
+          <form (ngSubmit)="solicitarReserva()">
             <div class="row mb-4 g-3">
               
               <div class="col-md-4">
                 <label for="localSelect" class="form-label fw-bold">Local</label>
-                <select class="form-select" id="localSelect" aria-label="Seleção do Local" required>
-                  <option value="" disabled selected>Selecione a Área</option>
-                  <option value="1">Salão de Festas Principal</option>
-                  <option value="2">Salão Gourmet</option>
-                  <option value="3">Quadra Poliesportiva</option>
-                  <option value="4">Churrasqueira</option>
+                <select class="form-select" id="localSelect" [(ngModel)]="reservaForm.area_id" name="area_id" required>
+                    <option value="" disabled selected>Selecione a Área</option>
+                    <option value="f35ca5f7-0ec6-4762-96fc-578ff1be4bb8">Salão de Festas Principal</option>
+                    <option value="2ed0bfcc-5fbb-4e29-9b2b-ceb36ef1c46e">Piscina</option>
+                    <option value="10249751-9bd8-43f6-b285-b00e92a2d5e2">Churrasqueira</option>
+                    <option value="ea75df0f-5ad1-4d96-844f-89b1b4e8b5ea">Academia</option>
                 </select>
               </div>
 
               <div class="col-md-4">
                 <label for="dataInput" class="form-label fw-bold">Data</label>
-                <input type="date" class="form-control" id="dataInput" required>
+                <input type="date" class="form-control" id="dataInput" [(ngModel)]="reservaForm.data" name="data" required>
               </div>
 
               <div class="col-md-4">
                 <label for="periodoSelect" class="form-label fw-bold">Período</label>
-                <select class="form-select" id="periodoSelect" aria-label="Seleção do Período" required>
-                  <option value="" disabled selected>Selecione o Bloco</option>
-                  <option value="1">Manhã (06:00 - 11:00)</option>
-                  <option value="2">Tarde (12:00 - 17:00)</option>
-                  <option value="3">Noite (18:00 - 23:00)</option>
+                <select class="form-select" id="periodoSelect" [(ngModel)]="reservaForm.periodo" name="periodo" required>
+                  <option value="" disabled selected>Selecione</option>
+                  <option value="1">Manhã (08:00)</option>
+                  <option value="2">Tarde (13:00)</option>
+                  <option value="3">Noite (19:00)</option>
                 </select>
               </div>
             </div>
+
             <div class="row mb-4">
                 <div class="col-12">
                     <div class="form-floating">
                         <textarea 
                             class="form-control" 
-                            placeholder="Deixe uma descrição aqui" 
+                            placeholder="Descrição" 
                             id="floatingTextarea2" 
                             style="height: 100px"
+                            [(ngModel)]="reservaForm.descricao" name="descricao"
                         ></textarea>
                         <label for="floatingTextarea2">Descrição (Opcional)</label>
                     </div>
@@ -52,7 +54,10 @@
             </div>
 
             <div class="d-grid mt-4">
-              <button class="btn btn-marrom btn-lg" type="submit">Solicitar Reserva</button>
+              <button class="btn btn-marrom btn-lg" type="submit" [disabled]="isLoading">
+                <span *ngIf="isLoading">Processando...</span>
+                <span *ngIf="!isLoading">Solicitar Reserva</span>
+              </button>
             </div>
           </form>
         </div>

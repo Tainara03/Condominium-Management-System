@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { CreateBillingService } from "../services/CreateBillingService.";
+import { CreateBillingService } from "../services/CreateBillingService";
 
 export class BillingController {
     async store(req: Request, res: Response) {

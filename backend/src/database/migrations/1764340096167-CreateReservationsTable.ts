@@ -32,6 +32,12 @@ export class CreateReservationsTable1764340096167 implements MigrationInterface 
                         type: 'timestamp',
                         isNullable: false
                     },
+                    {
+                        name: 'description',
+                        type: 'varchar',
+                        length: '200',
+                        isNullable: true
+                    },
                 ],
                 foreignKeys: [
                     {
