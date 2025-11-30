@@ -29,6 +29,9 @@
 - Padrão de arquitetura utilizada: 
 → MVC
 
+#### Protótipo:
+[Figma](https://www.figma.com/design/qiWAbfyKnuKTYSzWLa6CdI/Condominium-Management-System?node-id=0-1&t=Wnft73GjivRkF9B3-1)
+
 #### Estrutura dos diretórios:
 ```bash
 Condominium-Management-System/
