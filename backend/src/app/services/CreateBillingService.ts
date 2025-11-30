@@ -46,7 +46,6 @@ export class CreateBillingService {
         const billingsToSave = units.map(unit => {
             return billingRepository.create({
                 ammount: Ammount,
-                type: type,
                 due_date: new Date(due_date),
                 description: description,
                 file_path: file_path,

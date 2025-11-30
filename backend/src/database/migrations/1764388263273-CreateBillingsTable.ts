@@ -25,7 +25,7 @@ export class CreateBillingTable1764388263273 implements MigrationInterface {
                         type: 'timestamp',
                         isNullable: false
                     },
-                     {
+                    {
                         name: 'is_paid',
                         type: 'boolean',
                         isNullable: false,
