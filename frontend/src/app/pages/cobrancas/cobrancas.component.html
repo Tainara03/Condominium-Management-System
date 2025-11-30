@@ -1,4 +1,4 @@
-<div class="container py-5">
+<div class="container custom-container py-5">
   <div class="row justify-content-center">
     <div class="col-lg-10">
 
@@ -45,47 +45,45 @@
                 </div>
                 
             </div>
-            <table class="table table-light table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">Bloco</th>
-                        <th scope="col">Apto</th>
-                        <th scope="col">Data Lanç.</th>
-                        <th scope="col">Tipo</th>
-                        <th scope="col">Valor</th>
-                        <th scope="col">Vencimento</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Comprovante</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let cobranca of cobrancasFiltradas"
-                        [ngClass]="{
-                            'bg-warning': cobranca.status === 'Pendente',
-                            'bg-danger text-white': cobranca.status === 'Atrasado',
-                            'bg-success-light': cobranca.status === 'Pago' 
-                        }">
-                        
-                        <td>{{ cobranca.bloco }}</td>
-                        <td>{{ cobranca.apartamento }}</td>
-                        <td>{{ cobranca.dataLancamento }}</td>
-                        <td>{{ cobranca.tipoCobranca }}</td>
-                        <td>{{ cobranca.valor }}</td>
-                        <td>{{ cobranca.dataVencimento }}</td>
-                        
-                        <td>
-                            <span class="fw-bold">{{ cobranca.status }}</span>
-                        </td>
-                        
-                        <td>
+            <div class="table-responsive-wrapper">
+                <table class="table table-light table-striped table-hover table-fixed">
+                    <thead>
+                        <tr>
+                        <th>Status</th>
+                        <th>Tipo</th>
+                        <th>Valor</th>
+                        <th>Vencimento</th>
+                        <th>Bloco</th>
+                        <th>Apto</th>
+                        <th>Data Lanç.</th>
+                        <th>Comprovante</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let cobranca of cobrancasFiltradas">
+                        <tr [ngClass]="{
+                                'bg-warning': cobranca.status === 'Pendente',
+                                'bg-danger text-white': cobranca.status === 'Atrasado',
+                                'bg-success-light': cobranca.status === 'Pago' 
+                            }">
+                            <td><span class="fw-bold">{{ cobranca.status }}</span></td>
+                            <td>{{ cobranca.tipoCobranca }}</td>
+                            <td>{{ cobranca.valor }}</td>
+                            <td>{{ cobranca.dataVencimento }}</td>
+                            <td>{{ cobranca.bloco }}</td>
+                            <td>{{ cobranca.apartamento }}</td>
+                            <td>{{ cobranca.dataLancamento }}</td>
+                            <td>
                             <a [href]="cobranca.linkComprovante" class="btn btn-sm btn-outline-info" 
-                               [class.disabled]="cobranca.status !== 'Pago'">
+                                [class.disabled]="cobranca.status !== 'Pago'">
                                 {{ cobranca.status === 'Pago' ? 'Ver Doc' : '—' }}
                             </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            </td>
+                        </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+          </div>
         </div>
       </div>
     </div>

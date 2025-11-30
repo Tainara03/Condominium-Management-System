@@ -48,3 +48,32 @@ tr.bg-pendente td {
     background-color: #bb2d3b;
     border-color: #b02a37;
 }
+
+.table-responsive-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.table-fixed {
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 600px;
+}
+
+.table-fixed thead tr {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 10;
+}
+
+@media (max-width: 768px) {
+
+    .custom-container {
+        width: 48%;
+        max-width: 48%;
+        margin-right: auto;
+        margin-left: 0px;
+    }
+}
