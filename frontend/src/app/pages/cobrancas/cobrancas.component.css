@@ -1,28 +1,41 @@
-.btn-marrom {
-    background-color: #FCAA60;
-    border-color: #FCAA60;
-    color: #FFF;
-}
-
-.btn-marrom:hover {
-    background-color: #e59950;
-    border-color: #e59950;
-}
-
 .card-fixed-height {
-    max-height: 80vh; 
+    max-height: 80vh;
     width: 100%;
 }
 
 .fixed-height-content {
     height: 100%;
-    
     display: flex;
     flex-direction: column;
-    
-    overflow-y: auto; 
+    overflow-y: auto;
 }
 
-.fixed-height-content table {
-    flex-shrink: 0;
+.table-responsive-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.table-fixed {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: max-content;
+    min-width: 600px;
+}
+
+.table-fixed thead tr {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 10;
+}
+
+@media (max-width: 768px) {
+
+    .custom-container {
+        width: 48%;
+        max-width: 48%;
+        margin-right: auto;
+        margin-left: 0px;
+    }
 }

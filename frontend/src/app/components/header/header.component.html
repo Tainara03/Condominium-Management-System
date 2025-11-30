@@ -1,4 +1,4 @@
-<nav *ngIf="auth.isLoggedIn()" class="navbar custom-navbar">
+<nav *ngIf="auth.isLoggedIn()" class="navbar custom-navbar d-none d-md-flex">
   <div class="container-fluid justify-content-between"> 
     <a class="navbar-brand d-flex align-items-center" routerLink="/home">
       <img src="assets/logo-domus.png" alt="Logo" style="height: 60px; width: auto;" class="me-2">
@@ -7,5 +7,49 @@
     <button class="btn btn-outline-light d-flex align-items-center" (click)="auth.logout()">
       <i class="bi bi-box-arrow-right fs-5 me-2"></i>
     </button>
+  </div>
+</nav>
+
+<nav *ngIf="auth.isLoggedIn()" class="navbar navbar-expand-md custom-navbar d-md-none flex-column">
+  <div class="container-fluid justify-content-between mb-2">
+    <a class="navbar-brand d-flex align-items-center" routerLink="/home">
+      <img src="assets/logo-domus.png" alt="Logo" style="height: 50px; width: auto;" class="me-2">
+      <span class="fw-bold">Domus</span>
+    </a>
+    <button class="navbar-toggler mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
+      aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse w-100 mt-2" id="navbarMenu">
+      <ul class="navbar-nav w-100 mb-2">
+        <li class="nav-item">
+          <a class="nav-link menu-item" routerLink="/home" data-bs-toggle="collapse" data-bs-target="#navbarMenu">Página Inicial</a>
+        </li>
+        <li *ngIf="auth.userType() === 'admin'" class="nav-item">
+          <a class="nav-link menu-item" routerLink="/painel" data-bs-toggle="collapse" data-bs-target="#navbarMenu">Painel Administrador</a>
+        </li>
+        <li *ngIf="auth.userType() === 'porteiro'" class="nav-item">
+          <a class="nav-link menu-item" routerLink="/encomendas" data-bs-toggle="collapse" data-bs-target="#navbarMenu">Cadastrar Encomendas</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link menu-item" routerLink="/cobrancas" data-bs-toggle="collapse" data-bs-target="#navbarMenu">Controle de Cobranças</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link menu-item" routerLink="/ocorrencias" data-bs-toggle="collapse" data-bs-target="#navbarMenu">Enviar Comunicados</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link menu-item" routerLink="/reservas" data-bs-toggle="collapse" data-bs-target="#navbarMenu">Reserva de Áreas</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link menu-item" routerLink="/perfil" data-bs-toggle="collapse" data-bs-target="#navbarMenu">Meu Perfil</a>
+        </li>
+        <li class="nav-item mt-2">
+          <button class="btn btn-outline-light w-100 d-flex justify-content-center" (click)="auth.logout()">
+            <i class="bi bi-box-arrow-right fs-5"></i>
+          </button>
+        </li>
+      </ul>
+    </div>
   </div>
 </nav>
