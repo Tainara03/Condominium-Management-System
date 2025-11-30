@@ -2,8 +2,42 @@
     background-color: #824F31;
 }
 
-span {
+.custom-navbar .navbar-brand span {
     color: #FCAA60;
     font-family: 'Comic Sans MS', 'Kristen ITC', cursive, sans-serif;
     font-size: 2.5rem;
+}
+
+.navbar-toggler {
+    border: 1px solid #fff;
+    background-color: #824F31;
+}
+
+.navbar-toggler-icon {
+    filter: invert(100%);
+}
+
+.navbar-nav .nav-link {
+    background-color: #f2f2f2;
+    color: #824F31;
+    border-bottom: 1px solid #d9d9d9;
+    text-align: center;
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: #e0e0e0;
+}
+
+.navbar-nav .btn-outline-light {
+    color: #fff;
+    border-color: #fff;
+}
+
+.navbar-nav .btn-outline-light:hover {
+    background-color: #fff;
+    color: #824F31;
+}
+
+.navbar-nav .btn-outline-light {
+    border-top: 1px solid #d9d9d9;
 }
