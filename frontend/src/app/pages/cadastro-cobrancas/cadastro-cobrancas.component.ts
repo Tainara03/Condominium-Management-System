@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClient,  } from '@angular/common/http';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { environment } from '../../environment/environment';
 
 @Component({
     selector: 'app-cadastro-cobrancas',
@@ -12,7 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
     styleUrls: ['./cadastro-cobrancas.component.css']
 })
 export class CadastroCobrancasComponent {
-    private apiUrl = 'http://localhost:3000/cobrancas'; 
+    private apiUrl = `${environment.apiUrl}cobrancas`; 
     isLoading = false; 
 
     cobrancaData = {
@@ -37,7 +37,6 @@ export class CadastroCobrancasComponent {
     }
 
     cadastrarCobranca(): void {
-        
         if (this.cobrancaData.modoDestino === 'Blocos' && this.cobrancaData.blocosSelecionados.length === 0) {
             alert('Selecione pelo menos um Bloco.');
             return;
@@ -63,6 +62,8 @@ export class CadastroCobrancasComponent {
             formData.append('file', this.cobrancaData.arquivoAnexo);
         }
 
+        console.log(this.apiUrl);
+        console.log(formData);
         this.http.post(this.apiUrl, formData).subscribe({
             next: (response) => {
                 alert('Cobrança cadastrada com sucesso!');

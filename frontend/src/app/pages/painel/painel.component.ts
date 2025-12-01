@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../environment/environment';
 
 interface Usuario {
     bloco: string;
@@ -27,6 +28,8 @@ interface Filtros {
     styleUrls: ['./painel.component.css']
 })
 export class PainelComponent implements OnInit {
+
+    private apiUrl = `${environment.apiUrl}painel`;  
 
     usuarios: Usuario[] = [];
     usuariosFiltrados: Usuario[] = [];

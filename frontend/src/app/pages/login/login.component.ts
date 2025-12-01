@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../services/auth/auth.service'; // Ajuste o caminho conforme a localização do seu AuthService
+import { AuthService } from '../../services/auth/auth.service';
 import { Router, RouterLink } from '@angular/router';
+import { environment } from '../../environment/environment';
 
 @Component({
   selector: 'app-login',
@@ -12,6 +13,9 @@ import { Router, RouterLink } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+
+  private apiUrl = `${environment.apiUrl}login`;  
+
   username: string = '';
   password: string = '';
   
