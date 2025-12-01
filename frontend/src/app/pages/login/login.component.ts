@@ -61,6 +61,9 @@ export class LoginComponent {
         this.isSuccess = false;
         if (err.status === 401 || err.status === 404) {
           this.loginMessage = 'Erro: Usuário ou senha inválidos.';
+        }
+        else if (err.status === 403) {
+          this.loginMessage = 'Erro: Usuário não está ativo. Contate o síndico';
         } else {
           this.loginMessage = 'Erro: Falha ao conectar com o servidor.';
         }

@@ -1,8 +1,6 @@
 <div class="d-flex vh-100 justify-content-center align-items-center">
-  
   <div class="card p-0 shadow-lg registration-card-integrated"> 
     <div class="row g-0 h-100"> 
-      
       <div class="col-md-2 bg-marrom d-flex flex-column justify-content-end align-items-center p-3 rounded-start">
         <img src="assets/logo-domus.png" alt="Logo Domus" class="img-fluid" style="max-height: 100px;">
       </div>
@@ -11,7 +9,6 @@
         <h3 class="mb-4 text-center text-md-start">Crie sua Conta</h3>
 
         <form (ngSubmit)="registrar()">
-          
           <div class="row g-2">
             <div class="col-md-6 mb-3">
               <label for="fullName" class="form-label">Nome Completo</label>
@@ -34,7 +31,7 @@
                 <option value="" disabled selected>Selecione</option>
                 <option value="admin">Administrador</option>
                 <option value="morador">Morador</option>
-                <option value="funcionario">funcionario</option>
+                <option value="funcionario">Funcionario</option>
               </select>
             </div>
           </div>
@@ -55,25 +52,23 @@
               <label for="password" class="form-label">Senha</label>
               <input type="password" class="form-control" id="password" name="password" [(ngModel)]="registroData.password" required>
             </div>
-
             <div class="col-md-6 mb-3">
               <label for="comprovante" class="form-label">Anexar Comprovante</label>
-              <input class="form-control" type="file" id="comprovante" name="comprovante" (change)="onFileSelected($event)" required>
+              <input type="file" class="form-control" id="comprovante" name="comprovante" (change)="onFileSelected($event)" required>
               <div class="form-text">Sujeito a aprovação.</div>
             </div>
           </div>
+
           <button type="submit" class="btn btn-primary w-100">Registrar</button>
-          
+
           <div *ngIf="registroMessage" class="alert mt-3" [ngClass]="{'alert-success': isSuccess, 'alert-danger': !isSuccess}">
             {{ registroMessage }}
           </div>
-
         </form>
-        
+
         <div class="text-center mt-3">
           Já tem uma conta? <a class="text-decoration-none fw-bold" routerLink="/login">Fazer Login</a>
         </div>
-
       </div>
     </div>
   </div>
