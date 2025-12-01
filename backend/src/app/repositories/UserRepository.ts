@@ -8,6 +8,10 @@ const getUsers = () => {
     return userRepository.find({relations: ['role','unit']});
 }
 
+const findByName = (name: string) => {
+    return userRepository.findOne({where: {name}, relations:['role', 'unit']});
+}
+
 const findByEmail = (email: string) => {
     return userRepository.findOne({where: {email}, relations:['role', 'unit']});
 }
@@ -32,4 +36,4 @@ const deleteUser = async (id: string) => {
     return result.affected !== 0;
 }
 
-export default { getUsers, findByEmail, findById, createUser, updateUser, deleteUser };
+export default { getUsers, findByName, findByEmail, findById, createUser, updateUser, deleteUser };

@@ -57,6 +57,12 @@ export class CreateUsersTable1763515876333 implements MigrationInterface {
                         type: 'boolean',
                         default: 'false',
                         isNullable: false
+                    },
+                    {
+                        name: 'comprovante_path',
+                        type: 'varchar',
+                        length: '255',
+                        isNullable: true
                     }
                 ],
                 foreignKeys: [

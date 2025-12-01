@@ -35,11 +35,11 @@ export class SeedInitialData1764346356542 implements MigrationInterface {
 
         // Inserir usuário administrador padrão (somente se não existir)
         await queryRunner.query(`
-            INSERT INTO users (name, email, password_hash, phone, role_id, unit_id, is_approved)
+            INSERT INTO users (name, email, password_hash, phone, role_id, unit_id, is_approved, comprovante_path)
             SELECT 'Administrador', 'admin@admin.com', '${adminHash}', '11999999999',
                 (SELECT id FROM roles WHERE level = 4 AND role='admin' LIMIT 1),
                 (SELECT id FROM units WHERE apartment='1' AND building='Administração' LIMIT 1),
-                true
+                true, NULL
             WHERE NOT EXISTS (SELECT 1 FROM users WHERE email='admin@admin.com');
         `);
 
@@ -53,38 +53,38 @@ export class SeedInitialData1764346356542 implements MigrationInterface {
 
         // Inserir usuários de teste (somente se não existirem)
         await queryRunner.query(`
-            INSERT INTO users (name, email, password_hash, phone, role_id, unit_id, is_approved)
+            INSERT INTO users (name, email, password_hash, phone, role_id, unit_id, is_approved, comprovante_path)
             SELECT 'José Maria', 'jm@email.com', '${adminHash}', '11999999999',
                 (SELECT id FROM roles WHERE level = 1 AND role='morador' LIMIT 1),
                 (SELECT id FROM units WHERE apartment='404' AND building='A' LIMIT 1),
-                true
+                true, NULL
             WHERE NOT EXISTS (SELECT 1 FROM users WHERE email='jm@email.com');
         `);
 
         await queryRunner.query(`
-            INSERT INTO users (name, email, password_hash, phone, role_id, unit_id, is_approved)
+            INSERT INTO users (name, email, password_hash, phone, role_id, unit_id, is_approved, comprovante_path)
             SELECT 'Maria José', 'mj@admin.com', '${adminHash}', '11999999999',
                 (SELECT id FROM roles WHERE level = 1 AND role='morador' LIMIT 1),
                 (SELECT id FROM units WHERE apartment='404' AND building='A' LIMIT 1),
-                false
+                false, NULL
             WHERE NOT EXISTS (SELECT 1 FROM users WHERE email='mj@admin.com');
         `);
 
         await queryRunner.query(`
-            INSERT INTO users (name, email, password_hash, phone, role_id, unit_id, is_approved)
+            INSERT INTO users (name, email, password_hash, phone, role_id, unit_id, is_approved, comprovante_path)
             SELECT 'Sicero', 'sindico@email.com', '${adminHash}', '11999999999',
                 (SELECT id FROM roles WHERE level = 3 AND role='sindico' LIMIT 1),
                 (SELECT id FROM units WHERE apartment='1' AND building='Administração' LIMIT 1),
-                true
+                true, NULL
             WHERE NOT EXISTS (SELECT 1 FROM users WHERE email='sindico@email.com');
         `);
 
         await queryRunner.query(`
-            INSERT INTO users (name, email, password_hash, phone, role_id, unit_id, is_approved)
+            INSERT INTO users (name, email, password_hash, phone, role_id, unit_id, is_approved, comprovante_path)
             SELECT 'firmino', 'firmino@email.com', '${adminHash}', '11999999999',
                 (SELECT id FROM roles WHERE level = 2 AND role='funcionario' LIMIT 1),
                 (SELECT id FROM units WHERE apartment='1' AND building='Administração' LIMIT 1),
-                true
+                true, NULL
             WHERE NOT EXISTS (SELECT 1 FROM users WHERE email='firmino@email.com');
         `);
 
