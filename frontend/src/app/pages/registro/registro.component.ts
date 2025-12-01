@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { environment } from '../../environment/environment';
 
 @Component({
   selector: 'app-registro',
@@ -11,6 +12,8 @@ import { RouterLink } from '@angular/router';
   styleUrl: './registro.component.css'
 })
 export class RegistroComponent {
+
+  private apiUrl = `${environment.apiUrl}registro`;  
   
   registroData = {
     fullName: '',

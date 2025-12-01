@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
+import { environment } from '../../environment/environment';
 
 interface Unidade {
   bloco: string;
@@ -26,6 +27,8 @@ interface Perfil {
   styleUrls: ['./perfil.component.css']
 })
 export class PerfilComponent implements OnInit {
+
+  private apiUrl = `${environment.apiUrl}perfil`;  
 
   modoEdicao: boolean = false; 
   perfilData: Perfil = this.getInitialProfileData();
