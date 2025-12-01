@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { environment } from '../../environment/environment';
+import { environment } from '../../environments/environment';
 
 // Interface Genérica para qualquer Evento no Feed
 interface Evento {

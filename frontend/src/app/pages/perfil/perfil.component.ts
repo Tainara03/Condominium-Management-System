@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
-import { environment } from '../../environment/environment';
+import { environment } from '../../environments/environment';
 
 interface Unidade {
   bloco: string;
@@ -13,7 +13,7 @@ interface Perfil {
   fullName: string;
   email: string;
   phone: string;
-  userType: 'admin' | 'morador' | 'porteiro' | null;
+  userType: 'admin' | 'morador' | 'funcionario' | null;
   userTypeDisplay: string;
   unidades: Unidade[]; 
   novoComprovante: File | null; 
@@ -127,7 +127,7 @@ export class PerfilComponent implements OnInit {
       switch (type) {
           case 'admin': return 'Administrador';
           case 'morador': return 'Morador';
-          case 'porteiro': return 'Porteiro';
+          case 'funcionario': return 'funcionario';
           default: return 'Desconhecido';
       }
   }

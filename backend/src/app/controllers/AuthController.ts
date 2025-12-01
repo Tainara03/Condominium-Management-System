@@ -64,24 +64,25 @@ authRouter.post('/register', async (req: Request, res: Response) => {
 });
 
 // Login
-authRouter.post('/login', async (req: Request<{}, {}, { email: string; password: string }>, res: Response) => {
+authRouter.post('/login', async (req: Request<{}, {}, { name: string; password: string }>, res: Response) => {
     try {
-        
         if (!req.body || Object.keys(req.body).length === 0) {
             return res.status(400).json({
                 message: "Bad request: request body is missing or malformed."
             });
         }
 
-        const { email, password } = req.body;
-        if (!email || !password) {
+        const { name, password } = req.body;
+        if (!name || !password) {
             return res.status(400).json({ message: 'Bad request: missing required fields.' });
         }
 
-        const user = await UserRepository.findByEmail(email);
+        const user = await UserRepository.findByName(name);
         if (!user) {
             return res.status(401).json({ message: 'Unauthorized: invalid credentials' });
         }
+
+        console.log('Comparing password for user:', password, user.password_hash);
 
         const ok = await AuthService.comparePassword(password, user.password_hash);
         if (!ok) {

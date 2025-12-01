@@ -29,7 +29,7 @@
         <li *ngIf="auth.userType() === 'admin'" class="nav-item">
           <a class="nav-link menu-item" routerLink="/painel" data-bs-toggle="collapse" data-bs-target="#navbarMenu">Painel Administrador</a>
         </li>
-        <li *ngIf="auth.userType() === 'porteiro'" class="nav-item">
+        <li *ngIf="auth.userType() === 'funcionario'" class="nav-item">
           <a class="nav-link menu-item" routerLink="/encomendas" data-bs-toggle="collapse" data-bs-target="#navbarMenu">Cadastrar Encomendas</a>
         </li>
         <li class="nav-item">
