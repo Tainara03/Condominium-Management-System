@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
 import { OnInit } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-reservas',
@@ -15,7 +16,7 @@ import { OnInit } from '@angular/core';
 export class ReservasComponent implements OnInit {
   
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/reservas'; 
+  private apiUrl = `${environment.apiUrl}reservas`;  
 
   isLoading = false;
   reservaForm = {

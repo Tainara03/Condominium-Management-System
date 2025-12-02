@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { RouterLink } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 interface Cobranca {
   bloco: string;
@@ -29,6 +30,8 @@ interface Filtros {
   styleUrls: ['./cobrancas.component.css']
 })
 export class CobrancasComponent implements OnInit {
+
+  private apiUrl = `${environment.apiUrl}cobrancas`;  
 
   cobrancas: Cobranca[] = [];
   cobrancasFiltradas: Cobranca[] = [];

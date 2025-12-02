@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-encomendas',
@@ -7,5 +8,7 @@ import { Component } from '@angular/core';
   styleUrl: './encomendas.component.css'
 })
 export class EncomendasComponent {
+
+  private apiUrl = `${environment.apiUrl}encomendas`;  
 
 }

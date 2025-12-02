@@ -1,17 +1,20 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { environment } from '../../environments/environment';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, CommonModule, RouterLink, HttpClientModule],
   templateUrl: './registro.component.html',
-  styleUrl: './registro.component.css'
+  styleUrls: ['./registro.component.css']
 })
 export class RegistroComponent {
-  
+  private apiUrl = `${environment.apiUrl}auth/register`;
+
   registroData = {
     fullName: '',
     email: '',
@@ -20,16 +23,15 @@ export class RegistroComponent {
     bloco: '',
     apartment: '',
     password: '',
-    comprovante: null as File | null 
+    comprovante: null as File | null
   };
 
   registroMessage: string = '';
   isSuccess: boolean = false;
 
-  constructor() {} 
+  constructor(private http: HttpClient) {}
 
   onFileSelected(event: Event): void {
-    this.registroMessage = '';
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length) {
       this.registroData.comprovante = input.files[0];
@@ -37,21 +39,36 @@ export class RegistroComponent {
   }
 
   registrar(): void {
-    this.registroMessage = ''; 
-
-    if (!this.registroData.fullName || this.registroData.password.length < 6 || !this.registroData.userType) {
+    if (!this.registroData.fullName || !this.registroData.email || !this.registroData.password ||
+        !this.registroData.userType || !this.registroData.bloco || !this.registroData.apartment ||
+        !this.registroData.comprovante) {
       this.isSuccess = false;
-      this.registroMessage = 'Por favor, preencha todos os campos obrigatórios e verifique a senha.';
+      this.registroMessage = 'Preencha todos os campos obrigatórios e anexe o comprovante.';
       return;
     }
 
-    if (!this.registroData.comprovante) {
-      this.isSuccess = false;
-      this.registroMessage = 'É necessário anexar um comprovante de vínculo com o condomínio.';
-      return;
-    }
+    const formData = new FormData();
+    formData.append('name', this.registroData.fullName);
+    formData.append('email', this.registroData.email);
+    formData.append('phone', this.registroData.phone);
+    formData.append('role_id', this.registroData.userType);
+    formData.append('unit_id', `${this.registroData.bloco}-${this.registroData.apartment}`);
+    formData.append('password', this.registroData.password);
+    formData.append('comprovante', this.registroData.comprovante);
 
-    this.isSuccess = true;
-    this.registroMessage = 'Cadastro enviado com sucesso! Sua conta será ativada após a verificação do comprovante.';
+    this.http.post(this.apiUrl, formData).subscribe({
+      next: (res: any) => {
+        this.isSuccess = true;
+        this.registroMessage = 'Cadastro enviado com sucesso!';
+      },
+      error: (err) => {
+        if (err.status === 400) {
+          this.registroMessage = 'Unidade não cadastrada.';
+        } else {
+          this.isSuccess = false;
+          this.registroMessage = err.error?.message || 'Erro ao registrar usuário.';
+        }
+      }
+    });
   }
 }

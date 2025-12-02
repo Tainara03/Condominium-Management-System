@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../environments/environment';
 
 interface Usuario {
     bloco: string;
@@ -28,6 +29,8 @@ interface Filtros {
 })
 export class PainelComponent implements OnInit {
 
+    private apiUrl = `${environment.apiUrl}painel`;  
+
     usuarios: Usuario[] = [];
     usuariosFiltrados: Usuario[] = [];
     
@@ -45,7 +48,7 @@ export class PainelComponent implements OnInit {
     carregarUsuarios(): void {
         const dadosIniciais: Usuario[] = [
             { bloco: 'A', apartamento: '101', nome: 'João da Silva', tipoUsuario: 'Morador', email: 'joao@domus.com', telefone: '11987654321', status: 'Ativo' },
-            { bloco: 'B', apartamento: '203', nome: 'Maria Souza', tipoUsuario: 'Porteiro', email: 'maria@domus.com', telefone: '21912345678', status: 'Inativo' },
+            { bloco: 'B', apartamento: '203', nome: 'Maria Souza', tipoUsuario: 'funcionario', email: 'maria@domus.com', telefone: '21912345678', status: 'Inativo' },
             { bloco: 'C', apartamento: '304', nome: 'Pedro Lima', tipoUsuario: 'Morador', email: 'pedro@domus.com', telefone: '11999998888', status: 'Pendente' },
         ];
         this.usuarios = dadosIniciais;
