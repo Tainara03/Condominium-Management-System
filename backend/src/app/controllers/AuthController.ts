@@ -16,10 +16,10 @@ authRouter.post('/register', uploadMiddleware.single('comprovante'), async (req:
       return res.status(400).json({ message: "Missing required fields." });
     }
 
-    const role = await RoleRepository.findByName(role_id);
+    const role = await RoleRepository.findById(role_id);
     if (!role) return res.status(400).json({ message: "Role not found" });
 
-    const unit = await UnitRepository.findByComposite(unit_id);
+    const unit = await UnitRepository.findById(unit_id);
     if (!unit) return res.status(400).json({ message: "Unit not found" });
 
     const existing = await UserRepository.findByEmail(email);
@@ -34,7 +34,7 @@ authRouter.post('/register', uploadMiddleware.single('comprovante'), async (req:
       phone,
       role_id: role.id,
       unit_id: unit.id,
-      is_approved: false,
+      is_approved: null,
       comprovante_path
     });
 

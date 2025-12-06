@@ -35,7 +35,7 @@ class User {
     unit?: Unit;
 
     @Column('boolean', { nullable: false, default: false })
-    is_approved!: boolean;
+    is_approved!: boolean | null;
 
     @OneToMany(() => History, history => history.performed_by)
     history!: History[];
