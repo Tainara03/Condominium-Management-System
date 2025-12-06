@@ -2,43 +2,52 @@ import UserRepository from "../repositories/UserRepository";
 import IUser from "../interfaces/IUser";
 
 
-const getUserById = async (id: string) => {
-    try {
-        const user = await UserRepository.findById(id);
-        if (!user) {
-            throw new Error('User not found');
-        }
-        return user;
-    } catch (error) {
-        throw error;
+const mapUserForFrontend = (user: any) => {
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    phone: user.phone,
+    tipoUsuario: user.role?.role,
+    status: user.is_approved === null ? 'Pendente' : user.is_approved ? 'Ativo' : 'Inativo',
+    bloco: user.unit?.building,
+    apartamento: user.unit?.apartment,
+    comprovante_path: user.comprovante_path,
+  };
+};
+
+const getAllUsers = async () => {
+  try {
+    const users = await UserRepository.getUsers();
+    if (!users || users.length === 0) {
+      throw new Error('User not found');
     }
+    return users.map(mapUserForFrontend);
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getUserById = async (id: string) => {
+  try {
+    const user = await UserRepository.findById(id);
+    if (!user) throw new Error('User not found');
+    return mapUserForFrontend(user);
+  } catch (error) {
+    throw error;
+  }
 };
 
 const getUserByEmail = async (email: string) => {
-    try {
-        const user = await UserRepository.findByEmail(email);
-        if (!user) {
-            throw new Error('User not found');
-        }
-        return user;
-    }
-    catch (error) {
-        throw error;
-    }
+  try {
+    const user = await UserRepository.findByEmail(email);
+    if (!user) throw new Error('User not found');
+    return mapUserForFrontend(user);
+  } catch (error) {
+    throw error;
+  }
 };
 
-// function that geta all users, or by id or email
-const getAllUsers = async () => {
-    try {
-        const users = await UserRepository.getUsers();
-        if (!users || users.length === 0) {
-            throw new Error('User not found');
-        }
-        return users;
-    } catch (error) {
-        throw error;
-    }
-};
 
 const updateUser = async (id: string, userData: Partial<IUser>) => {
     try {

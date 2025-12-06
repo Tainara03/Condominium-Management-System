@@ -3,7 +3,7 @@ import Unit from "../entities/Unit";
 
 const getUnitById = async (id: string) => {
     try {
-        const unit = await UnitRepository.getUnitById(id);
+        const unit = await UnitRepository.findById(id);
         if (!unit) {
             throw new Error('Unit not found');
         }
@@ -15,7 +15,7 @@ const getUnitById = async (id: string) => {
 
 const getUnitByApartmentAndBuilding = async (apartment: string, building: string) => {
     try {
-        const unit = await UnitRepository.getUnitByApartmentAndBuilding(apartment, building);
+        const unit = await UnitRepository.findByComposite(apartment, building);
         if (!unit) {
             throw new Error('Unit not found');
         }
@@ -27,7 +27,7 @@ const getUnitByApartmentAndBuilding = async (apartment: string, building: string
 
 const getAllUnits = async () => {
     try {
-        const units = await UnitRepository.getAllUnits();
+        const units = await UnitRepository.getAll();
         if (!units || units.length === 0) {
             throw new Error('Unit not found');
         }
@@ -49,7 +49,7 @@ const createUnit = async (unitData: Partial<Unit>) => {
 
 const updateUnit = async (id: string, unitData: Partial<Unit>) => {
     try {
-        const unit = await UnitRepository.getUnitById(id);
+        const unit = await UnitRepository.findById(id);
         if (!unit) {
             throw new Error('Unit not found');
         }
@@ -63,7 +63,7 @@ const updateUnit = async (id: string, unitData: Partial<Unit>) => {
 
 const deleteUnit = async (id: string) => {
     try {
-        const unit = await UnitRepository.getUnitById(id);
+        const unit = await UnitRepository.findById(id);
         if (!unit) {
             throw new Error('Unit not found');
         }
