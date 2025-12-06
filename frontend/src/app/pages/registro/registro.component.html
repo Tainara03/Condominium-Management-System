@@ -27,11 +27,12 @@
             </div>
             <div class="col-md-6 mb-3">
               <label for="userType" class="form-label">Tipo de Usuário</label>
-              <select class="form-select" id="userType" name="userType" [(ngModel)]="registroData.userType" required>
+              <select class="form-select" id="userType" name="userType"
+                      [(ngModel)]="registroData.userType" required>
                 <option value="" disabled selected>Selecione</option>
-                <option value="admin">Administrador</option>
-                <option value="morador">Morador</option>
-                <option value="funcionario">Funcionario</option>
+                <option *ngFor="let r of roles" [value]="r.id">
+                  {{ r.role }}
+                </option>
               </select>
             </div>
           </div>
@@ -39,11 +40,27 @@
           <div class="row g-2">
             <div class="col-md-6 mb-3">
               <label for="bloco" class="form-label">Bloco</label>
-              <input type="text" class="form-control" id="bloco" name="bloco" [(ngModel)]="registroData.bloco" placeholder="Ex: A" required>
+              <select class="form-select" id="bloco" name="bloco"
+                      [(ngModel)]="registroData.bloco"
+                      (change)="onBlocoChange()"
+                      required>
+                <option value="" disabled selected>Selecione o Bloco</option>
+                <option *ngFor="let b of blocos" [value]="b">
+                  {{ b }}
+                </option>
+              </select>
             </div>
             <div class="col-md-6 mb-3">
               <label for="apartment" class="form-label">Apartamento</label>
-              <input type="text" class="form-control" id="apartment" name="apartment" [(ngModel)]="registroData.apartment" placeholder="Ex: 101" required>
+              <select class="form-select" id="apartment" name="apartment"
+                      [(ngModel)]="registroData.apartment"
+                      (change)="onApartmentChange()"
+                      required>
+                <option value="" disabled selected>Selecione o Apartamento</option>
+                <option *ngFor="let a of apartamentos" [value]="a.id">
+                  {{ a.name }}
+                </option>
+              </select>
             </div>
           </div>
 

@@ -5,6 +5,8 @@ import { permit } from "../middlewares/roleMiddleware";
 import { QueryFailedError } from "typeorm";
 import UserService from "../services/UserService";
 import IUser from "../interfaces/IUser";
+import path from 'path';
+import fs from 'fs';
 
 const userRouter = Router();
 
@@ -41,6 +43,27 @@ userRouter.get('/', ensureAuthenticated, permit(1), async (req: Request, res: Re
         return res.status(500).json({ message: 'Internal server error' });
     }
 
+});
+
+userRouter.get('/:id/comprovante', ensureAuthenticated, async (req, res) => {
+  try {
+    const user = await UserService.getUserById(req.params.id);
+
+    if (!user?.comprovante_path) {
+      return res.status(404).json({ message: 'Comprovante não encontrado' });
+    }
+
+    const filePath = path.resolve(user.comprovante_path);
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ message: 'Arquivo não encontrado' });
+    }
+
+    res.download(filePath, `comprovante-${user.name}.pdf`);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Erro ao baixar comprovante' });
+  }
 });
 
 //atualizar usuário
@@ -80,6 +103,45 @@ userRouter.put('/:id', ensureAuthenticated, permit(3), async (req: Request, res:
         return res.status(500).json({ message: 'Internal server error' });
     }
 });
+
+// Aprovar usuário (pendente -> ativo)
+userRouter.post('/:id/approve', ensureAuthenticated, permit(3), async (req: Request, res: Response) => {
+  try {
+    const updatedUser = await UserService.updateUser(req.params.id, { is_approved: true });
+    if (!updatedUser) return res.status(404).json({ message: 'User not found' });
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Reprovar usuário (pendente -> inativo)
+userRouter.post('/:id/reject', ensureAuthenticated, permit(3), async (req: Request, res: Response) => {
+  try {
+    const updatedUser = await UserService.updateUser(req.params.id, { is_approved: false });
+    if (!updatedUser) return res.status(404).json({ message: 'User not found' });
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Alternar status de usuário ativo/inativo
+userRouter.post('/:id/status', ensureAuthenticated, permit(3), async (req: Request, res: Response) => {
+  try {
+    const { status } = req.body;
+    const isApproved = status === 'Ativo' ? true : false;
+    const updatedUser = await UserService.updateUser(req.params.id, { is_approved: isApproved });
+    if (!updatedUser) return res.status(404).json({ message: 'User not found' });
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 
 // Deletar usuário
 userRouter.delete('/:id', ensureAuthenticated, permit(4), async (req: Request, res: Response) => {

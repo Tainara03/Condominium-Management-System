@@ -1,9 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+
+interface Unidade {
+  id: string;
+  apartment: string;
+  building: string;
+}
+
+interface ApartamentoOption {
+  id: string;
+  name: string;
+}
+
+interface Role {
+  id: string;
+  role: string;
+  level: number;
+}
 
 @Component({
   selector: 'app-registro',
@@ -12,8 +29,14 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
   templateUrl: './registro.component.html',
   styleUrls: ['./registro.component.css']
 })
-export class RegistroComponent {
-  private apiUrl = `${environment.apiUrl}auth/register`;
+export class RegistroComponent implements OnInit {
+  private apiUrl = `${environment.apiUrl}`;
+
+  unidades: Unidade[] = [];
+  roles: Role[] = [];
+
+  blocos: string[] = [];
+  apartamentos: ApartamentoOption[] = [];
 
   registroData = {
     fullName: '',
@@ -26,10 +49,52 @@ export class RegistroComponent {
     comprovante: null as File | null
   };
 
-  registroMessage: string = '';
-  isSuccess: boolean = false;
+  registroMessage = '';
+  isSuccess = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private router: Router,
+    private http: HttpClient) {}
+
+  ngOnInit(): void {
+    this.carregarUnidades();
+    this.carregarPerfis();
+  }
+
+  carregarUnidades(): void {
+    this.http.get<Unidade[]>(`${this.apiUrl}public/units`).subscribe({
+      next: (res) => {
+        this.unidades = res;
+        this.blocos = Array.from(new Set(res.map(u => u.building)));
+        this.apartamentos = res.map(u => ({ id: u.id, name: u.apartment }));
+      },
+      error: () => {}
+    });
+  }
+
+  carregarPerfis(): void {
+    this.http.get<Role[]>(`${this.apiUrl}public/roles`).subscribe({
+      next: (res) => {
+        this.roles = res;
+      },
+      error: () => {}
+    });
+  }
+
+  onBlocoChange(): void {
+    this.apartamentos = this.unidades
+      .filter(u => u.building === this.registroData.bloco)
+      .map(u => ({ id: u.id, name: u.apartment }));
+
+    this.registroData.apartment = '';
+  }
+
+  onApartmentChange(): void {
+    const unidade = this.unidades.find(u => u.id === this.registroData.apartment);
+    if (unidade) {
+      this.registroData.bloco = unidade.building;
+    }
+  }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -52,17 +117,21 @@ export class RegistroComponent {
     formData.append('email', this.registroData.email);
     formData.append('phone', this.registroData.phone);
     formData.append('role_id', this.registroData.userType);
-    formData.append('unit_id', `${this.registroData.bloco}-${this.registroData.apartment}`);
+    formData.append('unit_id', this.registroData.apartment);
     formData.append('password', this.registroData.password);
     formData.append('comprovante', this.registroData.comprovante);
 
-    this.http.post(this.apiUrl, formData).subscribe({
-      next: (res: any) => {
+    this.http.post(`${this.apiUrl}auth/register`, formData).subscribe({
+      next: () => {
         this.isSuccess = true;
         this.registroMessage = 'Cadastro enviado com sucesso!';
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 1000); 
       },
       error: (err) => {
         if (err.status === 400) {
+          this.isSuccess = false;
           this.registroMessage = 'Unidade não cadastrada.';
         } else {
           this.isSuccess = false;

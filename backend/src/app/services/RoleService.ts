@@ -4,7 +4,7 @@ import IRole from "../interfaces/IRole";
 
 const getRoleById = async (id: string) => {
     try {
-        const role = await RoleRepository.getRoleById(id);
+        const role = await RoleRepository.findById(id);
         if (!role) {
             throw new Error('Role not found');
         }
@@ -16,7 +16,7 @@ const getRoleById = async (id: string) => {
 
 const getRoleByName = async (roleName: string) => {
     try {
-        const role = await RoleRepository.getRoleByName(roleName);
+        const role = await RoleRepository.findByName(roleName);
         if (!role) {
             throw new Error('Role not found');
         }
@@ -28,7 +28,7 @@ const getRoleByName = async (roleName: string) => {
 
 const getAllRoles = async () => {
     try {
-        const roles = await RoleRepository.getAllRoles();
+        const roles = await RoleRepository.getAll();
         if (!roles || roles.length === 0) {
             throw new Error('Role not found');
         }
@@ -40,7 +40,7 @@ const getAllRoles = async () => {
 
 const createRole = async (roleData: Partial<IRole>) => {
     try {
-        const existingRole = await RoleRepository.getRoleByName(roleData.role!);
+        const existingRole = await RoleRepository.findByName(roleData.role!);
         if (existingRole) {
             throw new Error('Role already exists');
         }
@@ -53,7 +53,7 @@ const createRole = async (roleData: Partial<IRole>) => {
 
 const updateRole = async (id: string, roleData: Partial<IRole>) => {
     try {
-        const role = await RoleRepository.getRoleById(id);
+        const role = await RoleRepository.findById(id);
         if (!role) {
             throw new Error('Role not found');
         }
@@ -66,7 +66,7 @@ const updateRole = async (id: string, roleData: Partial<IRole>) => {
 
 const deleteRole = async (id: string) => {
     try {
-        const role = await RoleRepository.getRoleById(id);
+        const role = await RoleRepository.findById(id);
         if (!role) {
             throw new Error('Role not found');
         }

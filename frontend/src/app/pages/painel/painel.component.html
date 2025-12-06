@@ -12,7 +12,7 @@
                 <div class="col-md-3">
                     <label for="filtroNome" class="form-label fw-bold">Nome</label>
                     <input type="text" id="filtroNome" class="form-control form-control-sm" placeholder="Nome do morador"
-                            [(ngModel)]="filtros.nome" (input)="aplicarFiltros()">
+                            [(ngModel)]="filtros.name" (input)="aplicarFiltros()">
                 </div>
                 <div class="col-md-2">
                     <label for="filtroBloco" class="form-label fw-bold">Bloco</label>
@@ -66,12 +66,16 @@
                             [ngClass]="{'bg-pendente': usuario.status === 'Pendente'}"> 
                             <td>{{ usuario.bloco }}</td>
                             <td>{{ usuario.apartamento }}</td>
-                            <td>{{ usuario.nome }}</td>
+                            <td>{{ usuario.name }}</td>
                             <td>{{ usuario.tipoUsuario }}</td>
                             <td>{{ usuario.email }}</td>
-                            <td>{{ usuario.telefone }}</td>
-                            <td><a href="#" class="btn btn-sm btn-outline-info">Ver Doc</a></td>
-                            
+                            <td>{{ usuario.phone }}</td>
+                            <td>
+                                <button *ngIf="usuario.comprovante_path" class="btn btn-sm btn-outline-info"
+                                        (click)="baixarComprovante(usuario)">
+                                    Ver/Download
+                                </button>
+                            </td>
                             <td>
                                 <div *ngIf="usuario.status === 'Pendente'; else acoesAtivasInativas">
                                     <button class="btn btn-sm btn-success me-2" (click)="aprovarUsuario(usuario)">Aprovar</button>

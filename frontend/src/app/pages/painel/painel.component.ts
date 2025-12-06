@@ -1,107 +1,133 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
+interface Unidade {
+  id: string;
+  apartment: string;
+  building: string;
+}
+
 interface Usuario {
-    bloco: string;
-    apartamento: string;
-    nome: string;
-    tipoUsuario: string;
-    email: string;
-    telefone: string;
-    status: 'Ativo' | 'Inativo' | 'Pendente';
+  id: string;
+  bloco: string;
+  apartamento: string;
+  name: string;
+  tipoUsuario: string;
+  email: string;
+  phone: string;
+  status: 'Ativo' | 'Inativo' | 'Pendente';
+  comprovante_path?: string;
 }
 
 interface Filtros {
-    nome: string;
-    bloco: string;
-    status: 'Ativo' | 'Inativo' | 'Pendente' | '';
-    tipoUsuario: string;
+  name: string;
+  bloco: string;
+  status: 'Ativo' | 'Inativo' | 'Pendente' | '';
+  tipoUsuario: string;
 }
 
 @Component({
-    selector: 'app-painel',
-    standalone: true,
-    imports: [CommonModule, FormsModule],
-    templateUrl: './painel.component.html',
-    styleUrls: ['./painel.component.css']
+  selector: 'app-painel',
+  standalone: true,
+  imports: [CommonModule, FormsModule, HttpClientModule],
+  templateUrl: './painel.component.html',
+  styleUrls: ['./painel.component.css']
 })
 export class PainelComponent implements OnInit {
+  private apiUrl = environment.apiUrl;
 
-    private apiUrl = `${environment.apiUrl}painel`;  
+  unidades: Unidade[] = [];
+  usuarios: Usuario[] = [];
+  usuariosFiltrados: Usuario[] = [];
 
-    usuarios: Usuario[] = [];
-    usuariosFiltrados: Usuario[] = [];
-    
-    filtros: Filtros = {
-        nome: '',
-        bloco: '',
-        status: '',
-        tipoUsuario: ''
-    };
+  filtros: Filtros = { name: '', bloco: '', status: '', tipoUsuario: '' };
 
-    ngOnInit(): void {
-        this.carregarUsuarios();
-    }
+  constructor(private http: HttpClient) {}
 
-    carregarUsuarios(): void {
-        const dadosIniciais: Usuario[] = [
-            { bloco: 'A', apartamento: '101', nome: 'João da Silva', tipoUsuario: 'Morador', email: 'joao@domus.com', telefone: '11987654321', status: 'Ativo' },
-            { bloco: 'B', apartamento: '203', nome: 'Maria Souza', tipoUsuario: 'funcionario', email: 'maria@domus.com', telefone: '21912345678', status: 'Inativo' },
-            { bloco: 'C', apartamento: '304', nome: 'Pedro Lima', tipoUsuario: 'Morador', email: 'pedro@domus.com', telefone: '11999998888', status: 'Pendente' },
-        ];
-        this.usuarios = dadosIniciais;
-        this.aplicarFiltros(); 
-    }
+  ngOnInit(): void {
+    this.carregarUsuarios();
+  }
 
-    aplicarFiltros(): void {
-        let tempUsuarios = this.usuarios;
-        
-        if (this.filtros.nome) {
-            const termo = this.filtros.nome.toLowerCase();
-            tempUsuarios = tempUsuarios.filter(u => u.nome.toLowerCase().includes(termo));
-        }
-        
-        if (this.filtros.bloco) {
-            tempUsuarios = tempUsuarios.filter(u => u.bloco === this.filtros.bloco);
-        }
-        
-        if (this.filtros.status) {
-            // O filtro funciona corretamente porque u.status é do tipo literal e this.filtros.status agora inclui a string vazia
-            tempUsuarios = tempUsuarios.filter(u => u.status === this.filtros.status);
-        }
-        
-        if (this.filtros.tipoUsuario) {
-            tempUsuarios = tempUsuarios.filter(u => u.tipoUsuario === this.filtros.tipoUsuario);
-        }
-        
-        this.usuariosFiltrados = tempUsuarios;
-    }
-    
-    resetarFiltros(): void {
-        this.filtros = { nome: '', bloco: '', status: '', tipoUsuario: '' };
+  carregarUsuarios(): void {
+    this.http.get<Usuario[]>(`${this.apiUrl}users`).subscribe({
+      next: (res) => {
+        this.usuarios = res.map(u => ({ ...u }));
         this.aplicarFiltros();
-    }
+      },
+      error: (err) => console.error('Erro ao carregar usuários', err)
+    });
+  }
 
-    aprovarUsuario(usuario: Usuario): void {
+  aplicarFiltros(): void {
+    let tempUsuarios = this.usuarios;
+
+    if (this.filtros.name) {
+      const termo = this.filtros.name.toLowerCase();
+      tempUsuarios = tempUsuarios.filter(u => u.name.toLowerCase().includes(termo));
+    }
+    if (this.filtros.bloco) tempUsuarios = tempUsuarios.filter(u => u.bloco === this.filtros.bloco);
+    if (this.filtros.status) tempUsuarios = tempUsuarios.filter(u => u.status === this.filtros.status);
+    if (this.filtros.tipoUsuario) tempUsuarios = tempUsuarios.filter(u => u.tipoUsuario === this.filtros.tipoUsuario);
+
+    this.usuariosFiltrados = tempUsuarios;
+  }
+
+  resetarFiltros(): void {
+    this.filtros = { name: '', bloco: '', status: '', tipoUsuario: '' };
+    this.aplicarFiltros();
+  }
+
+  aprovarUsuario(usuario: Usuario): void {
+    this.http.post(`${this.apiUrl}users/${usuario.id}/approve`, {}).subscribe({
+      next: () => {
         usuario.status = 'Ativo';
-        this.aplicarFiltros(); 
-        alert(`Usuário ${usuario.nome} aprovado e ativado.`);
-    }
+        this.aplicarFiltros();
+      },
+      error: (err) => console.error('Erro ao aprovar usuário', err)
+    });
+  }
 
-    reprovarUsuario(usuario: Usuario): void {
+  reprovarUsuario(usuario: Usuario): void {
+    this.http.post(`${this.apiUrl}users/${usuario.id}/reject`, {}).subscribe({
+      next: () => {
         usuario.status = 'Inativo';
         this.aplicarFiltros();
-        alert(`Usuário ${usuario.nome} reprovado e desativado.`);
-    }
+      },
+      error: (err) => console.error('Erro ao reprovar usuário', err)
+    });
+  }
 
-    toggleStatus(usuario: Usuario): void {
-        if (usuario.status === 'Pendente') return; 
-        
-        const novoStatus = usuario.status === 'Ativo' ? 'Inativo' : 'Ativo';
+  toggleStatus(usuario: Usuario): void {
+    if (usuario.status === 'Pendente') return;
+    const novoStatus = usuario.status === 'Ativo' ? 'Inativo' : 'Ativo';
+
+    this.http.post(`${this.apiUrl}users/${usuario.id}/status`, { status: novoStatus }).subscribe({
+      next: () => {
         usuario.status = novoStatus;
         this.aplicarFiltros();
-        alert(`Usuário ${usuario.nome} está agora como ${novoStatus}.`);
-    }
+      },
+      error: (err) => console.error('Erro ao alterar status do usuário', err)
+    });
+  }
+
+  baixarComprovante(usuario: Usuario): void {
+    if (!usuario.comprovante_path) return;
+
+    const url = `${this.apiUrl}users/${usuario.id}/comprovante`;
+
+    this.http.get(url, { responseType: 'blob' }).subscribe({
+      next: (blob) => {
+        const link = document.createElement('a');
+        const fileUrl = window.URL.createObjectURL(blob);
+        link.href = fileUrl;
+        link.download = `comprovante-${usuario.name}.pdf`;
+        link.click();
+        window.URL.revokeObjectURL(fileUrl);
+      },
+      error: (err) => console.error('Erro ao baixar comprovante', err)
+    });
+  }
 }

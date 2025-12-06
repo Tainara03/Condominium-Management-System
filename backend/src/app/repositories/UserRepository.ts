@@ -4,9 +4,12 @@ import { AppDataSource } from "../../database/data-source";
 
 const userRepository = AppDataSource.getRepository(User);
 
-const getUsers = () => {
-    return userRepository.find({relations: ['role','unit']});
-}
+const getUsers = async () => {
+  const userRepo = AppDataSource.getRepository(User);
+  return userRepo.find({
+    relations: ['unit', 'role'],
+  });
+};
 
 const findByName = (name: string) => {
     return userRepository.findOne({where: {name}, relations:['role', 'unit']});

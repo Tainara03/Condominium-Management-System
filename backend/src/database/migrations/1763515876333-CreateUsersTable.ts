@@ -56,7 +56,7 @@ export class CreateUsersTable1763515876333 implements MigrationInterface {
                         name: 'is_approved',
                         type: 'boolean',
                         default: 'false',
-                        isNullable: false
+                        isNullable: true
                     },
                     {
                         name: 'comprovante_path',

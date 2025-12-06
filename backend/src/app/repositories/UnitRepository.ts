@@ -7,8 +7,7 @@ const findById = async (id: string) => {
     return UnitRepository.findOne({ where: { id } });
 };
 
-const findByComposite = async (composite: string) => {
-    const [building, apartment] = composite.split("-");
+const findByComposite = async (apartment: string, building: string) => {
     return UnitRepository.findOne({ where: { building, apartment } });
 };
 
