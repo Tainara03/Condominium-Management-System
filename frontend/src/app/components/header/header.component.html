@@ -26,10 +26,10 @@
         <li class="nav-item">
           <a class="nav-link menu-item" routerLink="/home" data-bs-toggle="collapse" data-bs-target="#navbarMenu">Página Inicial</a>
         </li>
-        <li *ngIf="auth.userType() === 'admin'" class="nav-item">
+        <li *ngIf="auth.userType() === 'Admin' || auth.userType() === 'Sindico'" class="nav-item">
           <a class="nav-link menu-item" routerLink="/painel" data-bs-toggle="collapse" data-bs-target="#navbarMenu">Painel Administrador</a>
         </li>
-        <li *ngIf="auth.userType() === 'funcionario'" class="nav-item">
+        <li *ngIf="auth.userType() === 'Funcionario'" class="nav-item">
           <a class="nav-link menu-item" routerLink="/encomendas" data-bs-toggle="collapse" data-bs-target="#navbarMenu">Cadastrar Encomendas</a>
         </li>
         <li class="nav-item">

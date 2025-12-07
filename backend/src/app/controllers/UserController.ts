@@ -116,12 +116,16 @@ userRouter.post('/:id/approve', ensureAuthenticated, permit(3), async (req: Requ
   }
 });
 
-// Reprovar usuário (pendente -> inativo)
-userRouter.post('/:id/reject', ensureAuthenticated, permit(3), async (req: Request, res: Response) => {
+// Reprovar usuário (pendente -> removido)
+userRouter.delete('/:id/reject', ensureAuthenticated, permit(3), async (req: Request, res: Response) => {
   try {
-    const updatedUser = await UserService.updateUser(req.params.id, { is_approved: false });
-    if (!updatedUser) return res.status(404).json({ message: 'User not found' });
-    return res.status(200).json(updatedUser);
+    const deletedUser = await UserService.deleteUser(req.params.id);
+
+    if (!deletedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    return res.status(204).send();
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Internal server error' });

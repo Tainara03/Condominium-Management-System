@@ -7,6 +7,7 @@ import reservationRouter from '../controllers/ReservationController';
 import unitsRouter from '../controllers/UnitsController';
 import rolesRouter from '../controllers/RoleController';
 import publicRouter from '../controllers/PublicController';
+import noticeRouter from '../controllers/NoticeController';
 
 const routers = Router();
 const billingController = new BillingController();
@@ -20,6 +21,7 @@ routers.use('/users', userRouter);
 routers.use('/reservas', reservationRouter);
 routers.use('/units', unitsRouter);
 routers.use('/roles', rolesRouter);
+routers.use('/notices', noticeRouter);
 routers.use('/public', publicRouter);
 
 routers.post('/cobrancas', uploadMiddleware.single('file'), billingController.store);

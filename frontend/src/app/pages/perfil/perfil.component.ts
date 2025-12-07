@@ -13,7 +13,7 @@ interface Perfil {
   fullName: string;
   email: string;
   phone: string;
-  userType: 'admin' | 'morador' | 'funcionario' | null;
+  userType: 'Admin' | 'Sindico' | 'Morador' | 'Funcionario' | null;
   userTypeDisplay: string;
   unidades: Unidade[]; 
   novoComprovante: File | null; 
@@ -55,7 +55,7 @@ export class PerfilComponent implements OnInit {
 
   carregarDadosDoPerfil(): void {
     const userType = this.authService.getUserType(); 
-    const userTypeValidated = userType || 'morador'; 
+    const userTypeValidated = userType || 'Morador'; 
     
     const mockData: Perfil = {
       fullName: 'João da Silva',
@@ -125,9 +125,10 @@ export class PerfilComponent implements OnInit {
   
   private formatUserType(type: string): string {
       switch (type) {
-          case 'admin': return 'Administrador';
-          case 'morador': return 'Morador';
-          case 'funcionario': return 'funcionario';
+          case 'Admin': return 'Administrador';
+          case 'Sindico': return 'Sindico';
+          case 'Morador': return 'Morador';
+          case 'Funcionario': return 'Funcionario';
           default: return 'Desconhecido';
       }
   }
