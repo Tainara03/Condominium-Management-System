@@ -24,7 +24,7 @@ unitRouter.get('/', ensureAuthenticated, permit(1), async (req: Request, res: Re
     } catch (error) {
         //Se Der problema na query
         if (error instanceof QueryFailedError) {
-            return res.status(400).json({ message: 'Querry Failed', error: error.message });
+            return res.status(400).json({ message: 'Query Failed', error: error.message });
         }
         //Se retornar unit not found
         if (error instanceof Error && error.message === 'Unit not found') {
@@ -53,7 +53,7 @@ unitRouter.put('/:id', ensureAuthenticated, permit(4), async (req: Request, res:
     } catch (error) {
         //Se Der problema na query
         if (error instanceof QueryFailedError) {
-            return res.status(400).json({ message: 'Querry failed', error: error.message });
+            return res.status(400).json({ message: 'Query failed', error: error.message });
         }
         //Se retornar unit not found
         if (error instanceof Error && error.message === 'Unit not found') {
@@ -75,7 +75,7 @@ unitRouter.post('/', ensureAuthenticated, permit(4), async (req: Request, res: R
     } catch (error) {
         //Se Der problema na query
         if (error instanceof QueryFailedError) {
-            return res.status(400).json({ message: 'Querry failed', error: error.message });
+            return res.status(400).json({ message: 'Query failed', error: error.message });
         }
         //se retornar unit already exists
         if (error instanceof Error && error.message === 'Unit already exists') {
@@ -102,7 +102,7 @@ unitRouter.delete('/:id', ensureAuthenticated, permit(4), async (req: Request, r
     } catch (error) {
         //Se Der problema na query
         if (error instanceof QueryFailedError) {
-            return res.status(400).json({ message: 'Querry failed', error: error.message });
+            return res.status(400).json({ message: 'Query failed', error: error.message });
         }
         //Se retornar unit not found
         if (error instanceof Error && error.message === 'Unit not found') {

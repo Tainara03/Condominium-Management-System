@@ -1,64 +1,51 @@
 <div class="container py-5">
   <div class="row justify-content-center">
     <div class="col-lg-10">
-
       <div class="card shadow-lg border-0">
         <div class="card-header text-white text-center py-3 perfil-header">
           <h4 class="mb-0">Meu Perfil e Dados Cadastrais</h4>
         </div>
         <div class="card-body p-4 p-md-5">
-
           <form (ngSubmit)="salvarPerfil()">
-            
             <h5 class="mb-3">Informações Pessoais</h5>
-
             <div class="row mb-4 g-3">
-              
               <div class="col-md-6">
-                <label for="fullName" class="form-label fw-bold">Nome Completo</label>
-                <input type="text" class="form-control" id="fullName" name="fullName" 
-                       [(ngModel)]="perfilData.fullName" [readonly]="!modoEdicao" required>
+                <label for="name" class="form-label fw-bold">Nome Completo</label>
+                <input type="text" class="form-control" id="name" name="name" 
+                       [(ngModel)]="perfilData.name" [readonly]="!modoEdicao" required>
               </div>
-
               <div class="col-md-6">
                 <label for="email" class="form-label fw-bold">E-mail</label>
                 <input type="email" class="form-control" id="email" name="email" 
                        [(ngModel)]="perfilData.email" [readonly]="!modoEdicao" required>
               </div>
             </div>
-
             <div class="row mb-5 g-3">
-              
               <div class="col-md-6">
                 <label for="phone" class="form-label fw-bold">Telefone</label>
                 <input type="tel" class="form-control" id="phone" name="phone" 
                        [(ngModel)]="perfilData.phone" [readonly]="!modoEdicao" required>
               </div>
-              
               <div class="col-md-6">
                 <label for="userType" class="form-label fw-bold">Tipo de Usuário</label>
                 <input type="text" class="form-control" id="userType" name="userType" 
                        [(ngModel)]="perfilData.userTypeDisplay" readonly>
-                <div class="form-text">O tipo de usuário só pode ser alterado pela administração.</div>
               </div>
             </div>
 
             <hr class="mb-5">
 
             <h5 class="mb-3">Dados da(s) Unidade(s)</h5>
-            
             <div class="mb-4">
-              
               <ul class="list-group mb-3">
                 <li *ngFor="let unidade of perfilData.unidades; let i = index" class="list-group-item d-flex justify-content-between align-items-center">
                   Bloco: {{ unidade.bloco }} | Apto: {{ unidade.apartment }}
-                  
                   <button *ngIf="modoEdicao && perfilData.unidades.length > 1" type="button" class="btn btn-sm btn-outline-danger" (click)="removerUnidade(i)">
                     <i class="bi bi-x-lg"></i>
                   </button>
                 </li>
               </ul>
-              
+
               <div *ngIf="modoEdicao" class="card p-3 bg-light border">
                 <h6 class="mb-3">Adicionar Nova Unidade</h6>
                 <div class="row g-2 mb-3">
@@ -87,7 +74,6 @@
             </div>
 
             <div class="d-flex justify-content-end mt-4">
-              
               <button *ngIf="!modoEdicao" type="button" class="btn btn-outline-secondary btn-lg" (click)="alternarModoEdicao()">
                 <i class="bi bi-pencil-square me-2"></i> Editar Dados
               </button>
@@ -101,12 +87,9 @@
                 </button>
               </ng-container>
             </div>
-            
           </form>
-
         </div>
       </div>
-
     </div>
   </div>
 </div>

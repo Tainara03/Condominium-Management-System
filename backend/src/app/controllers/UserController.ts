@@ -32,7 +32,7 @@ userRouter.get('/', ensureAuthenticated, permit(1), async (req: Request, res: Re
     } catch (error) {
         //Se Der problema na query
         if (error instanceof QueryFailedError) {
-            return res.status(400).json({ message: 'Querry Failed', error: error.message });
+            return res.status(400).json({ message: 'Query Failed', error: error.message });
         }
 
         //Se retornar user not found
@@ -88,7 +88,7 @@ userRouter.put('/:id', ensureAuthenticated, permit(1), uploadMiddleware.single('
   } catch (error) {
 
     if (error instanceof QueryFailedError) {
-      return res.status(400).json({ message: 'Querry failed', error: error.message });
+      return res.status(400).json({ message: 'Query failed', error: error.message });
     }
     if (error instanceof Error && error.message === 'User not found') {
       return res.status(404).json({ message: 'User not found' });
@@ -165,7 +165,7 @@ userRouter.delete('/:id', ensureAuthenticated, permit(4), async (req: Request, r
     catch (error) {
         //Se Der problema na query
         if (error instanceof QueryFailedError) {
-            return res.status(400).json({ message: 'Querry failed', error: error.message });
+            return res.status(400).json({ message: 'Query failed', error: error.message });
         }
 
         //Se retornar user not found
