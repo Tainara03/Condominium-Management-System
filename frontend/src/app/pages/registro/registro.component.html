@@ -111,7 +111,7 @@
               <input type="file" class="form-control" id="comprovante" name="comprovante" ngModel (change)="onFileSelected($event)" required #comprovante="ngModel"
                      accept=".pdf, .png, .jpg, .jpeg"
                      [class.is-invalid]="comprovante.invalid && formRegistro.submitted">
-              <div class="form-text">Sujeito a aprovação. Use .pdf, .png ou .jpg.</div>
+              <div class="form-text">Sujeito a aprovação. Use .pdf, .png, .jpeg ou .jpg.</div>
               <div class="invalid-feedback" *ngIf="comprovante.errors?.['required'] && formRegistro.submitted">
                 Anexar comprovante é obrigatório.
               </div>
