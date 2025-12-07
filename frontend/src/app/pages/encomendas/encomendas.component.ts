@@ -1,11 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { environment } from '../../environments/environment';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { AuthService } from '../../services/auth/auth.service';
+
+interface Unidade {
+  id: string;
+  building: string;
+  apartment: string;
+}
+
+interface ApartamentoOption {
+  id: string;
+  name: string;
+}
 
 @Component({
   selector: 'app-encomendas',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './encomendas.component.html',
-  styleUrl: './encomendas.component.css'
+  styleUrls: ['./encomendas.component.css']
 })
 export class EncomendasComponent {
   private apiUrl = `${environment.apiUrl}encomendas`;  

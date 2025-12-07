@@ -2,6 +2,8 @@
 
 # Compiled output
 **/dist/
+/dist
+.env
 /tmp
 /out-tsc
 /bazel-out
@@ -41,5 +43,3 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
-
-.env

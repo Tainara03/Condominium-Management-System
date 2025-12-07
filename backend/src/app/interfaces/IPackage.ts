@@ -7,7 +7,7 @@ interface IPackage {
     description: string,
     received_at: Date,
     status: string,
-    user_id: string
+    unit_id: string
 }
 
 export default IPackage;
