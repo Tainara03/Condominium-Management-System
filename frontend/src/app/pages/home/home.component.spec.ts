@@ -5,9 +5,9 @@ import { AuthService } from '../../services/auth/auth.service';
 import { signal } from '@angular/core';
 
 class MockAuthService {
-  userType = signal('morador');
+  userType = signal('Morador');
   isLoggedIn = () => true;
-  getUserType = () => 'morador';
+  getUserType = () => 'Morador';
 }
 
 describe('HomeComponent', () => {

@@ -25,6 +25,7 @@ interface Usuario {
 interface Filtros {
   name: string;
   bloco: string;
+  apartamento: string;
   status: 'Ativo' | 'Inativo' | 'Pendente' | '';
   tipoUsuario: string;
 }
@@ -39,11 +40,14 @@ interface Filtros {
 export class PainelComponent implements OnInit {
   private apiUrl = environment.apiUrl;
 
-  unidades: Unidade[] = [];
   usuarios: Usuario[] = [];
   usuariosFiltrados: Usuario[] = [];
 
-  filtros: Filtros = { name: '', bloco: '', status: '', tipoUsuario: '' };
+  filtros: Filtros = { name: '', bloco: '', apartamento: '', status: '', tipoUsuario: '' };
+
+  blocosDisponiveis: string[] = [];
+  tiposDisponiveis: string[] = [];
+  statusDisponiveis: string[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -55,6 +59,12 @@ export class PainelComponent implements OnInit {
     this.http.get<Usuario[]>(`${this.apiUrl}users`).subscribe({
       next: (res) => {
         this.usuarios = res.map(u => ({ ...u }));
+
+
+        this.blocosDisponiveis = [...new Set(this.usuarios.map(u => u.bloco))].filter(Boolean);
+        this.tiposDisponiveis = [...new Set(this.usuarios.map(u => u.tipoUsuario))].filter(Boolean);
+        this.statusDisponiveis = [...new Set(this.usuarios.map(u => u.status))].filter(Boolean);
+
         this.aplicarFiltros();
       },
       error: (err) => console.error('Erro ao carregar usuários', err)
@@ -69,6 +79,10 @@ export class PainelComponent implements OnInit {
       tempUsuarios = tempUsuarios.filter(u => u.name.toLowerCase().includes(termo));
     }
     if (this.filtros.bloco) tempUsuarios = tempUsuarios.filter(u => u.bloco === this.filtros.bloco);
+    if (this.filtros.apartamento) {
+      const termo = this.filtros.apartamento.toLowerCase();
+      tempUsuarios = tempUsuarios.filter(u => u.apartamento.toLowerCase().includes(termo));
+    }
     if (this.filtros.status) tempUsuarios = tempUsuarios.filter(u => u.status === this.filtros.status);
     if (this.filtros.tipoUsuario) tempUsuarios = tempUsuarios.filter(u => u.tipoUsuario === this.filtros.tipoUsuario);
 
@@ -76,7 +90,7 @@ export class PainelComponent implements OnInit {
   }
 
   resetarFiltros(): void {
-    this.filtros = { name: '', bloco: '', status: '', tipoUsuario: '' };
+    this.filtros = { name: '', bloco: '', apartamento: '', status: '', tipoUsuario: '' };
     this.aplicarFiltros();
   }
 
@@ -91,9 +105,9 @@ export class PainelComponent implements OnInit {
   }
 
   reprovarUsuario(usuario: Usuario): void {
-    this.http.post(`${this.apiUrl}users/${usuario.id}/reject`, {}).subscribe({
+    this.http.delete(`${this.apiUrl}users/${usuario.id}`).subscribe({
       next: () => {
-        usuario.status = 'Inativo';
+        this.usuarios = this.usuarios.filter(u => u.id !== usuario.id);
         this.aplicarFiltros();
       },
       error: (err) => console.error('Erro ao reprovar usuário', err)
@@ -102,6 +116,7 @@ export class PainelComponent implements OnInit {
 
   toggleStatus(usuario: Usuario): void {
     if (usuario.status === 'Pendente') return;
+
     const novoStatus = usuario.status === 'Ativo' ? 'Inativo' : 'Ativo';
 
     this.http.post(`${this.apiUrl}users/${usuario.id}/status`, { status: novoStatus }).subscribe({

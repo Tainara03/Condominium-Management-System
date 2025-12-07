@@ -1,10 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
-import User from "./User";
+import Unit from "./Unit";
 
 @Entity("packages")
 class Package {
 
-    @PrimaryGeneratedColumn("uuid")
+    @PrimaryGeneratedColumn("uuid", { name: "id_package" })
     id!: string;
 
     @Column("varchar", { length: 255, nullable: false })
@@ -16,14 +16,12 @@ class Package {
     @Column("varchar", { length: 50, nullable: false })
     status!: string;
 
-    // armazena a FK user
     @Column({ type: "uuid", nullable: false })
-    user_id!: string;
-
-    // relacionamento com user
-    @ManyToOne(() => User)
-    @JoinColumn({ name: "user_id" })
-    user!: User;
+    unit_id!: string;
+    
+    @ManyToOne(() => Unit)
+    @JoinColumn({ name: 'unit_id' })
+    unit?: Unit
 }
 
 export default Package;

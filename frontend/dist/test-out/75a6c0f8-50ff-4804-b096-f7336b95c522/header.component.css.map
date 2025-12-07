@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/components/header/header.component.css"],
-  "sourcesContent": [".custom-navbar {\r\n    background-color: #824F31;\r\n}\r\n\r\nspan {\r\n    color: #FCAA60;\r\n    font-family: 'Comic Sans MS', 'Kristen ITC', cursive, sans-serif;\r\n    font-size: 2.5rem;\r\n}"],
-  "mappings": ";AAAA,CAAC;AACG,oBAAkB;AACtB;AAEA;AACI,SAAO;AACP;AAAA,IAAa,eAAe;AAAA,IAAE,aAAa;AAAA,IAAE,OAAO;AAAA,IAAE;AACtD,aAAW;AACf;",
-  "names": []
-}

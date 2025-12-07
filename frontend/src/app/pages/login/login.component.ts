@@ -6,6 +6,14 @@ import { Router, RouterLink } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
+interface LoginResponse {
+  token: string;
+  user: {
+    id: string;
+    role: { role: 'Admin' | 'Sindico' | 'Morador' | 'Funcionario' };
+  };
+}
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -31,29 +39,25 @@ export class LoginComponent {
 
   login(): void {
     this.loginMessage = '';
+
     this.http.post<LoginResponse>(this.apiUrl, {
       email: this.email,
       password: this.password
     }).subscribe({
       next: (res) => {
         const role = res.user.role.role;
-        const allowedTypes = ['admin', 'morador', 'funcionario', 'sindico'] as const;
+        const allowedTypes = ['Admin', 'Morador', 'Funcionario', 'Sindico'] as const;
+
         if (!allowedTypes.includes(role as any)) {
           this.loginMessage = 'Erro: tipo de usuário inválido.';
           this.isSuccess = false;
           return;
         }
 
+        this.authService.loginAs(role as 'Admin' | 'Sindico' | 'Morador' | 'Funcionario', res.user.id, res.token);
+
         this.isSuccess = true;
         this.loginMessage = 'Login realizado com sucesso! Redirecionando...';
-
-        this.authService.setToken(res.token);
-        if(role === 'sindico'){
-          this.authService.setUserType('admin');
-        }
-        this.authService.setUserType(role as 'admin' | 'morador' | 'funcionario');
-
-        // Redireciona
         this.router.navigate(['/home']);
       },
       error: (err) => {

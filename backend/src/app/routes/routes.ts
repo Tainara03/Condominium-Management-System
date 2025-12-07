@@ -7,7 +7,8 @@ import reservationRouter from '../controllers/ReservationController';
 import unitsRouter from '../controllers/UnitsController';
 import rolesRouter from '../controllers/RoleController';
 import publicRouter from '../controllers/PublicController';
-import commonAreasRouter from '../controllers/CommonAreasController';
+import noticeRouter from '../controllers/NoticeController';
+import packageRouter from '../controllers/PackageController';
 
 const routers = Router();
 const billingController = new BillingController();
@@ -21,6 +22,8 @@ routers.use('/users', userRouter);
 routers.use('/reservas', reservationRouter);
 routers.use('/units', unitsRouter);
 routers.use('/roles', rolesRouter);
+routers.use('/notices', noticeRouter);
+routers.use('/packages', packageRouter);
 routers.use('/public', publicRouter);
 routers.use('/common-areas', commonAreasRouter);
 
