@@ -33,7 +33,7 @@
                         </div>
                         <p class="mb-1 small">{{ evento.mensagem }}</p>
                         
-                        <a [routerLink]="getLink(evento.tipo)" class="btn btn-sm btn-link p-0 pt-1">
+                        <a *ngIf="evento.tipo === 'COBRANCA'" routerLink="/cobrancas" class="btn btn-sm btn-link p-0 pt-1">
                             Ver Detalhes
                         </a>
                     </div>
