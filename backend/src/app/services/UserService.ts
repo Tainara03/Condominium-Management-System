@@ -1,6 +1,23 @@
 import UserRepository from "../repositories/UserRepository";
 import IUser from "../interfaces/IUser";
 
+//Validações
+const validateEmail = (email: string): boolean => {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
+};
+
+const validatePhone = (phone: string): boolean => {
+  // Aceita formatos nacionais: (11) 99999-9999 ou 11999999999
+  const regex = /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/;
+  return regex.test(phone);
+};
+
+const validatePassword = (password: string): boolean => {
+  // Senha forte: mínimo 8, 1 minúscula, 1 maiúscula, 1 número
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+  return regex.test(password);
+};
 
 const mapUserForFrontend = (user: any) => {
   return {
@@ -50,27 +67,41 @@ const getUserByEmail = async (email: string) => {
 
 
 const updateUser = async (id: string, userData: Partial<IUser>) => {
-    try {
-        const user = await UserRepository.findById(id);
+  const user = await UserRepository.findById(id);
+  if (!user) throw new Error("User not found");
 
-        if (!user) {
-            throw new Error('User not found');
-        }
-
-        // se contem email no userData, verificar se ja existe outro usuario com esse email
-        if (userData.email && userData.email !== user.email) {
-            const existingUser = await UserRepository.findByEmail(userData.email);
-            if (existingUser) {
-                throw new Error('Email already in use');
-            }
-        }
-        
-        const updatedUser = await UserRepository.updateUser(id, userData);
-
-        return updatedUser;
-    } catch (error) {
-        throw error;
+  // -------------------- VALIDAR EMAIL --------------------
+  if (userData.email) {
+    if (!validateEmail(userData.email)) {
+      throw new Error("Invalid email format");
     }
+
+    if (userData.email !== user.email) {
+      const existing = await UserRepository.findByEmail(userData.email);
+      if (existing) {
+        throw new Error("Email already in use");
+      }
+    }
+  }
+
+  // -------------------- VALIDAR TELEFONE --------------------
+  if (userData.phone) {
+    if (!validatePhone(userData.phone)) {
+      throw new Error("Invalid phone format");
+    }
+  }
+
+  // -------------------- VALIDAR SENHA --------------------
+  if (userData.password_hash) {
+    if (!validatePassword(userData.password_hash)) {
+      throw new Error(
+        "Weak password: must contain at least 8 characters, 1 uppercase, 1 lowercase, and 1 number"
+      );
+    }
+  }
+
+  const updated = await UserRepository.updateUser(id, userData);
+  return updated;
 };
 
 const deleteUser = async (id: string) => {

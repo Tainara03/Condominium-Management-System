@@ -30,9 +30,13 @@ const createUser = async (userData: Partial<User>) => {
 }
 
 const updateUser = async (id: string, userData: Partial<IUser>) => {
-    userRepository.update(id, userData);
-    return userRepository.findOne({where: {id}});
-}
+  await userRepository.update(id, userData);
+
+  return userRepository.findOne({
+    where: { id },
+    relations: ["role", "unit"],
+  });
+};
 
 const deleteUser = async (id: string) => {
     const result = await userRepository.delete(id);
