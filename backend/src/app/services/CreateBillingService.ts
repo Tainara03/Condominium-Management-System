@@ -2,6 +2,8 @@ import { AppDataSource } from "../../database/data-source";
 import Billing from "../entities/Billing";
 import Unit from "../entities/Unit";
 import { In } from "typeorm";
+import history from "./HistoryService"
+
 
 interface IRequest {
     type: string;
@@ -12,11 +14,12 @@ interface IRequest {
     blocosSelecionados: string[];
     apartamentosSelecionados: string[];
     file_path?: string;
+    performed_by: string
 }
 
 export class CreateBillingService {
-    async execute({ type, Ammount, due_date, description, modoDestino, blocosSelecionados, apartamentosSelecionados, file_path }: IRequest) {
-        
+    async execute({ type, Ammount, due_date, description, modoDestino, blocosSelecionados, apartamentosSelecionados, file_path, performed_by }: IRequest) {
+
         const billingRepository = AppDataSource.getRepository(Billing);
         const unitRepository = AppDataSource.getRepository(Unit);
 
@@ -24,17 +27,17 @@ export class CreateBillingService {
 
         if (modoDestino === 'Todos') {
             units = await unitRepository.find();
-        } 
+        }
         else if (modoDestino === 'Blocos') {
             units = await unitRepository.find({
                 where: { building: In(blocosSelecionados) }
             });
-        } 
+        }
         else if (modoDestino === 'Unidades') {
             units = await unitRepository.find({
-                where: { 
+                where: {
                     building: In(blocosSelecionados),
-                    apartment: In(apartamentosSelecionados) 
+                    apartment: In(apartamentosSelecionados)
                 }
             });
         }
@@ -49,12 +52,24 @@ export class CreateBillingService {
                 due_date: new Date(due_date),
                 description: description,
                 file_path: file_path,
-                unit_id: unit.id, 
+                unit_id: unit.id,
                 is_paid: false
             });
         });
 
         await billingRepository.save(billingsToSave);
+
+        for (const billing of billingsToSave) {
+
+            await history.registerEvent({
+                event_title: 'Cobrança criada',
+                table_name: 'billing',
+                event_id: billing.id,        
+                target_entity: billing.unit_id,
+                performed_by: performed_by,
+                created_at: new Date()
+            });
+        }
 
         return { message: `${billingsToSave.length} cobranças geradas com sucesso!` };
     }

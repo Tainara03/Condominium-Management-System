@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import userRouter from '../controllers/UserController';
 import authRouter from '../controllers/AuthController';
-import { BillingController } from '../controllers/BillingController';
+import BillingRouter from '../controllers/BillingController';
 import { uploadMiddleware } from '../middlewares/uploadMiddleware';
 import reservationRouter from '../controllers/ReservationController';
 import unitsRouter from '../controllers/UnitsController';
@@ -10,7 +10,6 @@ import publicRouter from '../controllers/PublicController';
 import historyRouter from '../controllers/HistoryController';
 
 const routers = Router();
-const billingController = new BillingController();
 
 routers.get("/", (req, res) => {
   return res.json({ status: "ok" });
@@ -23,7 +22,6 @@ routers.use('/units', unitsRouter);
 routers.use('/roles', rolesRouter);
 routers.use('/public', publicRouter);
 routers.use('/history', historyRouter)
-
-routers.post('/cobrancas', uploadMiddleware.single('file'), billingController.store);
+routers.post('/cobrancas', BillingRouter);
 
 export default routers;

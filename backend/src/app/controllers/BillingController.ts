@@ -1,13 +1,21 @@
-import { Request, Response } from "express";
+import { Request, Response, Router } from "express";
 import { CreateBillingService } from "../services/CreateBillingService";
+import { AuthRequest, ensureAuthenticated } from "../middlewares/authMiddleware";
+import { permit } from "../middlewares/roleMiddleware";
+import { uploadMiddleware } from "../middlewares/uploadMiddleware";
+import { deflate } from "zlib";
 
-export class BillingController {
-    async store(req: Request, res: Response) {
+
+const BillingRouter = Router();
+
+BillingRouter.post('/cobrancas', ensureAuthenticated, permit(2), uploadMiddleware.single('file'), async (req: AuthRequest, res: Response) => {
         const { 
             tipo, valor, dataVencimento, descricao, 
             modoDestino, blocosSelecionados, apartamentosSelecionados 
         } = req.body;
 
+        console.log(tipo, valor, dataVencimento, descricao, modoDestino, blocosSelecionados, apartamentosSelecionados )
+        console.log(req.user)
         const createBillingService = new CreateBillingService();
 
         const blocosArray = typeof blocosSelecionados === 'string' ? blocosSelecionados.split(',') : blocosSelecionados || [];
@@ -22,7 +30,8 @@ export class BillingController {
                 modoDestino,
                 blocosSelecionados: blocosArray,
                 apartamentosSelecionados: aptosArray,
-                file_path: req.file ? req.file.filename : undefined
+                file_path: req.file ? req.file.filename : undefined,
+                performed_by: req.user.id
             });
 
             return res.status(201).json(result);
@@ -31,4 +40,6 @@ export class BillingController {
             return res.status(400).json({ error: "Erro ao processar cobrança" });
         }
     }
-}
+)
+
+export default BillingRouter
