@@ -1,7 +1,7 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { FormsModule } from '@angular/forms'; // ⬅️ Essencial para resolver o erro NG0301
-import { CommonModule } from '@angular/common'; // ⬅️ Essencial para diretivas (*ngIf, *ngFor)
+import { FormsModule } from '@angular/forms'; 
+import { CommonModule } from '@angular/common'; 
 import { RouterTestingModule } from '@angular/router/testing';
 import { RegistroComponent } from './registro.component';
 
@@ -10,16 +10,25 @@ describe('RegistroComponent', () => {
   let fixture: ComponentFixture<RegistroComponent>;
   let httpMock: HttpTestingController;
 
+  // Defina a URL base esperada, assumindo que seja 'http://localhost:3000/api/'
+  const MOCK_API_URL = 'http://localhost:3000/api/';
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      // Importa o componente standalone e todas as suas dependências.
       imports: [
-        RegistroComponent, // Componente standalone
+        RegistroComponent, 
         RouterTestingModule,
         FormsModule,
         CommonModule,
         HttpClientTestingModule
       ],
+      // Adicionar providers para simular o valor de environment.apiUrl no componente
+      providers: [
+        {
+          provide: 'environment', // Token de provisão (dependendo de como environment é injetado)
+          useValue: { apiUrl: MOCK_API_URL }
+        }
+      ]
     }).compileComponents();
   });
 
@@ -28,22 +37,19 @@ describe('RegistroComponent', () => {
     component = fixture.componentInstance;
     httpMock = TestBed.inject(HttpTestingController);
 
-    // Mock das chamadas do ngOnInit para evitar erros HTTP no teste:
-    
     // 1. Simular chamada para public/units
-    const unitsReq = httpMock.expectOne((req) => req.url.includes('public/units'));
+    const unitsReq = httpMock.expectOne(`${MOCK_API_URL}public/units`); // ⬅️ Usando a URL completa
     unitsReq.flush([]); 
     
     // 2. Simular chamada para public/roles
-    const rolesReq = httpMock.expectOne((req) => req.url.includes('public/roles'));
+    const rolesReq = httpMock.expectOne(`${MOCK_API_URL}public/roles`); // ⬅️ Usando a URL completa
     rolesReq.flush([]); 
 
-    fixture.detectChanges(); // Aciona o ngOnInit e a renderização do template
+    fixture.detectChanges(); // Aciona o ngOnInit e a renderização
   });
 
   afterEach(() => {
-    // Garante que todas as requisições mockadas foram executadas
-    httpMock.verify();
+    httpMock.verify(); // Esta linha agora deve passar
   });
 
   it('should create', () => {
@@ -55,8 +61,8 @@ describe('RegistroComponent', () => {
     expect(component.roles.length).toBe(0);
   });
   
+  // O teste 'should prevent registration if required fields are missing' deve funcionar agora que a renderização é estável.
   it('should prevent registration if required fields are missing', () => {
-    // Testa a lógica de validação do componente
     component.registroData.fullName = 'Test User'; 
     component.registroData.email = 'test@example.com';
     
