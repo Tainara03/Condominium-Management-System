@@ -41,7 +41,7 @@
                 Telefone é obrigatório.
               </div>
               <div class="invalid-feedback" *ngIf="phone.errors?.['pattern'] && (phone.dirty || phone.touched || formRegistro.submitted)">
-                **Telefone inválido**. Formato esperado: (XX) XXXXX-XXXX ou (XX) XXXX-XXXX.
+                Telefone inválido. Formato esperado: (XX) XXXXX-XXXX ou (XX) XXXX-XXXX.
               </div>
             </div>
             <div class="col-md-6 mb-3">
@@ -103,7 +103,7 @@
                 A senha é obrigatória.
               </div>
               <div class="invalid-feedback" *ngIf="password.errors?.['pattern'] && (password.dirty || password.touched || formRegistro.submitted)">
-                **Senha inválida**: Mínimo 1 letra maiúscula, 1 minúscula, 1 número, 8 caracteres.
+                Senha inválida: sua senha deve ter no mínimo 8 caracteres, incluindo pelo menos 1 letra maiúscula, 1 minúscula e 1 número.
               </div>
             </div>
             <div class="col-md-6 mb-3">

@@ -127,7 +127,7 @@ export class RegistroComponent implements OnInit {
 
     if (!passwordRegex.test(this.registroData.password)) {
       this.isSuccess = false;
-      this.registroMessage = 'Senha inválida: mínimo 1 letra maiúscula, 1 minúscula, 1 número e 8 caracteres.';
+      this.registroMessage = 'Senha inválida: sua senha deve ter no mínimo 8 caracteres, incluindo pelo menos 1 letra maiúscula, 1 minúscula e 1 número.';
       return;
     }
 
