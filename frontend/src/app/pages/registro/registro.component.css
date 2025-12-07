@@ -17,6 +17,10 @@
   font-weight: bold;
 }
 
+.form-control.is-invalid[type="file"] {
+  border-color: #dc3545; /* Cor vermelha do Bootstrap */
+}
+
 .registration-card-integrated .row {
     height: 100%;
 }
