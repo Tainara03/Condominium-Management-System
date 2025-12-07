@@ -25,7 +25,9 @@ routers.use('/roles', rolesRouter);
 routers.use('/notices', noticeRouter);
 routers.use('/packages', packageRouter);
 routers.use('/public', publicRouter);
+routers.use('/common-areas', commonAreasRouter);
 
 routers.post('/cobrancas', uploadMiddleware.single('file'), billingController.store);
 
+routers.get('/cobrancas', billingController.index);
 export default routers;

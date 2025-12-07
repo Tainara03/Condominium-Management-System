@@ -1,7 +1,31 @@
 import { Request, Response } from "express";
 import { CreateBillingService } from "../services/CreateBillingService";
+import { AppDataSource } from "../../database/data-source";
+import Billing from "../entities/Billing";
+import { Not } from "typeorm";
 
 export class BillingController {
+    async index(req: Request, res: Response) {
+        try {
+            const billingRepository = AppDataSource.getRepository(Billing);
+            const billings = await billingRepository.find({
+                relations: ["unit"], 
+                where: {
+                    unit: {
+                        building: Not('Administração'),
+                        apartment: Not('1')
+                    }
+                },
+                order: { due_date: "DESC" }
+            });
+
+            return res.json(billings);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ error: "Erro ao listar cobranças" });
+        }
+    }
+
     async store(req: Request, res: Response) {
         const { 
             tipo, valor, dataVencimento, descricao, 
