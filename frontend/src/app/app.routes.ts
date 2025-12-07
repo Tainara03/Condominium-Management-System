@@ -10,10 +10,11 @@ import { PainelComponent } from './pages/painel/painel.component';
 import { EncomendasComponent } from './pages/encomendas/encomendas.component';
 import { RegistroComponent } from './pages/registro/registro.component';
 import { CadastroCobrancasComponent } from './pages/cadastro-cobrancas/cadastro-cobrancas.component';
+import { NoAuthGuard } from './services/auth/no-auth.guard';
 
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'registro', component: RegistroComponent },
+  { path: 'login', component: LoginComponent, canActivate: [NoAuthGuard] },
+  { path: 'registro', component: RegistroComponent, canActivate: [NoAuthGuard] },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'painel', component: PainelComponent, canActivate: [AuthGuard] },
   { path: 'encomendas', component: EncomendasComponent, canActivate: [AuthGuard] },

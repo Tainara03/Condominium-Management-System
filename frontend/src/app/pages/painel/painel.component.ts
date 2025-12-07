@@ -91,9 +91,10 @@ export class PainelComponent implements OnInit {
   }
 
   reprovarUsuario(usuario: Usuario): void {
-    this.http.post(`${this.apiUrl}users/${usuario.id}/reject`, {}).subscribe({
+    this.http.delete(`${this.apiUrl}users/${usuario.id}`).subscribe({
       next: () => {
-        usuario.status = 'Inativo';
+        // Remove do array local de usuários para atualizar a tela
+        this.usuarios = this.usuarios.filter(u => u.id !== usuario.id);
         this.aplicarFiltros();
       },
       error: (err) => console.error('Erro ao reprovar usuário', err)
