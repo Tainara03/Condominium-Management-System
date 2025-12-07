@@ -1,83 +1,87 @@
-import { Router, Request, Response } from 'express';
-import UserRepository from '../repositories/UserRepository';
-import AuthService from '../services/AuthService';
-import RoleRepository from '../repositories/RoleRepository';
-import UnitRepository from '../repositories/UnitRepository';
-import { uploadMiddleware } from '../middlewares/uploadMiddleware';
+import { Router, Request, Response } from "express";
+import AuthService from "../services/AuthService";
+import UserService from "../services/UserService";
+import RoleRepository from "../repositories/RoleRepository";
+import UnitRepository from "../repositories/UnitRepository";
+import { uploadMiddleware } from "../middlewares/uploadMiddleware";
 
 const authRouter = Router();
 
-authRouter.post('/register', uploadMiddleware.single('comprovante'), async (req: Request, res: Response) => {
-  try {
-    const { name, email, password, phone, role_id, unit_id } = req.body;
-    const comprovante_path = req.file?.path;
+authRouter.post(
+  "/register",
+  uploadMiddleware.single("comprovante"),
+  async (req: Request, res: Response) => {
+    try {
+      const { name, email, password, phone, role_id, unit_id } = req.body;
+      const comprovante_path = req.file?.path;
 
-    if (!name || !email || !password || !role_id || !unit_id) {
-      return res.status(400).json({ message: "Missing required fields." });
+      if (!name || !email || !password || !role_id || !unit_id) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      const role = await RoleRepository.findById(role_id);
+      if (!role) return res.status(400).json({ message: "Role not found" });
+
+      const unit = await UnitRepository.findById(unit_id);
+      if (!unit) return res.status(400).json({ message: "Unit not found" });
+
+      const created = await UserService.createUser({
+        name,
+        email,
+        password,
+        phone,
+        role_id,
+        unit_id,
+        comprovante_path,
+      });
+
+      const token = AuthService.signToken(created);
+
+      return res.status(201).json({
+        user: {
+          id: created.id,
+          name: created.name,
+          email: created.email,
+          role: created.role,
+          unit: created.unit,
+          comprovante_path: created.comprovante_path,
+        },
+        token,
+      });
+    } catch (error: any) {
+      return res.status(500).json({ message: "Internal server error", detail: error.message });
     }
-
-    const role = await RoleRepository.findById(role_id);
-    if (!role) return res.status(400).json({ message: "Role not found" });
-
-    const unit = await UnitRepository.findById(unit_id);
-    if (!unit) return res.status(400).json({ message: "Unit not found" });
-
-    const existing = await UserRepository.findByEmail(email);
-    if (existing) return res.status(409).json({ message: "Email already exists." });
-
-    const password_hash = await AuthService.hashPassword(password);
-
-    const created = await UserRepository.createUser({
-      name,
-      email,
-      password_hash,
-      phone,
-      role_id: role.id,
-      unit_id: unit.id,
-      is_approved: null,
-      comprovante_path
-    });
-
-    const token = AuthService.signToken(created);
-
-    return res.status(201).json({
-      user: {
-        id: created.id,
-        name: created.name,
-        email: created.email,
-        role: created.role,
-        unit: created.unit,
-        comprovante_path: created.comprovante_path
-      },
-      token
-    });
-
-  } catch (error: any) {
-    return res.status(500).json({ message: "Internal server error", detail: error.message });
   }
-});
+);
 
-authRouter.post('/login', async (req: Request<{}, {}, { email: string; password: string }>, res: Response) => {
+authRouter.post("/login", async (req: Request, res: Response) => {
   try {
-    if (!req.body || Object.keys(req.body).length === 0) {
-      return res.status(400).json({ message: "Bad request: request body is missing or malformed." });
-    }
-
     const { email, password } = req.body;
-    if (!email || !password) return res.status(400).json({ message: 'Bad request: missing required fields.' });
+    if (!email || !password)
+      return res.status(400).json({ message: "Missing fields" });
 
-    const user = await UserRepository.findByEmail(email);
-    if (!user) return res.status(401).json({ message: 'Unauthorized: invalid credentials' });
+    const user = await UserService.getUserByEmailRaw(email);
+    if (!user) return res.status(401).json({ message: "Invalid credentials" });
 
-    if (!user.is_approved) return res.status(403).json({ message: 'Access denied: user not approved' });
+    if (!user.is_approved)
+      return res.status(403).json({ message: "User not approved" });
 
     const ok = await AuthService.comparePassword(password, user.password_hash);
-    if (!ok) return res.status(401).json({ message: 'Unauthorized: invalid credentials' });
+    if (!ok) return res.status(401).json({ message: "Invalid credentials" });
 
     const token = AuthService.signToken(user);
-    return res.status(200).json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role, unit: user.unit } });
 
-  } catch (error: any) {
+    return res.status(200).json({
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        unit: user.unit,
+      },
+    });
+  } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
   }
 });

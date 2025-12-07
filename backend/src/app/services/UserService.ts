@@ -1,23 +1,6 @@
 import UserRepository from "../repositories/UserRepository";
+import AuthService from "./AuthService";
 import IUser from "../interfaces/IUser";
-
-//Validações
-const validateEmail = (email: string): boolean => {
-  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return regex.test(email);
-};
-
-const validatePhone = (phone: string): boolean => {
-  // Aceita formatos nacionais: (11) 99999-9999 ou 11999999999
-  const regex = /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/;
-  return regex.test(phone);
-};
-
-const validatePassword = (password: string): boolean => {
-  // Senha forte: mínimo 8, 1 minúscula, 1 maiúscula, 1 número
-  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-  return regex.test(password);
-};
 
 const mapUserForFrontend = (user: any) => {
   return {
@@ -34,89 +17,91 @@ const mapUserForFrontend = (user: any) => {
 };
 
 const getAllUsers = async () => {
-  try {
-    const users = await UserRepository.getUsers();
-    if (!users || users.length === 0) {
-      throw new Error('User not found');
-    }
-    return users.map(mapUserForFrontend);
-  } catch (error) {
-    throw error;
-  }
+  const users = await UserRepository.getUsers();
+  if (!users) throw new Error("User not found");
+  return users.map(mapUserForFrontend);
 };
 
 const getUserById = async (id: string) => {
-  try {
-    const user = await UserRepository.findById(id);
-    if (!user) throw new Error('User not found');
-    return mapUserForFrontend(user);
-  } catch (error) {
-    throw error;
-  }
+  const user = await UserRepository.findById(id);
+  if (!user) throw new Error("User not found");
+  return mapUserForFrontend(user);
 };
 
 const getUserByEmail = async (email: string) => {
-  try {
-    const user = await UserRepository.findByEmail(email);
-    if (!user) throw new Error('User not found');
-    return mapUserForFrontend(user);
-  } catch (error) {
-    throw error;
-  }
+  const user = await UserRepository.findByEmail(email);
+  if (!user) throw new Error("User not found");
+  return mapUserForFrontend(user);
 };
 
+// usado pelo login (retorna o usuário cru, sem map)
+const getUserByEmailRaw = async (email: string) => {
+  return await UserRepository.findByEmail(email);
+};
 
-const updateUser = async (id: string, userData: Partial<IUser>) => {
+const createUser = async (userData: {
+  name: string;
+  email: string;
+  phone?: string;
+  password: string;
+  role_id: string;
+  unit_id: string;
+  comprovante_path?: string;
+}) => {
+  const { name, email, phone, password, role_id, unit_id, comprovante_path } = userData;
+
+  // verificar e-mail duplicado
+  const exists = await UserRepository.findByEmail(email);
+  if (exists) throw new Error("Email already exists");
+
+  const password_hash = await AuthService.hashPassword(password);
+
+  const created = await UserRepository.createUser({
+    name,
+    email,
+    phone,
+    password_hash,
+    role_id,
+    unit_id,
+    comprovante_path,
+    is_approved: undefined,
+  });
+
+  return created;
+};
+
+const updateUser = async (id: string, data: Partial<IUser>) => {
   const user = await UserRepository.findById(id);
   if (!user) throw new Error("User not found");
 
-  // -------------------- VALIDAR EMAIL --------------------
-  if (userData.email) {
-    if (!validateEmail(userData.email)) {
-      throw new Error("Invalid email format");
-    }
-
-    if (userData.email !== user.email) {
-      const existing = await UserRepository.findByEmail(userData.email);
-      if (existing) {
-        throw new Error("Email already in use");
-      }
-    }
+  // validar e-mail duplicado
+  if (data.email && data.email !== user.email) {
+    const exists = await UserRepository.findByEmail(data.email);
+    if (exists) throw new Error("Email already in use");
   }
 
-  // -------------------- VALIDAR TELEFONE --------------------
-  if (userData.phone) {
-    if (!validatePhone(userData.phone)) {
-      throw new Error("Invalid phone format");
-    }
+  // se tentar atualizar a senha
+  if ((data as any).password) {
+    (data as any).password_hash = await AuthService.hashPassword((data as any).password);
+    delete (data as any).password; // remove para evitar conflito
   }
 
-  // -------------------- VALIDAR SENHA --------------------
-  if (userData.password_hash) {
-    if (!validatePassword(userData.password_hash)) {
-      throw new Error(
-        "Weak password: must contain at least 8 characters, 1 uppercase, 1 lowercase, and 1 number"
-      );
-    }
-  }
-
-  const updated = await UserRepository.updateUser(id, userData);
+  const updated = await UserRepository.updateUser(id, data);
   return updated;
 };
 
 const deleteUser = async (id: string) => {
-    try {
-        const user = await UserRepository.findById(id);
-
-        if (!user) {
-            throw new Error('User not found');
-        }
-
-        const deleted = await UserRepository.deleteUser(id);
-
-        return deleted;
-    } catch (error) {
-        throw error;
-    }
+  const user = await UserRepository.findById(id);
+  if (!user) throw new Error("User not found");
+  return await UserRepository.deleteUser(id);
 };
-export default { getAllUsers, getUserByEmail, getUserById, updateUser, deleteUser, };
+
+export default {
+  getAllUsers,
+  getUserByEmail,
+  getUserByEmailRaw,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser,
+};

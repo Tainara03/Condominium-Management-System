@@ -4,43 +4,55 @@ import { AppDataSource } from "../../database/data-source";
 
 const userRepository = AppDataSource.getRepository(User);
 
-const getUsers = async () => {
-  const userRepo = AppDataSource.getRepository(User);
-  return userRepo.find({
-    relations: ['unit', 'role'],
+const getUsers = () => {
+  return userRepository.find({
+    relations: ["unit", "role"],
   });
 };
 
 const findByName = (name: string) => {
-    return userRepository.findOne({where: {name}, relations:['role', 'unit']});
-}
+  return userRepository.findOne({
+    where: { name },
+    relations: ["role", "unit"],
+  });
+};
 
 const findByEmail = (email: string) => {
-    return userRepository.findOne({where: {email}, relations:['role', 'unit']});
-}
+  return userRepository.findOne({
+    where: { email },
+    relations: ["role", "unit"],
+  });
+};
 
 const findById = (id: string) => {
-    return userRepository.findOne({where: {id}, relations:['role', 'unit']});
-}
-
-const createUser = async (userData: Partial<User>) => {
-    const newUser = userRepository.create(userData);
-    await userRepository.save(newUser);
-    return newUser;
-}
-
-const updateUser = async (id: string, userData: Partial<IUser>) => {
-  await userRepository.update(id, userData);
-
   return userRepository.findOne({
     where: { id },
     relations: ["role", "unit"],
   });
 };
 
-const deleteUser = async (id: string) => {
-    const result = await userRepository.delete(id);
-    return result.affected !== 0;
-}
+const createUser = async (data: Partial<IUser>) => {
+  const created = userRepository.create(data);
+  await userRepository.save(created);
+  return created;
+};
 
-export default { getUsers, findByName, findByEmail, findById, createUser, updateUser, deleteUser };
+const updateUser = async (id: string, data: Partial<IUser>) => {
+  await userRepository.update(id, data);
+  return userRepository.findOne({ where: { id } });
+};
+
+const deleteUser = async (id: string) => {
+  const result = await userRepository.delete(id);
+  return result.affected !== 0;
+};
+
+export default {
+  getUsers,
+  findByEmail,
+  findById,
+  findByName,
+  createUser,
+  updateUser,
+  deleteUser,
+};

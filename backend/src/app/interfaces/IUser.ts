@@ -10,6 +10,7 @@ interface IUser {
     phone: string,
     role_id: string,
     unit_id: string,
+    comprovante_path: string,
     is_approved: boolean
 }
 
