@@ -7,10 +7,16 @@ class History{
     id?: string;
 
     @Column('varchar', {nullable: true, default: null})
-    table_name!: Date;
+    event_title!: string;
+
+    @Column('varchar', {nullable: true, default: null})
+    table_name!: string;
 
     @Column({ type: "uuid", nullable: false })
     event_id!: string;
+
+    @Column({ type: "uuid", nullable: false })
+    target_entity!: string | null; 
 
     @Column('timestamp', {nullable: true, default: null})
     created_at!: Date;
@@ -22,7 +28,7 @@ class History{
     // relacionamento com user
     @ManyToOne(()=> User)
     @JoinColumn( {name: 'performed_by'} )
-    unit!: User | null
+    performed_by_user!: User | null
 }
 
 export default History
