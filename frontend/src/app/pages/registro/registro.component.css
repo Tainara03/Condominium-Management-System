@@ -11,6 +11,12 @@
     margin-left: -150px !important; 
 }
 
+.required-star {
+  color: red;
+  margin-left: 2px;
+  font-weight: bold;
+}
+
 .registration-card-integrated .row {
     height: 100%;
 }

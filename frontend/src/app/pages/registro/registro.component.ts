@@ -106,6 +106,7 @@ export class RegistroComponent implements OnInit {
   registrar(): void {
     if (!this.registroData.fullName || !this.registroData.email || !this.registroData.password ||
         !this.registroData.userType || !this.registroData.bloco || !this.registroData.apartment ||
+        !this.registroData.phone || // <--- Telefone (phone) agora é obrigatório na validação TS
         !this.registroData.comprovante) {
       this.isSuccess = false;
       this.registroMessage = 'Preencha todos os campos obrigatórios e anexe o comprovante.';
@@ -119,15 +120,15 @@ export class RegistroComponent implements OnInit {
     formData.append('role_id', this.registroData.userType);
     formData.append('unit_id', this.registroData.apartment);
     formData.append('password', this.registroData.password);
-    formData.append('comprovante', this.registroData.comprovante);
-
+    formData.append('comprovante', this.registroData.comprovante as File); // Assertiva de tipo
+    
     this.http.post(`${this.apiUrl}auth/register`, formData).subscribe({
       next: () => {
         this.isSuccess = true;
         this.registroMessage = 'Cadastro enviado com sucesso!';
         setTimeout(() => {
           this.router.navigate(['/login']);
-        }, 1000); 
+        }, 1000);
       },
       error: (err) => {
         if (err.status === 400) {

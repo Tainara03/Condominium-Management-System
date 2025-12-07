@@ -1,32 +1,32 @@
 <div class="d-flex vh-100 justify-content-center align-items-center">
-  <div class="card p-0 shadow-lg registration-card-integrated"> 
-    <div class="row g-0 h-100"> 
+  <div class="card p-0 shadow-lg registration-card-integrated">
+    <div class="row g-0 h-100">
       <div class="col-md-2 bg-marrom d-flex flex-column justify-content-end align-items-center p-3 rounded-start">
         <img src="assets/logo-domus.png" alt="Logo Domus" class="img-fluid" style="max-height: 100px;">
       </div>
 
-      <div class="col-md-10 p-4"> 
+      <div class="col-md-10 p-4">
         <h3 class="mb-4 text-center text-md-start">Crie sua Conta</h3>
 
         <form (ngSubmit)="registrar()">
           <div class="row g-2">
             <div class="col-md-6 mb-3">
-              <label for="fullName" class="form-label">Nome Completo</label>
+              <label for="fullName" class="form-label">Nome Completo<span class="required-star">*</span></label>
               <input type="text" class="form-control" id="fullName" name="fullName" [(ngModel)]="registroData.fullName" required>
             </div>
             <div class="col-md-6 mb-3">
-              <label for="email" class="form-label">E-mail</label>
+              <label for="email" class="form-label">E-mail<span class="required-star">*</span></label>
               <input type="email" class="form-control" id="email" name="email" [(ngModel)]="registroData.email" placeholder="seu@email.com" required>
             </div>
           </div>
 
           <div class="row g-2">
             <div class="col-md-6 mb-3">
-              <label for="phone" class="form-label">Telefone</label>
+              <label for="phone" class="form-label">Telefone<span class="required-star">*</span></label>
               <input type="tel" class="form-control" id="phone" name="phone" [(ngModel)]="registroData.phone" placeholder="(XX) XXXXX-XXXX" required>
             </div>
             <div class="col-md-6 mb-3">
-              <label for="userType" class="form-label">Tipo de Usuário</label>
+              <label for="userType" class="form-label">Tipo de Usuário<span class="required-star">*</span></label>
               <select class="form-select" id="userType" name="userType"
                       [(ngModel)]="registroData.userType" required>
                 <option value="" disabled selected>Selecione</option>
@@ -39,7 +39,7 @@
 
           <div class="row g-2">
             <div class="col-md-6 mb-3">
-              <label for="bloco" class="form-label">Bloco</label>
+              <label for="bloco" class="form-label">Bloco<span class="required-star">*</span></label>
               <select class="form-select" id="bloco" name="bloco"
                       [(ngModel)]="registroData.bloco"
                       (change)="onBlocoChange()"
@@ -51,7 +51,7 @@
               </select>
             </div>
             <div class="col-md-6 mb-3">
-              <label for="apartment" class="form-label">Apartamento</label>
+              <label for="apartment" class="form-label">Apartamento<span class="required-star">*</span></label>
               <select class="form-select" id="apartment" name="apartment"
                       [(ngModel)]="registroData.apartment"
                       (change)="onApartmentChange()"
@@ -66,11 +66,11 @@
 
           <div class="row g-2">
             <div class="col-md-6 mb-3">
-              <label for="password" class="form-label">Senha</label>
+              <label for="password" class="form-label">Senha<span class="required-star">*</span></label>
               <input type="password" class="form-control" id="password" name="password" [(ngModel)]="registroData.password" required>
             </div>
             <div class="col-md-6 mb-3">
-              <label for="comprovante" class="form-label">Anexar Comprovante</label>
+              <label for="comprovante" class="form-label">Anexar Comprovante<span class="required-star">*</span></label>
               <input type="file" class="form-control" id="comprovante" name="comprovante" (change)="onFileSelected($event)" required>
               <div class="form-text">Sujeito a aprovação.</div>
             </div>
