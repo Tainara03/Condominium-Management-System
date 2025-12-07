@@ -2,8 +2,8 @@
   <a class="list-group-item list-group-item-action" routerLink="/home">Página Inicial</a>
   <a *ngIf="auth.userType() === 'Admin' || auth.userType() === 'Sindico'" class="list-group-item list-group-item-action" routerLink="/painel">Painel Administrador</a>
   <a *ngIf="auth.userType() === 'Funcionario'" class="list-group-item list-group-item-action" routerLink="/encomendas">Cadastrar Encomendas</a>
-  <a class="list-group-item list-group-item-action" routerLink="/cobrancas">Controle de Cobranças</a>
+  <a *ngIf="auth.userType() !== 'Funcionario'"class="list-group-item list-group-item-action" routerLink="/cobrancas">Controle de Cobranças</a>
   <a class="list-group-item list-group-item-action" routerLink="/ocorrencias">Enviar Comunicados</a>
-  <a class="list-group-item list-group-item-action" routerLink="/reservas">Reserva de Áreas</a>
+  <a *ngIf="auth.userType() !== 'Funcionario'"class="list-group-item list-group-item-action" routerLink="/reservas">Reserva de Áreas</a>
   <a class="list-group-item list-group-item-action" routerLink="/perfil">Meu Perfil</a>
 </div>

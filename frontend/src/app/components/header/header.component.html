@@ -32,13 +32,13 @@
         <li *ngIf="auth.userType() === 'Funcionario'" class="nav-item">
           <a class="nav-link menu-item" routerLink="/encomendas" data-bs-toggle="collapse" data-bs-target="#navbarMenu">Cadastrar Encomendas</a>
         </li>
-        <li class="nav-item">
+        <li *ngIf="auth.userType() !== 'Funcionario'" class="nav-item">
           <a class="nav-link menu-item" routerLink="/cobrancas" data-bs-toggle="collapse" data-bs-target="#navbarMenu">Controle de Cobranças</a>
         </li>
         <li class="nav-item">
           <a class="nav-link menu-item" routerLink="/ocorrencias" data-bs-toggle="collapse" data-bs-target="#navbarMenu">Enviar Comunicados</a>
         </li>
-        <li class="nav-item">
+        <li *ngIf="auth.userType() !== 'Funcionario'" class="nav-item">
           <a class="nav-link menu-item" routerLink="/reservas" data-bs-toggle="collapse" data-bs-target="#navbarMenu">Reserva de Áreas</a>
         </li>
         <li class="nav-item">
