@@ -12,14 +12,14 @@
         <form (ngSubmit)="login()" #loginForm="ngForm">
 
           <div class="mb-3">
-            <label for="username" class="form-label">Usuário</label>
+            <label for="email" class="form-label">E-mail</label>
             <input 
               type="text" 
               class="form-control" 
-              id="username" 
-              name="username" 
-              [(ngModel)]="username" 
-              placeholder="Digite seu usuário" 
+              id="email"
+              name="email" 
+              [(ngModel)]="email" 
+              placeholder="Digite seu email" 
               required
             >
           </div>
