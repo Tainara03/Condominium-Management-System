@@ -12,6 +12,7 @@ import { environment } from '../../environments/environment';
     styleUrls: ['./cadastro-cobrancas.component.css']
 })
 export class CadastroCobrancasComponent {
+    dataMinima = new Date().toISOString().split('T')[0];
     private apiUrl = `${environment.apiUrl}cobrancas`; 
     isLoading = false; 
 

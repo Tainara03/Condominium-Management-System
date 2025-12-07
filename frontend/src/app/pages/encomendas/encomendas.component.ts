@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
   styleUrl: './encomendas.component.css'
 })
 export class EncomendasComponent {
-
   private apiUrl = `${environment.apiUrl}encomendas`;  
 
+  dataHoraMaxima = new Date().toISOString().slice(0, 16);
 }

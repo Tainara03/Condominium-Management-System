@@ -14,7 +14,7 @@ import { environment } from '../../environments/environment';
   styleUrls: ['./reservas.component.css']
 })
 export class ReservasComponent implements OnInit {
-  
+  dataMinima = new Date().toISOString().split('T')[0];
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}reservas`;  
 
