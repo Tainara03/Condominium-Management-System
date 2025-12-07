@@ -108,7 +108,7 @@
             </div>
             <div class="col-md-6 mb-3">
               <label for="comprovante" class="form-label">Anexar Comprovante<span class="required-star">*</span></label>
-              <input type="file" class="form-control" id="comprovante" name="comprovante" (change)="onFileSelected($event)" required #comprovante="ngModel"
+              <input type="file" class="form-control" id="comprovante" name="comprovante" ngModel (change)="onFileSelected($event)" required #comprovante="ngModel"
                      accept=".pdf, .png, .jpg, .jpeg"
                      [class.is-invalid]="comprovante.invalid && formRegistro.submitted">
               <div class="form-text">Sujeito a aprovação. Use .pdf, .png ou .jpg.</div>
