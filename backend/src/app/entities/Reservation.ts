@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
 import CommonAreas from "./CommonAreas";
+import User from "./User";
 
 @Entity('reservations')
 class Reservation {
@@ -9,6 +10,13 @@ class Reservation {
 
     @Column({ type: "uuid", nullable: false })
     area_id!: string;
+
+    @Column({ type: "uuid", nullable: false })
+    user_id!: string;
+
+    @ManyToOne(() => User) 
+    @JoinColumn({ name: "user_id" })
+    user!: User;
 
     @ManyToOne(() => CommonAreas, area => area.reservations)
     @JoinColumn({ name: "area_id", referencedColumnName: "id_area" }) 
