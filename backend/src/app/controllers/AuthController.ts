@@ -57,16 +57,16 @@ authRouter.post('/register', uploadMiddleware.single('comprovante'), async (req:
   }
 });
 
-authRouter.post('/login', async (req: Request<{}, {}, { name: string; password: string }>, res: Response) => {
+authRouter.post('/login', async (req: Request<{}, {}, { email: string; password: string }>, res: Response) => {
   try {
     if (!req.body || Object.keys(req.body).length === 0) {
       return res.status(400).json({ message: "Bad request: request body is missing or malformed." });
     }
 
-    const { name, password } = req.body;
-    if (!name || !password) return res.status(400).json({ message: 'Bad request: missing required fields.' });
+    const { email, password } = req.body;
+    if (!email || !password) return res.status(400).json({ message: 'Bad request: missing required fields.' });
 
-    const user = await UserRepository.findByName(name);
+    const user = await UserRepository.findByEmail(email);
     if (!user) return res.status(401).json({ message: 'Unauthorized: invalid credentials' });
 
     if (!user.is_approved) return res.status(403).json({ message: 'Access denied: user not approved' });
