@@ -34,16 +34,16 @@ export class CreatePackagesTable1764373418833 implements MigrationInterface {
                         default: "'pending'"
                     },
                     {
-                        name: "user_id",
+                        name: "unit_id",
                         type: "uuid",
                         isNullable: false
                     }
                 ],
                 foreignKeys: [
                     {
-                        columnNames: ["user_id"],
+                        columnNames: ["unit_id"],
                         referencedColumnNames: ["id"],
-                        referencedTableName: "users",
+                        referencedTableName: "units",
                         onDelete: "CASCADE",
                         onUpdate: "CASCADE"
                     }

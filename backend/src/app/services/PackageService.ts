@@ -13,9 +13,9 @@ const getPackageById = async (id: string) => {
     }
 };
 
-const getPackagesByUser = async (user_id: string) => {
+const getPackagesByUnit = async (unit_id: string) => {
     try {
-        const packages = await PackageRepository.getPackagesByUser(user_id);
+        const packages = await PackageRepository.getPackagesByUnit(unit_id);
         return packages;
     } catch (error) {
         throw error;
@@ -72,7 +72,7 @@ const deletePackage = async (id: string) => {
 
 export default {
     getPackageById,
-    getPackagesByUser,
+    getPackagesByUnit,
     getAllPackages,
     createPackage,
     updatePackage,

@@ -32,7 +32,6 @@ export class AuthService {
   loginAs(type: 'Admin' | 'Sindico' | 'Morador' | 'Funcionario', id: string, jwt?: string) {
     this.setUserType(type);
     this.setUserId(id);
-    console.log('Storing user ID:', type, id);
     if (jwt) this.setToken(jwt);
   }
 
