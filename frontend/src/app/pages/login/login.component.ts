@@ -25,7 +25,7 @@ export class LoginComponent {
 
   private apiUrl = `${environment.apiUrl}auth/login`;  
 
-  username: string = '';
+  email: string = '';
   password: string = '';
   
   loginMessage: string = '';
@@ -41,7 +41,7 @@ export class LoginComponent {
     this.loginMessage = '';
 
     this.http.post<LoginResponse>(this.apiUrl, {
-      email: this.username,
+      email: this.email,
       password: this.password
     }).subscribe({
       next: (res) => {
