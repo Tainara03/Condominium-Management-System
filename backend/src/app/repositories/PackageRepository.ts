@@ -4,20 +4,20 @@ import Package from "../entities/Package";
 const packageRepository = AppDataSource.getRepository(Package);
 
 const getPackages = () => {
-    return packageRepository.find({ relations: ["user"] });
+    return packageRepository.find({ relations: ["unit"] });
 };
 
-const getPackagesByUser = (user_id: string) => {
+const getPackagesByUnit = (unit_id: string) => {
     return packageRepository.find({
-        where: { user_id },
-        relations: ["user"]
+        where: { unit_id },
+        relations: ["unit"]
     });
 };
 
 const findById = (id: string) => {
     return packageRepository.findOne({
         where: { id },
-        relations: ["user"]
+        relations: ["unit"]
     });
 };
 
@@ -39,7 +39,7 @@ const deletePackage = async (id: string) => {
 
 export default {
     getPackages,
-    getPackagesByUser,
+    getPackagesByUnit,
     findById,
     createPackage,
     updatePackage,
