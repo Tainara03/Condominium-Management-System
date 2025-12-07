@@ -90,14 +90,14 @@ export class HomeComponent implements OnInit {
     }
   }
   
-  getLink(tipo: Evento['tipo']): string {
-    switch (tipo) {
-      case 'COBRANCA': return '/cobrancas';
-      case 'ENCOMENDA': return '/encomendas';
-      case 'RESERVA': return '/reservas';
-      case 'OCORRENCIA': return '/ocorrencias';
-      case 'CADASTRO': return '/painel';
+  getLink(evento: Evento): string {
+    switch (evento.tipo) {
+      case 'COBRANCA': return `/cobrancas/${evento.id}`;
+      case 'ENCOMENDA': return `/encomendas/${evento.id}`;
+      case 'RESERVA': return `/reservas/${evento.id}`;
+      case 'OCORRENCIA': return `/ocorrencias/${evento.id}`;
+      case 'CADASTRO': return '/painel/usuarios';
       default: return '/';
     }
-  }
+}
 }
