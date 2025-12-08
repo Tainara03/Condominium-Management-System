@@ -34,9 +34,11 @@ export class RegistroComponent implements OnInit {
 
   unidades: Unidade[] = [];
   roles: Role[] = [];
-
   blocos: string[] = [];
   apartamentos: ApartamentoOption[] = [];
+
+  showPassword = false;
+  readonly passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
   registroData = {
     fullName: '',
@@ -52,9 +54,7 @@ export class RegistroComponent implements OnInit {
   registroMessage = '';
   isSuccess = false;
 
-  constructor(
-    private router: Router,
-    private http: HttpClient) {}
+  constructor(private router: Router, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.carregarUnidades();
@@ -85,47 +85,36 @@ export class RegistroComponent implements OnInit {
     this.apartamentos = this.unidades
       .filter(u => u.building === this.registroData.bloco)
       .map(u => ({ id: u.id, name: u.apartment }));
-
     this.registroData.apartment = '';
   }
 
   onApartmentChange(): void {
     const unidade = this.unidades.find(u => u.id === this.registroData.apartment);
-    if (unidade) {
-      this.registroData.bloco = unidade.building;
-    }
+    if (unidade) this.registroData.bloco = unidade.building;
+  }
+
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
   }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length) {
-      this.registroData.comprovante = input.files[0];
-    }
+    if (input.files && input.files.length) this.registroData.comprovante = input.files[0];
   }
 
   registrar(): void {
-    // 1. Checagem de campos obrigatórios
     if (!this.registroData.fullName || !this.registroData.email || !this.registroData.password ||
         !this.registroData.userType || !this.registroData.bloco || !this.registroData.apartment ||
-        !this.registroData.phone ||
-        !this.registroData.comprovante) {
+        !this.registroData.phone || !this.registroData.comprovante) {
       this.isSuccess = false;
       this.registroMessage = 'Preencha todos os campos obrigatórios e anexe o comprovante.';
       return;
     }
-    
-    // 2. Checagem de Formatos (Adicionado)
-    
-    // Regex para Senha: Mínimo 8 caracteres, 1 maiúscula, 1 minúscula, 1 número.
-    const passwordRegex = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})');
-    
-    // Regex para Telefone: Formato (XX) XXXXX-XXXX
-    const phoneRegex = new RegExp(/^(\([0-9]{2}\)\s?9[0-9]{4}-[0-9]{4}|\([0-9]{2}\)\s?[0-9]{4}-[0-9]{4})$/);
 
-    // Expressão regular de email não é estritamente necessária aqui pois o input[type=email] no HTML já faz uma validação básica.
-    // Usaremos a validação do browser/Angular para o email.
+    const phoneRegex = /^(\([0-9]{2}\)\s?9[0-9]{4}-[0-9]{4}|\([0-9]{2}\)\s?[0-9]{4}-[0-9]{4})$/;
+    const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg', 'image/jpg'];
 
-    if (!passwordRegex.test(this.registroData.password)) {
+    if (!this.passwordPattern.test(this.registroData.password)) {
       this.isSuccess = false;
       this.registroMessage = 'Senha inválida: sua senha deve ter no mínimo 8 caracteres, incluindo pelo menos 1 letra maiúscula, 1 minúscula e 1 número.';
       return;
@@ -137,17 +126,12 @@ export class RegistroComponent implements OnInit {
       return;
     }
 
-    // Checagem de formato do Comprovante
-    const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg', 'image/jpg'];
-    if (this.registroData.comprovante) {
-      if (!allowedTypes.includes(this.registroData.comprovante.type)) {
-        this.isSuccess = false;
-        this.registroMessage = 'Formato de comprovante inválido. Use .pdf, .png ou .jpg.';
-        return;
-      }
+    if (this.registroData.comprovante && !allowedTypes.includes(this.registroData.comprovante.type)) {
+      this.isSuccess = false;
+      this.registroMessage = 'Formato de comprovante inválido. Use .pdf, .png ou .jpg.';
+      return;
     }
 
-    // 3. Envio dos Dados (Original)
     const formData = new FormData();
     formData.append('name', this.registroData.fullName);
     formData.append('email', this.registroData.email);
@@ -161,18 +145,11 @@ export class RegistroComponent implements OnInit {
       next: () => {
         this.isSuccess = true;
         this.registroMessage = 'Cadastro enviado com sucesso! Aguarde a aprovação.';
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 1000);
+        setTimeout(() => this.router.navigate(['/login']), 1000);
       },
       error: (err) => {
-        if (err.status === 400) {
-          this.isSuccess = false;
-          this.registroMessage = 'Unidade não cadastrada.';
-        } else {
-          this.isSuccess = false;
-          this.registroMessage = err.error?.message || 'Erro ao registrar usuário.';
-        }
+        this.isSuccess = false;
+        this.registroMessage = err.status === 400 ? 'Unidade não cadastrada.' : err.error?.message || 'Erro ao registrar usuário.';
       }
     });
   }

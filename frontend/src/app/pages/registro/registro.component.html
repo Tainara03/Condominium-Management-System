@@ -26,7 +26,7 @@
                 E-mail é obrigatório.
               </div>
               <div class="invalid-feedback" *ngIf="email.errors?.['email'] && (email.dirty || email.touched || formRegistro.submitted)">
-                **E-mail inválido**.
+                E-mail inválido.
               </div>
             </div>
           </div>
@@ -96,20 +96,25 @@
           <div class="row g-2">
             <div class="col-md-6 mb-3">
               <label for="password" class="form-label">Senha<span class="required-star">*</span></label>
-              <input type="password" 
-                class="form-control" 
-                id="password" 
-                name="password" 
-                [(ngModel)]="registroData.password" 
-                required 
-                #password="ngModel"
-                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$"
-                [class.is-invalid]="password.invalid && (password.dirty || password.touched || formRegistro.submitted)">
-              <div class="invalid-feedback" *ngIf="password.errors?.['required'] && (password.dirty || password.touched || formRegistro.submitted)">
-                A senha é obrigatória.
-              </div>
-              <div class="invalid-feedback" *ngIf="password.errors?.['pattern'] && (password.dirty || password.touched || formRegistro.submitted)">
-                Senha inválida: sua senha deve ter no mínimo 8 caracteres, incluindo pelo menos 1 letra maiúscula, 1 minúscula e 1 número.
+              <div class="input-group has-validation">
+                <input [type]="showPassword ? 'text' : 'password'"
+                       class="form-control"
+                       id="password"
+                       name="password"
+                       [(ngModel)]="registroData.password"
+                       required
+                       [pattern]="passwordPattern"
+                       #password="ngModel"
+                       [class.is-invalid]="password.invalid && (password.dirty || password.touched || formRegistro.submitted)">
+                <button class="btn btn-outline-secondary" type="button" (click)="togglePassword()">
+                  <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                </button>
+                <div class="invalid-feedback" *ngIf="password.errors?.['required'] && (password.dirty || password.touched || formRegistro.submitted)">
+                  A senha é obrigatória.
+                </div>
+                <div class="invalid-feedback" *ngIf="password.errors?.['pattern'] && (password.dirty || password.touched || formRegistro.submitted)">
+                  Senha inválida: Mínimo 8 caracteres, 1 maiúscula, 1 minúscula e 1 número.
+                </div>
               </div>
             </div>
             <div class="col-md-6 mb-3">
@@ -121,7 +126,7 @@
               <div class="invalid-feedback" *ngIf="comprovante.errors?.['required'] && formRegistro.submitted">
                 Anexar comprovante é obrigatório.
               </div>
-              </div>
+            </div>
           </div>
 
           <button type="submit" class="btn btn-primary w-100">Registrar</button>
