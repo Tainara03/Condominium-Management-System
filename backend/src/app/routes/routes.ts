@@ -9,6 +9,7 @@ import rolesRouter from '../controllers/RoleController';
 import publicRouter from '../controllers/PublicController';
 import noticeRouter from '../controllers/NoticeController';
 import packageRouter from '../controllers/PackageController';
+import commonAreasRouter from '../controllers/CommonAreasController';
 
 const routers = Router();
 const billingController = new BillingController();
@@ -25,7 +26,7 @@ routers.use('/roles', rolesRouter);
 routers.use('/notices', noticeRouter);
 routers.use('/packages', packageRouter);
 routers.use('/public', publicRouter);
-
+routers.use('/common-areas', commonAreasRouter);
 routers.post('/cobrancas', uploadMiddleware.single('file'), billingController.store);
 
 export default routers;
