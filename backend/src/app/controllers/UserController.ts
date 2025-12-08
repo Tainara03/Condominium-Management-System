@@ -7,6 +7,7 @@ import UserService from "../services/UserService";
 import IUser from "../interfaces/IUser";
 import path from 'path';
 import fs from 'fs';
+import { uploadMiddleware } from "../middlewares/uploadMiddleware";
 
 const userRouter = Router();
 
@@ -31,7 +32,7 @@ userRouter.get('/', ensureAuthenticated, permit(1), async (req: Request, res: Re
     } catch (error) {
         //Se Der problema na query
         if (error instanceof QueryFailedError) {
-            return res.status(400).json({ message: 'Querry Failed', error: error.message });
+            return res.status(400).json({ message: 'Query Failed', error: error.message });
         }
 
         //Se retornar user not found
@@ -67,41 +68,37 @@ userRouter.get('/:id/comprovante', ensureAuthenticated, async (req, res) => {
 });
 
 //atualizar usuário
-userRouter.put('/:id', ensureAuthenticated, permit(3), async (req: Request, res: Response) => {
-    try {
-        if (!req.params || Object.keys(req.params).length === 0) {
-            return res.status(400).json({ message: "Bad request: request params are missing" });
-        }
-        const { id } = req.params;
+userRouter.put('/:id', ensureAuthenticated, permit(1), uploadMiddleware.single('comprovante'), async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
 
-        if (!req.body || Object.keys(req.body).length === 0) {
-            return res.status(400).json({ message: 'No data provided for update' });
-        }
-        
-        const updatedUser = await UserService.updateUser(id, req.body);
-
-        if (!updatedUser) {
-            return res.status(404).json({ message: 'Could Not update User' });
-        }
-
-        return res.status(204).json(updatedUser);
-
-    } catch (error) {
-        //Se Der problema na query
-        if (error instanceof QueryFailedError) {
-            return res.status(400).json({ message: 'Querry failed', error: error.message });
-        }
-        //Se retornar user not found
-        if (error instanceof Error && error.message === 'User not found') {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        // Se retornar email already in use
-        if (error instanceof Error && error.message === 'Email already in use') {
-            return res.status(409).json({ message: 'Email already in use' });
-        }
-        //Qualquer outro erro
-        return res.status(500).json({ message: 'Internal server error' });
+    if (req.file) {
+      data.comprovante_path = req.file.path;
     }
+
+    const updatedUser = await UserService.updateUser(id, data);
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'Could Not update User' });
+    }
+
+    return res.status(200).json(updatedUser);
+
+  } catch (error) {
+
+    if (error instanceof QueryFailedError) {
+      return res.status(400).json({ message: 'Query failed', error: error.message });
+    }
+    if (error instanceof Error && error.message === 'User not found') {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    if (error instanceof Error && error.message === 'Email already in use') {
+      return res.status(409).json({ message: 'Email already in use' });
+    }
+    
+    return res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
 // Aprovar usuário (pendente -> ativo)
@@ -116,12 +113,16 @@ userRouter.post('/:id/approve', ensureAuthenticated, permit(3), async (req: Requ
   }
 });
 
-// Reprovar usuário (pendente -> inativo)
-userRouter.post('/:id/reject', ensureAuthenticated, permit(3), async (req: Request, res: Response) => {
+// Reprovar usuário (pendente -> removido)
+userRouter.delete('/:id/reject', ensureAuthenticated, permit(3), async (req: Request, res: Response) => {
   try {
-    const updatedUser = await UserService.updateUser(req.params.id, { is_approved: false });
-    if (!updatedUser) return res.status(404).json({ message: 'User not found' });
-    return res.status(200).json(updatedUser);
+    const deletedUser = await UserService.deleteUser(req.params.id);
+
+    if (!deletedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    return res.status(204).send();
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Internal server error' });
@@ -164,7 +165,7 @@ userRouter.delete('/:id', ensureAuthenticated, permit(4), async (req: Request, r
     catch (error) {
         //Se Der problema na query
         if (error instanceof QueryFailedError) {
-            return res.status(400).json({ message: 'Querry failed', error: error.message });
+            return res.status(400).json({ message: 'Query failed', error: error.message });
         }
 
         //Se retornar user not found

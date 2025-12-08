@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-COPY . 
+COPY . .
 RUN npm run build -- --configuration production
 
 # Etapa 2: Servir com NGINX
@@ -19,3 +19,4 @@ COPY --from=builder /app/dist/Condominium-Management-System/browser /usr/share/n
 
 EXPOSE 4200
 CMD ["nginx", "-g", "daemon off;"]
+

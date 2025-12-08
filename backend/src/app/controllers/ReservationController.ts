@@ -8,8 +8,14 @@ const reservationRouter = Router();
 
 reservationRouter.post('/', ensureAuthenticated, permit(1), async (req: AuthRequest, res: Response) => {
     try {
-        const { area_id, reservation_date_time, description } = req.body; 
+        const { area_id, reservation_date_time, description } = req.body;
         
+        const user = (req as any).user;
+        const user_id = user?.id;
+
+        if (!user_id) {
+            return res.status(401).json({ message: 'Erro: Usuário não identificado no sistema.' });
+        }
         if (!area_id || !reservation_date_time) {
             return res.status(400).json({ message: 'Dados insuficientes para a reserva' });
         }
@@ -24,16 +30,10 @@ reservationRouter.post('/', ensureAuthenticated, permit(1), async (req: AuthRequ
         return res.status(201).json(newReservation);
     } catch (error: any) {
         console.error("ERRO NO POST DE RESERVA:", error);
-        
-        if (error.message.includes('Reservation already exists')) {
+        if (error.message?.includes('Reservation already exists')) {
             return res.status(409).json({ message: error.message });
         }
-        
-        if (error instanceof QueryFailedError) {
-            return res.status(400).json({ message: 'Falha na Query. Verifique FKs/Sintaxe.', error: error.message });
-        }
-        
-        return res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Erro interno ao salvar reserva.' });
     }
 });
 

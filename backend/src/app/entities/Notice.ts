@@ -4,7 +4,7 @@ import User from "./User";
 @Entity("notices")
 class Notice {
 
-    @PrimaryGeneratedColumn("uuid")
+    @PrimaryGeneratedColumn("uuid", { name: "id_notice" })
     id!: string;
 
     @Column("varchar", { length: 150, nullable: false })

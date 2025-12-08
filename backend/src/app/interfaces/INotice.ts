@@ -2,7 +2,7 @@
 Arquivo que define para o front qual o tipo de arquivo da nossa tabela users
 */
 
-interface IPackage {
+interface INotice {
     id?: string,
     title: string,
     message: string,
@@ -10,4 +10,4 @@ interface IPackage {
     user_id: string
 }
 
-export default IPackage;
+export default INotice;
