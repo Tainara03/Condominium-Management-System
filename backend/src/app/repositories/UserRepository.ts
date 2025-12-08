@@ -5,8 +5,7 @@ import { AppDataSource } from "../../database/data-source";
 const userRepository = AppDataSource.getRepository(User);
 
 const getUsers = async () => {
-  const userRepo = AppDataSource.getRepository(User);
-  return userRepo.find({
+  return userRepository.find({
     relations: ['unit', 'role'],
   });
 };

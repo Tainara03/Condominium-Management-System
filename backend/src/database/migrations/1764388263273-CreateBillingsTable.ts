@@ -16,6 +16,11 @@ export class CreateBillingTable1764388263273 implements MigrationInterface {
                         default: 'uuid_generate_v4()'
                     },
                     {
+                        name: 'tipo_cobranca',
+                        type: 'varchar',
+                        isNullable: true
+                    },
+                    {
                         name: 'ammount',
                         type: 'decimal',
                         isNullable: false

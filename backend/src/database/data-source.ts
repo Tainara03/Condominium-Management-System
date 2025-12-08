@@ -13,7 +13,6 @@ import { CreateReservationsTable1764340096167 } from "./migrations/1764340096167
 import { CreateCommonAreasTable1764340096168 } from "./migrations/1764340096168-CreateCommonAreasTable"
 import { SeedInitialData1764346356542 } from "./migrations/1764346356542-SeedInitialData"
 import { CreateBillingTable1764388263273 } from "./migrations/1764388263273-CreateBillingsTable"
-import Billing from "../app/entities/Billing"
 import { HistoryTable1764388308040 } from "./migrations/1764388308040-HistoryTable"
 import History from "../app/entities/history"
 import { SeedBillingsAndHistory1764395710090 } from "./migrations/1764395710090-SeedBillingsAndHistory"
@@ -21,6 +20,7 @@ import { CreatePackagesTable1764373418833 } from "./migrations/1764373418833-Cre
 import { CreateNoticesTable1764373726647 } from "./migrations/1764373726647-CreateNoticesTable"
 import Package from "../app/entities/Package"
 import Notice from "../app/entities/Notice"
+import Billing from "../app/entities/Billing"
 
 dotenv.config()
 
@@ -33,7 +33,7 @@ export const AppDataSource = new DataSource({
     database: process.env.DB_NAME,
     synchronize: false,
     logging: false,
-    entities: [Role, Unit, User, Reservation, CommonAreas,Billing,History, Package, Notice],
+    entities: [Role, Unit, User, Reservation, CommonAreas,History, Package, Notice, Billing],
     migrations: [CreateRolesTable1763515687970, CreateUnitsTable1763515754646, CreateUsersTable1763515876333, 
                  CreateReservationsTable1764340096167, CreateCommonAreasTable1764340096168, SeedInitialData1764346356542,
                  CreateBillingTable1764388263273,HistoryTable1764388308040,SeedBillingsAndHistory1764395710090,

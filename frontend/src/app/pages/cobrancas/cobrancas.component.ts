@@ -17,7 +17,7 @@ interface CobrancaBackend {
     building: string;
     apartment: string;
   };
-  tipoCobranca?: string; 
+  tipo_cobranca?: string; 
   dataLancamento?: string;
 }
 
@@ -58,7 +58,7 @@ export class CobrancasComponent implements OnInit {
             bloco: item.unit?.building || '-',
             apartamento: item.unit?.apartment || '-',
             dataLancamento: 'Automático',
-            tipoCobranca: item.ammount > '500' ? 'Condomínio' : 'Taxa Extra',
+            tipoCobranca: item.tipo_cobranca || '-',
             valor: this.formatarMoeda(item.ammount),
             dataVencimento: new Date(item.due_date).toLocaleDateString('pt-BR'),
             status: statusCalculado,
