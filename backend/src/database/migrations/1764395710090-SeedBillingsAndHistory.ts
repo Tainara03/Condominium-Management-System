@@ -60,10 +60,12 @@ export class SeedBillingsAndHistory1764395710090 implements MigrationInterface {
     
         // insere criação das faturas acima no histórico
         await queryRunner.query(`
-            INSERT INTO history (table_name, event_id, created_at, performed_by)
-            SELECT 
+            INSERT INTO history (event_title, table_name, event_id, target_entity, created_at, performed_by)
+            SELECT
+                'Cobrança Criada', 
                 'billings',
                 b.id,
+                b.unit_id,
                 '2025-01-01 10:00:00',
                 (SELECT id FROM users WHERE name='Sicero' LIMIT 1)
             FROM billings b

@@ -23,7 +23,7 @@ roleRouter.get('/', ensureAuthenticated, permit(1), async (req: Request, res: Re
     } catch (error) {
         //Se Der problema na query
         if (error instanceof QueryFailedError) {
-            return res.status(400).json({ message: 'Querry Failed', error: error.message });
+            return res.status(400).json({ message: 'Query Failed', error: error.message });
         }
 
         //Se retornar role not found
@@ -75,7 +75,7 @@ roleRouter.put('/:id', ensureAuthenticated, permit(4), async (req: Request, res:
     } catch (error) {
         //Se Der problema na query
         if (error instanceof QueryFailedError) {
-            return res.status(400).json({ message: 'Querry failed', error: error.message });
+            return res.status(400).json({ message: 'Query failed', error: error.message });
         }
         //Se retornar role not found
         if (error instanceof Error && error.message === 'Role not found') {
@@ -101,7 +101,7 @@ roleRouter.delete('/:id', ensureAuthenticated, permit(4), async (req: Request, r
     } catch (error) {
         //Se Der problema na query
         if (error instanceof QueryFailedError) {
-            return res.status(400).json({ message: 'Querry failed', error: error.message });
+            return res.status(400).json({ message: 'Query failed', error: error.message });
         }
         //Se retornar role not found
         if (error instanceof Error && error.message === 'Role not found') {

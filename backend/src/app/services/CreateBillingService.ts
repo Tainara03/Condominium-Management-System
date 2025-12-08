@@ -1,7 +1,9 @@
 import { AppDataSource } from "../../database/data-source";
 import Billing from "../entities/Billing";
 import Unit from "../entities/Unit";
-import { In } from "typeorm";
+import history from "./HistoryService"
+
+import { In, Not } from "typeorm"; 
 
 interface IRequest {
     type: string;
@@ -12,29 +14,42 @@ interface IRequest {
     blocosSelecionados: string[];
     apartamentosSelecionados: string[];
     file_path?: string;
+    performed_by: string
 }
 
 export class CreateBillingService {
-    async execute({ type, Ammount, due_date, description, modoDestino, blocosSelecionados, apartamentosSelecionados, file_path }: IRequest) {
-        
+    async execute({ type, Ammount, due_date, description, modoDestino, blocosSelecionados, apartamentosSelecionados, file_path, performed_by }: IRequest) {
+
         const billingRepository = AppDataSource.getRepository(Billing);
         const unitRepository = AppDataSource.getRepository(Unit);
 
         let units: Unit[] = [];
 
+        const ignoreAdmin = {
+            building: Not('Administração'),
+            apartment: Not('1')
+        };
+
         if (modoDestino === 'Todos') {
-            units = await unitRepository.find();
+            units = await unitRepository.find({
+                where: {
+                    ...ignoreAdmin
+                }
+            });
         } 
         else if (modoDestino === 'Blocos') {
             units = await unitRepository.find({
-                where: { building: In(blocosSelecionados) }
-            });
-        } 
-        else if (modoDestino === 'Unidades') {
-            units = await unitRepository.find({
                 where: { 
                     building: In(blocosSelecionados),
-                    apartment: In(apartamentosSelecionados) 
+                    apartment: Not('ADM')
+                }
+            });
+        }
+        else if (modoDestino === 'Unidades') {
+            units = await unitRepository.find({
+                where: {
+                    building: In(blocosSelecionados),
+                    apartment: In(apartamentosSelecionados)
                 }
             });
         }
@@ -49,12 +64,24 @@ export class CreateBillingService {
                 due_date: new Date(due_date),
                 description: description,
                 file_path: file_path,
-                unit_id: unit.id, 
+                unit_id: unit.id,
                 is_paid: false
             });
         });
 
         await billingRepository.save(billingsToSave);
+
+        for (const billing of billingsToSave) {
+
+            await history.registerEvent({
+                event_title: 'Cobrança criada',
+                table_name: 'billing',
+                event_id: billing.id,        
+                target_entity: billing.unit_id,
+                performed_by: performed_by,
+                created_at: new Date()
+            });
+        }
 
         return { message: `${billingsToSave.length} cobranças geradas com sucesso!` };
     }

@@ -5,11 +5,11 @@ import { AppDataSource } from "../../database/data-source";
 const commonAreasRepository = AppDataSource.getRepository(CommonAreas);
 
 const getAreas = () => {
-    return commonAreasRepository.find({ relations: ['reservation'] });
+    return commonAreasRepository.find({ relations: ['reservations'] });
 }
 
 const getAreaById = (id_area: string) => {
-    return commonAreasRepository.findOne({ where: { id_area }, relations: ['reservation'] });
+    return commonAreasRepository.findOne({ where: { id_area }, relations: ['reservations'] });
 };
 
 const createArea = async (areaData: Partial<CommonAreas>) => {
