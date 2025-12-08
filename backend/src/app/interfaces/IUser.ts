@@ -10,7 +10,8 @@ interface IUser {
     phone: string,
     role_id: string,
     unit_id: string,
-    is_approved: boolean
+    is_approved: boolean,
+    comprovante_path: string
 }
 
 export default IUser;

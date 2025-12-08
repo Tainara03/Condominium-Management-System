@@ -25,7 +25,7 @@ export class CreateReservationsTable1764340096167 implements MigrationInterface 
                     {
                         name: 'area_id',
                         type: 'uuid',
-                        isNullable: true
+                        isNullable: false
                     },
                     {
                         name: 'reservation_date',

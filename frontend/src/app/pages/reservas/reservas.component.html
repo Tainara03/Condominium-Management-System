@@ -15,16 +15,15 @@
                 <label for="localSelect" class="form-label fw-bold">Local</label>
                 <select class="form-select" id="localSelect" [(ngModel)]="reservaForm.area_id" name="area_id" required>
                     <option value="" disabled selected>Selecione a Área</option>
-                    <option value="f35ca5f7-0ec6-4762-96fc-578ff1be4bb8">Salão de Festas Principal</option>
-                    <option value="2ed0bfcc-5fbb-4e29-9b2b-ceb36ef1c46e">Piscina</option>
-                    <option value="10249751-9bd8-43f6-b285-b00e92a2d5e2">Churrasqueira</option>
-                    <option value="ea75df0f-5ad1-4d96-844f-89b1b4e8b5ea">Academia</option>
+                    <option *ngFor="let area of areas" [value]="area.id_area">
+                      {{ area.name }}
+                    </option>
                 </select>
               </div>
 
               <div class="col-md-4">
                 <label for="dataInput" class="form-label fw-bold">Data</label>
-                <input type="date" class="form-control" id="dataInput" [(ngModel)]="reservaForm.data" name="data" required>
+                <input type="date" class="form-control" id="dataInput" [min]="dataMinima" [(ngModel)]="reservaForm.data" name="data" required>
               </div>
 
               <div class="col-md-4">

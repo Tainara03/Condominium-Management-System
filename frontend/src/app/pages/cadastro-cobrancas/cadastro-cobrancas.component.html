@@ -11,7 +11,6 @@
           <form (ngSubmit)="cadastrarCobranca()">
             
             <div class="row mb-4 g-3">
-              
               <div class="col-md-4">
                 <label for="tipoCobrancaSelect" class="form-label fw-bold">Tipo de Cobrança</label>
                 <select class="form-select" id="tipoCobrancaSelect" 
@@ -26,7 +25,7 @@
 
               <div class="col-md-4">
                 <label for="dataVencimento" class="form-label fw-bold">Data de Vencimento</label>
-                <input type="date" class="form-control" id="dataVencimento" 
+                <input type="date" class="form-control" id="dataVencimento" [min]="dataMinima"
                        [(ngModel)]="cobrancaData.dataVencimento" name="dataVencimento" required>
               </div>
 
@@ -37,14 +36,14 @@
               </div>
             </div>
 
-<div class="row mb-4 g-3">
+            <div class="row mb-4 g-3">
                 <div class="col-md-4">
                     <label for="modoDestino" class="form-label fw-bold">Aplicar a</label>
                     <select class="form-select" id="modoDestino" 
                             [(ngModel)]="cobrancaData.modoDestino" name="modoDestino" required>
                         <option value="Todos">Todas as Unidades (Lançamento em Massa)</option>
-                        <option value="Blocos">Blocos Selecionados (Todos os aptos dentro)</option>
-                        <option value="Unidades">Unidades Específicas (Aptos individuais)</option>
+                        <option value="Blocos">Blocos Selecionados</option>
+                        <option value="Unidades">Unidades Específicas</option>
                     </select>
                 </div>
 
@@ -53,10 +52,11 @@
                         <label for="blocoMultiSelect" class="form-label fw-bold">Blocos (Múltipla Seleção)</label>
                         <select class="form-select" id="blocoMultiSelect" size="4" multiple 
                                 [(ngModel)]="cobrancaData.blocosSelecionados" name="blocosSelecionados" required>
-                            <option value="A">Bloco A</option>
-                            <option value="B">Bloco B</option>
-                            <option value="C">Bloco C</option>
-                            <option value="D">Bloco D</option>
+                            
+                            <option *ngFor="let bloco of listaBlocos" [value]="bloco">
+                                Bloco {{ bloco }}
+                            </option>
+
                         </select>
                         <div class="form-text obs fw-bold">
                             Segure CTRL (ou CMD no Mac) para selecionar vários.
@@ -69,19 +69,23 @@
                         <label for="blocoUnidadeSelect" class="form-label fw-bold">Blocos Envolvidos</label>
                         <select class="form-select" id="blocoUnidadeSelect" size="4" multiple 
                                 [(ngModel)]="cobrancaData.blocosSelecionados" name="blocosUnidadeSelecionados" required>
-                            <option value="A">Bloco A</option>
-                            <option value="B">Bloco B</option>
+                            
+                            <option *ngFor="let bloco of listaBlocos" [value]="bloco">
+                                Bloco {{ bloco }}
+                            </option>
                         </select>
                         <div class="form-text obs fw-bold">Segure CTRL/CMD para selecionar vários.</div>
                     </div>
+
                     <div class="col-md-4">
                         <label for="aptosMultiSelect" class="form-label fw-bold">Apartamentos</label>
                         <select class="form-select" id="aptosMultiSelect" size="4" multiple 
                                 [(ngModel)]="cobrancaData.apartamentosSelecionados" name="apartamentosSelecionados" required>
-                            <option value="101">101</option>
-                            <option value="102">102</option>
-                            <option value="201">201</option>
-                            <option value="304">304</option>
+                            
+                            <option *ngFor="let apto of listaApartamentos" [value]="apto">
+                                {{ apto }}
+                            </option>
+                            
                         </select>
                         <div class="form-text obs fw-bold">Segure CTRL/CMD para selecionar vários.</div>
                     </div>
@@ -118,7 +122,9 @@
                 </div>
             </div>
             <div class="d-grid mt-4">
-              <button class="btn btn-marrom btn-lg" type="submit">Cadastrar Cobrança</button>
+              <button class="btn btn-marrom btn-lg" type="submit" [disabled]="isLoading">
+                {{ isLoading ? 'Processando...' : 'Cadastrar Cobrança' }}
+              </button>
             </div>
           </form>
         </div>

@@ -1,5 +1,28 @@
 import UnitRepository from "../repositories/UnitRepository";
+import { Request, Response, Router } from "express";
+import { AppDataSource } from "../../database/data-source";
 import Unit from "../entities/Unit";
+import { ensureAuthenticated } from "../middlewares/authMiddleware";
+
+const unitsRouter = Router();
+
+unitsRouter.get('/', ensureAuthenticated, async (req: Request, res: Response) => {
+    try {
+        const repository = AppDataSource.getRepository(Unit);
+        
+        const units = await repository.find({
+            order: {
+                building: "ASC",
+                apartment: "ASC"
+            }
+        });
+        
+        return res.json(units);
+    } catch (error) {
+        console.error("Erro ao listar unidades:", error);
+        return res.status(500).json({ message: "Erro interno ao buscar unidades" });
+    }
+});
 
 const getUnitById = async (id: string) => {
     try {
@@ -75,4 +98,4 @@ const deleteUnit = async (id: string) => {
     }
 };
 
-export default {getUnitById, getUnitByApartmentAndBuilding, getAllUnits, createUnit, updateUnit, deleteUnit};
+export default {unitsRouter, getUnitById, getUnitByApartmentAndBuilding, getAllUnits, createUnit, updateUnit, deleteUnit};
