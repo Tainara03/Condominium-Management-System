@@ -60,6 +60,7 @@ export class CreateBillingService {
 
         const billingsToSave = units.map(unit => {
             return billingRepository.create({
+                tipo_cobranca: type,
                 ammount: Ammount,
                 due_date: new Date(due_date),
                 description: description,
@@ -74,8 +75,8 @@ export class CreateBillingService {
         for (const billing of billingsToSave) {
 
             await history.registerEvent({
-                event_title: 'Cobrança criada',
-                table_name: 'billing',
+                event_title: `Cobranca ${type} criada`,
+                table_name: 'Billing',
                 event_id: billing.id,        
                 target_entity: billing.unit_id,
                 performed_by: performed_by,
