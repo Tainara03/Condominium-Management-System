@@ -5,21 +5,24 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 interface Unidade {
-  id: string;
   apartment: string;
-  building: string;
+  bloco: string;
 }
 
 interface Usuario {
   id: string;
-  bloco: string;
-  apartamento: string;
   name: string;
-  tipoUsuario: string;
   email: string;
   phone: string;
   status: 'Ativo' | 'Inativo' | 'Pendente';
   comprovante_path?: string;
+
+  unidades: Unidade[];
+  userTypeDisplay: string;
+
+  bloco: string;
+  apartamento: string;
+  tipoUsuario: string;
 }
 
 interface Filtros {
@@ -38,12 +41,19 @@ interface Filtros {
   styleUrls: ['./painel.component.css']
 })
 export class PainelComponent implements OnInit {
+
   private apiUrl = environment.apiUrl;
 
   usuarios: Usuario[] = [];
   usuariosFiltrados: Usuario[] = [];
 
-  filtros: Filtros = { name: '', bloco: '', apartamento: '', status: '', tipoUsuario: '' };
+  filtros: Filtros = {
+    name: '',
+    bloco: '',
+    apartamento: '',
+    status: '',
+    tipoUsuario: ''
+  };
 
   blocosDisponiveis: string[] = [];
   tiposDisponiveis: string[] = [];
@@ -58,12 +68,25 @@ export class PainelComponent implements OnInit {
   carregarUsuarios(): void {
     this.http.get<Usuario[]>(`${this.apiUrl}users`).subscribe({
       next: (res) => {
-        this.usuarios = res.map(u => ({ ...u }));
 
+        this.usuarios = res.map(u => ({
+          ...u,
+          bloco: u.unidades?.[0]?.bloco ?? '',
+          apartamento: u.unidades?.[0]?.apartment ?? '',
+          tipoUsuario: u.userTypeDisplay ?? ''
+        }));
 
-        this.blocosDisponiveis = [...new Set(this.usuarios.map(u => u.bloco))].filter(Boolean);
-        this.tiposDisponiveis = [...new Set(this.usuarios.map(u => u.tipoUsuario))].filter(Boolean);
-        this.statusDisponiveis = [...new Set(this.usuarios.map(u => u.status))].filter(Boolean);
+        this.blocosDisponiveis = [
+          ...new Set(this.usuarios.map(u => u.bloco).filter(v => !!v))
+        ];
+
+        this.tiposDisponiveis = [
+          ...new Set(this.usuarios.map(u => u.tipoUsuario).filter(v => !!v))
+        ];
+
+        this.statusDisponiveis = [
+          ...new Set(this.usuarios.map(u => u.status).filter(v => !!v))
+        ];
 
         this.aplicarFiltros();
       },
@@ -72,21 +95,31 @@ export class PainelComponent implements OnInit {
   }
 
   aplicarFiltros(): void {
-    let tempUsuarios = this.usuarios;
+    let temp = this.usuarios;
 
     if (this.filtros.name) {
       const termo = this.filtros.name.toLowerCase();
-      tempUsuarios = tempUsuarios.filter(u => u.name.toLowerCase().includes(termo));
+      temp = temp.filter(u => u.name.toLowerCase().includes(termo));
     }
-    if (this.filtros.bloco) tempUsuarios = tempUsuarios.filter(u => u.bloco === this.filtros.bloco);
+
+    if (this.filtros.bloco) {
+      temp = temp.filter(u => u.bloco === this.filtros.bloco);
+    }
+
     if (this.filtros.apartamento) {
       const termo = this.filtros.apartamento.toLowerCase();
-      tempUsuarios = tempUsuarios.filter(u => u.apartamento.toLowerCase().includes(termo));
+      temp = temp.filter(u => u.apartamento.toLowerCase().includes(termo));
     }
-    if (this.filtros.status) tempUsuarios = tempUsuarios.filter(u => u.status === this.filtros.status);
-    if (this.filtros.tipoUsuario) tempUsuarios = tempUsuarios.filter(u => u.tipoUsuario === this.filtros.tipoUsuario);
 
-    this.usuariosFiltrados = tempUsuarios;
+    if (this.filtros.status) {
+      temp = temp.filter(u => u.status === this.filtros.status);
+    }
+
+    if (this.filtros.tipoUsuario) {
+      temp = temp.filter(u => u.tipoUsuario === this.filtros.tipoUsuario);
+    }
+
+    this.usuariosFiltrados = temp;
   }
 
   resetarFiltros(): void {
@@ -99,8 +132,7 @@ export class PainelComponent implements OnInit {
       next: () => {
         usuario.status = 'Ativo';
         this.aplicarFiltros();
-      },
-      error: (err) => console.error('Erro ao aprovar usuário', err)
+      }
     });
   }
 
@@ -109,8 +141,7 @@ export class PainelComponent implements OnInit {
       next: () => {
         this.usuarios = this.usuarios.filter(u => u.id !== usuario.id);
         this.aplicarFiltros();
-      },
-      error: (err) => console.error('Erro ao reprovar usuário', err)
+      }
     });
   }
 
@@ -123,8 +154,7 @@ export class PainelComponent implements OnInit {
       next: () => {
         usuario.status = novoStatus;
         this.aplicarFiltros();
-      },
-      error: (err) => console.error('Erro ao alterar status do usuário', err)
+      }
     });
   }
 
@@ -133,16 +163,15 @@ export class PainelComponent implements OnInit {
 
     const url = `${this.apiUrl}users/${usuario.id}/comprovante`;
 
-    this.http.get(url, { responseType: 'blob' }).subscribe({
-      next: (blob) => {
-        const link = document.createElement('a');
-        const fileUrl = window.URL.createObjectURL(blob);
-        link.href = fileUrl;
-        link.download = `comprovante-${usuario.name}.pdf`;
-        link.click();
-        window.URL.revokeObjectURL(fileUrl);
-      },
-      error: (err) => console.error('Erro ao baixar comprovante', err)
+    this.http.get(url, { responseType: 'blob' }).subscribe(blob => {
+      const link = document.createElement('a');
+      const fileUrl = window.URL.createObjectURL(blob);
+
+      link.href = fileUrl;
+      link.download = `comprovante-${usuario.name}.pdf`;
+      link.click();
+
+      window.URL.revokeObjectURL(fileUrl);
     });
   }
 }
