@@ -39,7 +39,7 @@ const createPackage = async (data: Partial<IPackage>, req_user: any) => {
         if(newPackage){
             await History.registerEvent({
                         event_title: 'Encomenda Recebida',
-                        table_name: 'reservations',
+                        table_name: 'packages',
                         event_id: newPackage.id,
                         target_entity: newPackage.unit_id,
                         performed_by: req_user.user_id

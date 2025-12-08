@@ -1,5 +1,6 @@
 import NoticeRepository from "../repositories/NoticeRepository";
 import INotice from "../interfaces/INotice";
+import History from "./HistoryService";
 
 const getNoticeById = async (id: string) => {
     try {
@@ -34,6 +35,15 @@ const getAllNotices = async () => {
 const createNotice = async (data: Partial<INotice>) => {
     try {
         const newNotice = await NoticeRepository.createNotice(data);
+        if (newNotice) {
+            await History.registerEvent({
+                event_title: 'Novo Comunicado',
+                table_name: 'notices',
+                event_id: newNotice.id,
+                target_entity: newNotice.user_id,
+                performed_by: newNotice.user_id
+            });
+        }
         return newNotice;
     } catch (error) {
         throw error;
