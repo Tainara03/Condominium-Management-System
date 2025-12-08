@@ -27,6 +27,6 @@ routers.use('/notices', noticeRouter);
 routers.use('/packages', packageRouter);
 routers.use('/public', publicRouter);
 routers.use('/history', historyRouter)
-routers.post('/cobrancas', BillingRouter);
+routers.use('/cobrancas', BillingRouter);
 routers.use('/common-areas', commonAreasRouter);
 export default routers;

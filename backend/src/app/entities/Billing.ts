@@ -9,6 +9,9 @@ class Billing {
     @Column('decimal', { nullable: false, precision: 10, scale: 2 })
     ammount!: number;
 
+    @Column('varchar', { nullable: true })
+    tipo_cobranca?: string;
+
     @Column('timestamp', { nullable: false })
     due_date!: Date;
 

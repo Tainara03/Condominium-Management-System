@@ -6,9 +6,10 @@ export class SeedBillingsAndHistory1764395710090 implements MigrationInterface {
 
         // insere fatura em atraso não paga
         await queryRunner.query(`
-            INSERT INTO billings (ammount, due_date, is_paid, paid_at, description, unit_id)
+            INSERT INTO billings (ammount,tipo_cobranca, due_date, is_paid, paid_at, description, unit_id)
             SELECT 
                 500.00,
+                'Condominio',
                 '2025-11-01',
                 false,
                 NULL,
@@ -23,9 +24,10 @@ export class SeedBillingsAndHistory1764395710090 implements MigrationInterface {
 
         // insere fatura paga na data correta
         await queryRunner.query(`
-            INSERT INTO billings (ammount, due_date, is_paid, paid_at, description, unit_id)
+            INSERT INTO billings (ammount,tipo_cobranca, due_date, is_paid, paid_at, description, unit_id)
             SELECT 
                 500.00,
+                'Condominio',
                 '2025-10-01',
                 true,
                 '2025-10-01',
@@ -41,9 +43,10 @@ export class SeedBillingsAndHistory1764395710090 implements MigrationInterface {
 
         // insere fatura em aberto sem atraso
         await queryRunner.query(`
-            INSERT INTO billings (ammount, due_date, is_paid, paid_at, description, unit_id)
+            INSERT INTO billings (ammount, tipo_cobranca, due_date, is_paid, paid_at, description, unit_id)
             SELECT 
                 500.00,
+                'Condominio',
                 '2026-01-01',
                 false,
                 NULL,
