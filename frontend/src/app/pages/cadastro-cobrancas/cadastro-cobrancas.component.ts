@@ -19,7 +19,7 @@ interface Unit {
   styleUrls: ['./cadastro-cobrancas.component.css']
 })
 export class CadastroCobrancasComponent implements OnInit {
-  
+  dataMinima = new Date().toISOString().split('T')[0];
   private apiUrl = `${environment.apiUrl}cobrancas`; 
   private apiUrlUnits = `${environment.apiUrl}units`;
 
