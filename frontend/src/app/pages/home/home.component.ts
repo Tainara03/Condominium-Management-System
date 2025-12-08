@@ -5,7 +5,6 @@ import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
-// Interface Genérica para qualquer Evento no Feed
 interface Evento {
   id: string;
   tipo: string;
@@ -31,7 +30,7 @@ export class HomeComponent implements OnInit {
   eventosFiltrados: Evento[] = [];
   filtroTipo: string = '';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     this.carregarEventosDoBackend();
@@ -40,7 +39,6 @@ export class HomeComponent implements OnInit {
   carregarEventosDoBackend(): void {
     this.http.get<any[]>(this.apiUrl).subscribe({
       next: (res) => {
-
         this.eventos = res.map(ev => ({
           id: ev.id,
           tipo: this.mapearTipo(ev.table_name),
@@ -50,7 +48,6 @@ export class HomeComponent implements OnInit {
           apto: undefined,
           statusDetalhe: undefined
         }));
-
         this.aplicarFiltros();
       },
       error: (err) => {
@@ -60,14 +57,14 @@ export class HomeComponent implements OnInit {
   }
 
   mapearTipo(table: string): string {
-    switch (table) {
-      case 'billings': return 'COBRANCA';
-      case 'deliveries': return 'ENCOMENDA';
-      case 'reservations': return 'RESERVA';
-      case 'occurrences': return 'OCORRENCIA';
-      case 'users': return 'CADASTRO';
-      default: return 'OUTRO';
-    }
+    const t = table.toLowerCase();
+    if (t === 'billings' || t === 'billing') return 'COBRANCA';
+    if (t === 'packages') return 'ENCOMENDA';
+    if (t === 'notices') return 'COMUNICADO';
+    if (t === 'reservations') return 'RESERVA';
+    if (t === 'occurrences') return 'OCORRENCIA';
+    if (t === 'users') return 'CADASTRO';
+    return 'OUTRO';
   }
 
   mapearMensagem(ev: any): string {
@@ -77,11 +74,9 @@ export class HomeComponent implements OnInit {
 
   aplicarFiltros(): void {
     let tempEventos = this.eventos;
-
     if (this.filtroTipo) {
       tempEventos = tempEventos.filter(e => e.tipo === this.filtroTipo);
     }
-
     this.eventosFiltrados = tempEventos;
   }
 
@@ -89,7 +84,8 @@ export class HomeComponent implements OnInit {
     const prefixo = evento.statusDetalhe ? `[${evento.statusDetalhe}] ` : '';
     switch (evento.tipo) {
       case 'COBRANCA': return prefixo + 'Nova Cobrança Lançada';
-      case 'ENCOMENDA': return prefixo + 'Encomenda Chegou!';
+      case 'ENCOMENDA': return prefixo + 'Encomenda Recebida';
+      case 'COMUNICADO': return prefixo + 'Novo Comunicado';
       case 'RESERVA': return prefixo + 'Atualização de Reserva';
       case 'OCORRENCIA': return prefixo + 'Ocorrência Registrada';
       case 'CADASTRO': return prefixo + 'Novo Cadastro de Usuário';
@@ -101,6 +97,7 @@ export class HomeComponent implements OnInit {
     switch (tipo) {
       case 'COBRANCA': return 'bi bi-cash-stack text-success';
       case 'ENCOMENDA': return 'bi bi-box-seam text-info';
+      case 'COMUNICADO': return 'bi bi-megaphone text-primary';
       case 'RESERVA': return 'bi bi-calendar-check text-primary';
       case 'OCORRENCIA': return 'bi bi-exclamation-triangle text-warning';
       case 'CADASTRO': return 'bi bi-person-fill-add text-danger';
@@ -112,6 +109,7 @@ export class HomeComponent implements OnInit {
     switch (tipo) {
       case 'COBRANCA': return 'list-group-item-success';
       case 'ENCOMENDA': return 'list-group-item-info';
+      case 'COMUNICADO': return 'list-group-item-primary';
       case 'OCORRENCIA': return 'list-group-item-warning';
       case 'CADASTRO': return 'list-group-item-danger';
       default: return '';
