@@ -12,8 +12,12 @@ import { environment } from '../../environments/environment';
     styleUrls: ['./cadastro-cobrancas.component.css']
 })
 export class CadastroCobrancasComponent {
+    dataMinima = new Date().toISOString().split('T')[0];
     private apiUrl = `${environment.apiUrl}cobrancas`; 
     isLoading = false; 
+
+    listaBlocos: string[] = ['A', 'B', 'C']; 
+    listaApartamentos: string[] = ['101', '102', '103'];
 
     cobrancaData = {
         tipo: '',
@@ -62,10 +66,8 @@ export class CadastroCobrancasComponent {
             formData.append('file', this.cobrancaData.arquivoAnexo);
         }
 
-        console.log(this.apiUrl);
-        console.log(formData);
         this.http.post(this.apiUrl, formData).subscribe({
-            next: (response) => {
+            next: () => {
                 alert('Cobrança cadastrada com sucesso!');
                 this.limparFormulario();
                 this.isLoading = false;
