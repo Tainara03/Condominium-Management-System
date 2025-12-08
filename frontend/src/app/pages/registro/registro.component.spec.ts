@@ -4,7 +4,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 describe('RegistroComponent', () => {
   let fixture: ComponentFixture<RegistroComponent>;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [RegistroComponent, RouterTestingModule],
@@ -14,6 +13,6 @@ describe('RegistroComponent', () => {
   it('should create', () => {
     fixture = TestBed.createComponent(RegistroComponent);
     const component = fixture.componentInstance;
-    expect(component).toBeTruthy(); 
+    expect(component).toBeTruthy(); 
   });
 });

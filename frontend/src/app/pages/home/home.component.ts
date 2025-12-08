@@ -89,15 +89,4 @@ export class HomeComponent implements OnInit {
       default: return '';
     }
   }
-  
-  getLink(tipo: Evento['tipo']): string {
-    switch (tipo) {
-      case 'COBRANCA': return '/cobrancas';
-      case 'ENCOMENDA': return '/encomendas';
-      case 'RESERVA': return '/reservas';
-      case 'OCORRENCIA': return '/ocorrencias';
-      case 'CADASTRO': return '/painel';
-      default: return '/';
-    }
-  }
 }

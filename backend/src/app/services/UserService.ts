@@ -1,91 +1,83 @@
 import UserRepository from "../repositories/UserRepository";
+import UnitRepository from "../repositories/UnitRepository";
 import IUser from "../interfaces/IUser";
 
+interface UpdateUserData extends Partial<IUser> {
+  unidades?: { bloco: string; apartment: string }[];
+  userType?: 'Admin' | 'Sindico' | 'Morador' | 'Funcionario' | null;
+}
 
-const mapUserForFrontend = (user: any) => {
-  return {
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    phone: user.phone,
-    tipoUsuario: user.role?.role,
-    status: user.is_approved === null ? 'Pendente' : user.is_approved ? 'Ativo' : 'Inativo',
-    bloco: user.unit?.building,
-    apartamento: user.unit?.apartment,
-    comprovante_path: user.comprovante_path,
-  };
-};
+const mapUserForFrontend = (user: any) => ({
+  id: user.id,
+  name: user.name,
+  email: user.email,
+  phone: user.phone,
+  userTypeDisplay: user.role?.role,
+  status: user.is_approved === null ? 'Pendente' : user.is_approved ? 'Ativo' : 'Inativo',
+  unidades: user.unit ? [{ bloco: user.unit.building, apartment: user.unit.apartment }] : [],
+  comprovante_path: user.comprovante_path,
+});
 
 const getAllUsers = async () => {
-  try {
-    const users = await UserRepository.getUsers();
-    if (!users || users.length === 0) {
-      throw new Error('User not found');
-    }
-    return users.map(mapUserForFrontend);
-  } catch (error) {
-    throw error;
-  }
+  const users = await UserRepository.getUsers();
+  if (!users || users.length === 0) throw new Error('User not found');
+  return users.map(mapUserForFrontend);
 };
 
 const getUserById = async (id: string) => {
-  try {
-    const user = await UserRepository.findById(id);
-    if (!user) throw new Error('User not found');
-    return mapUserForFrontend(user);
-  } catch (error) {
-    throw error;
-  }
+  const user = await UserRepository.findById(id);
+  if (!user) throw new Error('User not found');
+  return mapUserForFrontend(user);
 };
 
 const getUserByEmail = async (email: string) => {
-  try {
-    const user = await UserRepository.findByEmail(email);
-    if (!user) throw new Error('User not found');
-    return mapUserForFrontend(user);
-  } catch (error) {
-    throw error;
-  }
+  const user = await UserRepository.findByEmail(email);
+  if (!user) throw new Error('User not found');
+  return mapUserForFrontend(user);
 };
 
+const updateUser = async (id: string, userData: UpdateUserData) => {
+  const user = await UserRepository.findById(id);
+  if (!user) throw new Error('User not found');
 
-const updateUser = async (id: string, userData: Partial<IUser>) => {
-    try {
-        const user = await UserRepository.findById(id);
+  if (userData.email && userData.email !== user.email) {
+    const existingUser = await UserRepository.findByEmail(userData.email);
+    if (existingUser) throw new Error('Email already in use');
+  }
 
-        if (!user) {
-            throw new Error('User not found');
-        }
+  const fieldsToUpdate: Partial<IUser> = {
+    name: userData.name ?? user.name,
+    email: userData.email ?? user.email,
+    phone: userData.phone ?? user.phone,
+    is_approved: userData.userType === 'Admin' ||  userData.userType === 'Sindico' ? true : false,
+    comprovante_path: userData.comprovante_path ?? user.comprovante_path,
+  };
 
-        // se contem email no userData, verificar se ja existe outro usuario com esse email
-        if (userData.email && userData.email !== user.email) {
-            const existingUser = await UserRepository.findByEmail(userData.email);
-            if (existingUser) {
-                throw new Error('Email already in use');
-            }
-        }
-        
-        const updatedUser = await UserRepository.updateUser(id, userData);
+  const updatedUser = await UserRepository.updateUser(id, fieldsToUpdate);
 
-        return updatedUser;
-    } catch (error) {
-        throw error;
+  if (userData.unidades && userData.unidades.length > 0) {
+    const unidadeData = userData.unidades[0];
+    if (user.unit_id) {
+      await UnitRepository.updateUnit(user.unit_id, {
+        building: unidadeData.bloco,
+        apartment: unidadeData.apartment,
+      });
+    } else {
+      const newUnit = await UnitRepository.createUnit({
+        building: unidadeData.bloco,
+        apartment: unidadeData.apartment,
+      });
+      await UserRepository.updateUser(id, { unit_id: newUnit.id });
     }
+  }
+
+  return updatedUser;
 };
 
 const deleteUser = async (id: string) => {
-    try {
-        const user = await UserRepository.findById(id);
-
-        if (!user) {
-            throw new Error('User not found');
-        }
-
-        const deleted = await UserRepository.deleteUser(id);
-
-        return deleted;
-    } catch (error) {
-        throw error;
-    }
+  const user = await UserRepository.findById(id);
+  if (!user) throw new Error('User not found');
+  return await UserRepository.deleteUser(id);
 };
-export default { getAllUsers, getUserByEmail, getUserById, updateUser, deleteUser, };
+
+export default { getAllUsers, getUserByEmail, getUserById, updateUser, deleteUser };

@@ -17,13 +17,15 @@
                         <option value="">Todos</option>
                         <option value="A">Bloco A</option>
                         <option value="B">Bloco B</option>
-                    </select>
+                        </select>
                 </div>
+
                 <div class="col-md-2">
                     <label for="filtroApto" class="form-label fw-bold">Apartamento</label>
                     <input type="text" id="filtroApto" class="form-control form-control-sm" placeholder="Ex: 101"
                            [(ngModel)]="filtros.apartamento" (input)="aplicarFiltros()">
                 </div>
+
                 <div class="col-md-2">
                     <label for="filtroStatus" class="form-label fw-bold">Status</label>
                     <select id="filtroStatus" class="form-select form-select-sm"
@@ -34,17 +36,23 @@
                         <option value="Atrasado">Atrasado</option>
                     </select>
                 </div>
+
                 <div class="col-md-6 d-flex justify-content-end align-items-end">
-                  <button class="btn btn-sm btn-outline-secondary me-2" (click)="resetarFiltros()">Resetar Filtros</button>
+                  <button class="btn btn-sm btn-outline-secondary me-2" (click)="resetarFiltros()">
+                    Resetar Filtros
+                  </button>
+                  
                   <button 
                       *ngIf="auth.userType() === 'Admin'" 
                       type="button" 
                       class="btn btn-marrom btn-sm me-2" 
-                      routerLink="/cadastrar-cobrancas"> <i class="bi bi-plus-lg me-2"></i> Adicionar Cobranças
+                      routerLink="/cadastrar-cobrancas"> 
+                      <i class="bi bi-plus-lg me-2"></i> Adicionar Cobranças
                   </button>
                 </div>
                 
             </div>
+
             <div class="table-responsive-wrapper">
                 <table class="table table-light table-striped table-hover table-fixed">
                     <thead>
@@ -55,8 +63,7 @@
                         <th>Vencimento</th>
                         <th>Bloco</th>
                         <th>Apto</th>
-                        <th>Data Lanç.</th>
-                        <th>Comprovante</th>
+                        <th>Data Lanç.</th> <th>Comprovante</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -66,21 +73,37 @@
                                 'bg-danger text-white': cobranca.status === 'Atrasado',
                                 'bg-success-light': cobranca.status === 'Pago' 
                             }">
+                            
                             <td><span class="fw-bold">{{ cobranca.status }}</span></td>
+                            
                             <td>{{ cobranca.tipoCobranca }}</td>
+                            
                             <td>{{ cobranca.valor }}</td>
+                            
                             <td>{{ cobranca.dataVencimento }}</td>
+                            
                             <td>{{ cobranca.bloco }}</td>
                             <td>{{ cobranca.apartamento }}</td>
+                            
                             <td>{{ cobranca.dataLancamento }}</td>
+                            
                             <td>
-                            <a [href]="cobranca.linkComprovante" class="btn btn-sm btn-outline-info" 
-                                [class.disabled]="cobranca.status !== 'Pago'">
-                                {{ cobranca.status === 'Pago' ? 'Ver Doc' : '—' }}
+                            <a [href]="cobranca.linkComprovante" 
+                               target="_blank"
+                               class="btn btn-sm btn-outline-info" 
+                               [class.disabled]="!cobranca.linkComprovante">
+                                {{ cobranca.linkComprovante ? 'Ver Doc' : '—' }}
                             </a>
                             </td>
                         </tr>
                         </ng-container>
+
+                        <tr *ngIf="cobrancasFiltradas.length === 0">
+                            <td colspan="8" class="text-center py-4 text-muted">
+                                <i class="bi bi-inbox fs-4 d-block mb-2"></i>
+                                Nenhuma cobrança encontrada para os filtros selecionados.
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
           </div>

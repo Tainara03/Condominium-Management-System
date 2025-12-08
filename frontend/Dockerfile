@@ -19,3 +19,4 @@ COPY --from=builder /app/dist/Condominium-Management-System/browser /usr/share/n
 
 EXPOSE 4200
 CMD ["nginx", "-g", "daemon off;"]
+
