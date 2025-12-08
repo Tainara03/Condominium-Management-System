@@ -34,8 +34,7 @@
 
               <div class="col-md-4">
                 <label for="dataHoraInput" class="form-label fw-bold">Data e Hora de Chegada</label>
-                <input type="datetime-local" class="form-control" id="dataHoraInput" required
-                       [(ngModel)]="dataHora" name="dataHora">
+                <input type="datetime-local" class="form-control" id="dataHoraInput" [max]="dataHoraMaxima" required>
               </div>
             </div>
             

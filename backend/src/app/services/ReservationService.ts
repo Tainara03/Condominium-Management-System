@@ -3,11 +3,13 @@ import Reservation from "../entities/Reservation";
 
 interface IRequest {
     area_id: string;
+    user_id: string;
     reservation_date_time: Date;
     description?: string;
 }
 
 const reservationRepository = AppDataSource.getRepository(Reservation);
+
 const getReservationById = async (id: string) => {
     try {
         const reservation = await reservationRepository.findOneBy({ id }); 
@@ -32,15 +34,17 @@ const getAllReservations = async () => {
     }
 };
 
-const createReservation = async (reservationData: Partial<Reservation>) => {
+const createReservation = async (reservationData: IRequest) => {
     try {
         const existingReservation = await reservationRepository.findOneBy({
             area_id: reservationData.area_id,
             reservation_date_time: reservationData.reservation_date_time
         });
+        
         if (existingReservation) {
             throw new Error('Reservation already exists'); 
         }
+
         const newReservation = reservationRepository.create(reservationData); 
         await reservationRepository.save(newReservation); 
         

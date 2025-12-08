@@ -1,7 +1,7 @@
 import { AppDataSource } from "../../database/data-source";
 import Billing from "../entities/Billing";
 import Unit from "../entities/Unit";
-import { In } from "typeorm";
+import { In, Not } from "typeorm"; 
 
 interface IRequest {
     type: string;
@@ -22,12 +22,24 @@ export class CreateBillingService {
 
         let units: Unit[] = [];
 
+        const ignoreAdmin = {
+            building: Not('Administração'),
+            apartment: Not('1')
+        };
+
         if (modoDestino === 'Todos') {
-            units = await unitRepository.find();
+            units = await unitRepository.find({
+                where: {
+                    ...ignoreAdmin
+                }
+            });
         } 
         else if (modoDestino === 'Blocos') {
             units = await unitRepository.find({
-                where: { building: In(blocosSelecionados) }
+                where: { 
+                    building: In(blocosSelecionados),
+                    apartment: Not('ADM')
+                }
             });
         } 
         else if (modoDestino === 'Unidades') {
