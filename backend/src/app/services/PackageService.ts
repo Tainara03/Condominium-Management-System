@@ -1,5 +1,6 @@
 import PackageRepository from "../repositories/PackageRepository";
 import IPackage from "../interfaces/IPackage";
+import History from "./HistoryService";
 
 const getPackageById = async (id: string) => {
     try {
@@ -31,9 +32,19 @@ const getAllPackages = async () => {
     }
 };
 
-const createPackage = async (data: Partial<IPackage>) => {
+const createPackage = async (data: Partial<IPackage>, req_user: any) => {
     try {
         const newPackage = await PackageRepository.createPackage(data);
+
+        if(newPackage){
+            await History.registerEvent({
+                        event_title: 'Encomenda Recebida',
+                        table_name: 'reservations',
+                        event_id: newPackage.id,
+                        target_entity: newPackage.unit_id,
+                        performed_by: req_user.user_id
+                    });
+        }
         return newPackage;
     } catch (error) {
         throw error;

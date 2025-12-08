@@ -1,12 +1,12 @@
 import { Request, Response, Router } from 'express';
 import { QueryFailedError } from 'typeorm';
-import { ensureAuthenticated } from '../middlewares/authMiddleware';
+import { AuthRequest, ensureAuthenticated } from '../middlewares/authMiddleware';
 import { permit } from '../middlewares/roleMiddleware';
 import PackageService from '../services/PackageService';
 
 const packageRouter = Router();
 
-packageRouter.post('/', ensureAuthenticated, permit(2), async (req: Request, res: Response) => {
+packageRouter.post('/', ensureAuthenticated, permit(2), async (req: AuthRequest, res: Response) => {
     try {
         const { description, unit_id, received_at } = req.body;
 
@@ -18,7 +18,7 @@ packageRouter.post('/', ensureAuthenticated, permit(2), async (req: Request, res
             description,
             unit_id,
             received_at
-        });
+        },req.user);
 
         return res.status(201).json(newPackage);
     } catch (error: any) {
