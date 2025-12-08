@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import User from "./User";
 import Billing from "./Billing";
+import Package from "./Package"
 
 @Entity('units')
 class Unit {
@@ -19,6 +20,9 @@ class Unit {
 
     @OneToMany(() => Billing, (billing) => billing.unit)
     billings!: Billing[];
+
+    @OneToMany(() => Package, (packages) => packages.unit)
+    packages!: Package[];
 }
 
 export default Unit
