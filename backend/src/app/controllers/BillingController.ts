@@ -14,8 +14,6 @@ BillingRouter.post('/cobrancas', ensureAuthenticated, permit(2), uploadMiddlewar
             modoDestino, blocosSelecionados, apartamentosSelecionados 
         } = req.body;
 
-        console.log(tipo, valor, dataVencimento, descricao, modoDestino, blocosSelecionados, apartamentosSelecionados )
-        console.log(req.user)
         const createBillingService = new CreateBillingService();
 
         const blocosArray = typeof blocosSelecionados === 'string' ? blocosSelecionados.split(',') : blocosSelecionados || [];

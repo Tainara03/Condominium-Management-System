@@ -1,12 +1,12 @@
 import { Request, Response, Router } from 'express';
 import { QueryFailedError } from 'typeorm';
-import { ensureAuthenticated } from '../middlewares/authMiddleware'; 
+import { AuthRequest, ensureAuthenticated } from '../middlewares/authMiddleware'; 
 import { permit } from '../middlewares/roleMiddleware'; 
 import ReservationService from '../services/ReservationService'; 
 
 const reservationRouter = Router();
 
-reservationRouter.post('/', async (req: Request, res: Response) => {
+reservationRouter.post('/', ensureAuthenticated, permit(1), async (req: AuthRequest, res: Response) => {
     try {
         const { area_id, reservation_date_time, description } = req.body; 
         
@@ -15,9 +15,10 @@ reservationRouter.post('/', async (req: Request, res: Response) => {
         }
         
         const newReservation = await ReservationService.createReservation({
-            area_id,
+            user_id: req.user.id,
+            area_id: area_id,
             reservation_date_time: new Date(reservation_date_time),
-            description 
+            description: description?? null
         });
         
         return res.status(201).json(newReservation);
@@ -35,6 +36,7 @@ reservationRouter.post('/', async (req: Request, res: Response) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 });
+
 reservationRouter.get('/', ensureAuthenticated, permit(1), async (req: Request, res: Response) => {
     try {
         const { id } = req.query;
@@ -55,13 +57,15 @@ reservationRouter.get('/', ensureAuthenticated, permit(1), async (req: Request, 
         return res.status(500).json({ message: 'Internal server error' });
     }
 });
-reservationRouter.put('/:id', ensureAuthenticated, permit(4), async (req: Request, res: Response) => {
+
+reservationRouter.put('/:id', ensureAuthenticated, permit(4), async (req: AuthRequest, res: Response) => {
     try {
         const { id } = req.params;
         if (!req.body || Object.keys(req.body).length === 0) {
             return res.status(400).json({ message: 'No data provided for update' });
         }
-        const updatedReservation = await ReservationService.updateReservation(id, req.body);
+
+        const updatedReservation = await ReservationService.updateReservation(id, req.body, req.user.id);
         if (!updatedReservation) {
             return res.status(404).json({ message: 'Could not update reservation' });
         }
@@ -77,13 +81,14 @@ reservationRouter.put('/:id', ensureAuthenticated, permit(4), async (req: Reques
     }
 });
 
-reservationRouter.delete('/:id', ensureAuthenticated, permit(4), async (req: Request, res: Response) => {
+reservationRouter.delete('/:id', ensureAuthenticated, permit(4), async (req: AuthRequest, res: Response) => {
     try {
         const { id } = req.params;
-        const deleted = await ReservationService.deleteReservation(id);
+        const deleted = await ReservationService.deleteReservation(id, req.user.id);
         if (!deleted) {
             return res.status(404).json({ message: 'Could not delete reservation' });
         }
+
         return res.status(200).json({ message: 'Reservation deleted successfully' });
     } catch (error) {
         if (error instanceof QueryFailedError) {

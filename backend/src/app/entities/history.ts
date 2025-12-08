@@ -6,10 +6,10 @@ class History{
     @PrimaryGeneratedColumn('uuid')
     id?: string;
 
-    @Column('varchar', {nullable: true, default: null})
+    @Column('varchar', {nullable: false, default: null})
     event_title!: string;
 
-    @Column('varchar', {nullable: true, default: null})
+    @Column('varchar', {nullable: false, default: null})
     table_name!: string;
 
     @Column({ type: "uuid", nullable: false })
@@ -18,7 +18,7 @@ class History{
     @Column({ type: "uuid", nullable: false })
     target_entity!: string | null; 
 
-    @Column('timestamp', {nullable: true, default: null})
+    @Column('timestamp', {nullable: false, default: () => "CURRENT_TIMESTAMP"})
     created_at!: Date;
 
     // armazena a FK do usuáio

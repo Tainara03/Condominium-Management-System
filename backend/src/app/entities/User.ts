@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMan
 import Unit from "./Unit";
 import Role from "./Role";
 import History from "./history";
+import Reservation from "./Reservation";
 
 @Entity('users')
 class User {
@@ -42,6 +43,9 @@ class User {
 
     @Column('varchar', { length: 255, nullable: true })
     comprovante_path?: string;
+
+    @OneToMany(() => Reservation, reservation => reservation.user)
+    reservations!: Reservation[];
 }
 
 export default User;

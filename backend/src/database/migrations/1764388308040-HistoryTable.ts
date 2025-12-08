@@ -16,22 +16,33 @@ export class HistoryTable1764388308040 implements MigrationInterface {
                         default: 'uuid_generate_v4()'
                     },
                     {
+                        name: 'event_title',
+                        type: 'varchar',
+                        isNullable: false,
+                    },
+                    {
                         //nome da tabela em que o evento foi criado
                         name: 'table_name',
                         type: 'varchar',
                         isNullable: false
                     },
                     {
-                        //id do evento
+                        //id do evento na tabela de origem
                         name: 'event_id',
+                        type: 'uuid',
+                        isNullable: false
+                    },
+                    {
+                        //Referencia o id de usuário/unidade que foi afetado pelo evento
+                        name: 'target_entity',
                         type: 'uuid',
                         isNullable: false
                     },
                     {
                         name: 'created_at',
                         type: 'timestamp',
-                        isNullable: true,
-                        default: null
+                        isNullable: false,
+                        default: "CURRENT_TIMESTAMP"
                     },
                     {
                         name: 'performed_by',
