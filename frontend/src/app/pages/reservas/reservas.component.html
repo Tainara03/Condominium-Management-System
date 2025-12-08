@@ -23,7 +23,7 @@
 
               <div class="col-md-4">
                 <label for="dataInput" class="form-label fw-bold">Data</label>
-                <input type="date" class="form-control" id="dataInput" [(ngModel)]="reservaForm.data" name="data" required>
+                <input type="date" class="form-control" id="dataInput" [min]="dataMinima" [(ngModel)]="reservaForm.data" name="data" required>
               </div>
 
               <div class="col-md-4">
