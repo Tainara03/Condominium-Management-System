@@ -96,9 +96,15 @@
           <div class="row g-2">
             <div class="col-md-6 mb-3">
               <label for="password" class="form-label">Senha<span class="required-star">*</span></label>
-              <input type="password" class="form-control" id="password" name="password" [(ngModel)]="registroData.password" required #password="ngModel"
-                     pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})"
-                     [class.is-invalid]="password.invalid && (password.dirty || password.touched || formRegistro.submitted)">
+              <input type="password" 
+                class="form-control" 
+                id="password" 
+                name="password" 
+                [(ngModel)]="registroData.password" 
+                required 
+                #password="ngModel"
+                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$"
+                [class.is-invalid]="password.invalid && (password.dirty || password.touched || formRegistro.submitted)">
               <div class="invalid-feedback" *ngIf="password.errors?.['required'] && (password.dirty || password.touched || formRegistro.submitted)">
                 A senha é obrigatória.
               </div>
