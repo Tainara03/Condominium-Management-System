@@ -18,7 +18,7 @@ interface CommonArea {
   styleUrls: ['./reservas.component.css']
 })
 export class ReservasComponent implements OnInit {
-  dataMinima = new Date().toISOString().split('T')[0];
+  
   private http = inject(HttpClient);
   private apiUrlReservas = `${environment.apiUrl}reservas`;  
   private apiUrlAreas = `${environment.apiUrl}common-areas`;
