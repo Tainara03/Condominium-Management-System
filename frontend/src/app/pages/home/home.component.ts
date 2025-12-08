@@ -2,49 +2,77 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 // Interface Genérica para qualquer Evento no Feed
 interface Evento {
-    id: number;
-    tipo: 'COBRANCA' | 'ENCOMENDA' | 'OCORRENCIA' | 'RESERVA' | 'CADASTRO';
-    data: Date;
-    mensagem: string;
-    bloco?: string;
-    apto?: string;
-    statusDetalhe?: string; // Ex: 'Pendente' / 'Aprovada' / 'Entregue'
+  id: string;
+  tipo: string;
+  data: Date;
+  mensagem: string;
+  bloco?: string;
+  apto?: string;
+  statusDetalhe?: string;
 }
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink], 
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  
-  private apiUrl = `${environment.apiUrl}historico`;  
+
+  private apiUrl = `${environment.apiUrl}history`;
 
   eventos: Evento[] = [];
   eventosFiltrados: Evento[] = [];
   filtroTipo: string = '';
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-    this.carregarEventosSimulados();
-    this.aplicarFiltros();
+    this.carregarEventosDoBackend();
   }
 
-  carregarEventosSimulados(): void {
-    this.eventos = [
-      { id: 1, tipo: 'COBRANCA', data: new Date(), statusDetalhe: 'Pendente', mensagem: 'Condomínio referente a Dezembro/2025. Vencimento em 28/12.', bloco: 'A', apto: '101' },
-      { id: 2, tipo: 'ENCOMENDA', data: new Date(Date.now() - 3600000), statusDetalhe: 'Na Portaria', mensagem: 'Nova caixa registrada na portaria para Bloco B, Apto 201.', bloco: 'B', apto: '201' },
-      { id: 3, tipo: 'RESERVA', data: new Date(Date.now() - 7200000), statusDetalhe: 'Aprovada', mensagem: 'Sua reserva para o Salão de Festas (Noite) foi aprovada.', bloco: 'A', apto: '101' },
-      { id: 4, tipo: 'OCORRENCIA', data: new Date(Date.now() - 10800000), statusDetalhe: 'Em Análise', mensagem: 'Nova reclamação registrada: Barulho excessivo vindo do vizinho.', bloco: 'B', apto: '201' },
-      { id: 5, tipo: 'CADASTRO', data: new Date(Date.now() - 86400000), statusDetalhe: 'Pendente', mensagem: 'Novo morador cadastrado aguardando aprovação de vínculo.', bloco: 'C', apto: '304' },
-    ];
+  carregarEventosDoBackend(): void {
+    this.http.get<any[]>(this.apiUrl).subscribe({
+      next: (res) => {
+
+        this.eventos = res.map(ev => ({
+          id: ev.id,
+          tipo: this.mapearTipo(ev.table_name),
+          data: new Date(ev.created_at),
+          mensagem: this.mapearMensagem(ev),
+          bloco: undefined,
+          apto: undefined,
+          statusDetalhe: undefined
+        }));
+
+        this.aplicarFiltros();
+      },
+      error: (err) => {
+        console.error('Erro ao carregar histórico:', err);
+      }
+    });
+  }
+
+  mapearTipo(table: string): string {
+    switch (table) {
+      case 'billings': return 'COBRANCA';
+      case 'deliveries': return 'ENCOMENDA';
+      case 'reservations': return 'RESERVA';
+      case 'occurrences': return 'OCORRENCIA';
+      case 'users': return 'CADASTRO';
+      default: return 'OUTRO';
+    }
+  }
+
+  mapearMensagem(ev: any): string {
+    if (ev.event_title) return ev.event_title;
+    return `Atividade registrada na tabela ${ev.table_name}`;
   }
 
   aplicarFiltros(): void {
