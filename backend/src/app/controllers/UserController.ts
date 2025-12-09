@@ -134,7 +134,8 @@ userRouter.post('/:id/status', ensureAuthenticated, permit(3), async (req: Reque
   try {
     const { status } = req.body;
     const isApproved = status === 'Ativo' ? true : false;
-    const updatedUser = await UserService.updateUser(req.params.id, { is_approved: isApproved });
+    const flag = true;
+    const updatedUser = await UserService.updateUser(req.params.id, { is_approved: isApproved }, flag);
     if (!updatedUser) return res.status(404).json({ message: 'User not found' });
     return res.status(200).json(updatedUser);
   } catch (error) {

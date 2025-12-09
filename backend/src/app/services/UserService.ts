@@ -36,7 +36,7 @@ const getUserByEmail = async (email: string) => {
   return mapUserForFrontend(user);
 };
 
-const updateUser = async (id: string, userData: UpdateUserData) => {
+const updateUser = async (id: string, userData: UpdateUserData, flag: boolean = false) => {
   const user = await UserRepository.findById(id);
   if (!user) throw new Error('User not found');
 
@@ -45,11 +45,19 @@ const updateUser = async (id: string, userData: UpdateUserData) => {
     if (existingUser) throw new Error('Email already in use');
   }
 
+  let statusAprovacao;
+  
+  if (flag) {
+      statusAprovacao = userData.is_approved;
+  } else {
+      statusAprovacao = (userData.userType === 'Admin' || userData.userType === 'Sindico') ? true : false;
+  }
+
   const fieldsToUpdate: Partial<IUser> = {
     name: userData.name ?? user.name,
     email: userData.email ?? user.email,
     phone: userData.phone ?? user.phone,
-    is_approved: userData.userType === 'Admin' ||  userData.userType === 'Sindico' ? true : false,
+    is_approved: statusAprovacao,
     comprovante_path: userData.comprovante_path ?? user.comprovante_path,
   };
 
