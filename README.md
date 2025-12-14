@@ -2,7 +2,7 @@
   <img src="./frontend/src/assets/logo-domus.png" alt="Logo do Projeto" width="400"/>
 </p>
 
-[Domus](https://front-condominium-management-system-production.up.railway.app/login)
+[Clique aqui e assista um vídeo do site desenvolvido](docs/Domus.mp4)
 
 #### Usuários principais
 - Síndico/Administração
@@ -16,6 +16,7 @@
 - Registro de ocorrências (barulho, manutenção, segurança)
 - Integração de notificações
 - Controle de cobranças e condomínio
+- Controle de ações por tipo de usuário, e segmentação de informações de acordo com seus níveis
 
 #### Arquitetura e Tecnologias
 - Linguagem Backend:
