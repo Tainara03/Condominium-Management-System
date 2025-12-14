@@ -1,8 +1,4 @@
-<p align="center">
-  <img src="./frontend/src/assets/logo-domus.png" alt="Logo do Projeto" width="400"/>
-</p>
-
-[Clique aqui e assista um vídeo do site desenvolvido](docs/Domus.mp4)
+![Demonstração do Site](docs/Domus.gif)
 
 #### Usuários principais
 - Síndico/Administração
@@ -43,49 +39,59 @@ Condominium-Management-System/
 │
 ├── backend/
 │   ├── src/
-│   │   ├── config/
-│   │   ├── controllers/
-│   │   ├── models/
-│   │   ├── repositories/
-│   │   ├── services/
-│   │   ├── routes/
-│   │   ├── middlewares/
-│   │   ├── utils/
-│   │   └── index.ts
+│   │   ├── app/
+│   │   │   ├── controllers/
+│   │   │   ├── entities/
+│   │   │   ├── interfaces/
+│   │   │   ├── middlewares/
+│   │   │   ├── repositories/
+│   │   │   ├── routes/
+│   │   │   └── services/
+│   │   └── database/
+│   │       └── migrations/
+│   ├── uploads/
 │   ├── tests/
-│   ├── prisma/orm/
 │   ├── Dockerfile
 │   ├── package.json
+│   ├── package-lock.json
 │   └── tsconfig.json
 │
 ├── frontend/
 │   ├── src/
 │   │   ├── app/
-│   │   │   ├── core/
-│   │   │   ├── shared/
-│   │   │   ├── modules/
-│   │   │   │   ├── moradores/
-│   │   │   │   ├── comunicados/
-│   │   │   │   ├── reservas/
-│   │   │   │   ├── ocorrencias/
+│   │   │   ├── components/
+│   │   │   │   ├── header/
+│   │   │   │   ├── sidebar/
+│   │   │   │   └── footer/
+│   │   │   ├── environments/
+│   │   │   ├── pages/
+│   │   │   │   ├── cadastro-cobrancas/
 │   │   │   │   ├── cobrancas/
-│   │   │   └── app.module.ts
+│   │   │   │   ├── encomendas/
+│   │   │   │   ├── home/
+│   │   │   │   ├── login/
+│   │   │   │   ├── ocorrencias/
+│   │   │   │   ├── painel/
+│   │   │   │   ├── perfil/
+│   │   │   │   ├── registro/
+│   │   │   │   └── reservas/
+│   │   │   ├── responses/
+│   │   │   └── services/
+│   │   │       └── auth/
 │   │   ├── assets/
-│   │   ├── environments/
 │   │   └── index.html
 │   ├── Dockerfile
 │   ├── angular.json
 │   ├── package.json
+│   ├── package-lock.json
 │   └── tsconfig.json
 │
-├── db/
-│   ├── init.sql
-│   └── data/ 
-│
 ├── docs/
-│
 ├── docker-compose.yml
 ├── .gitignore
 └── README.md
 ```
 
+<p align="center">
+  <img src="./frontend/src/assets/logo-domus.png" alt="Logo do Projeto" width="200"/>
+</p>
